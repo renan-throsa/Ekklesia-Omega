@@ -46,14 +46,7 @@ namespace Ekklesia.Domain.Tests.Member
             var result = Validation.Validate(Member);
             Assert.False(result.IsValid);
         }
-
-        [Fact]
-        private void TestEmptyNumber()
-        {
-            Member.Phone = string.Empty;
-            var result = Validation.Validate(Member);
-            Assert.False(result.IsValid);
-        }
+               
 
         [Theory]
         [InlineData("63994544665")]
@@ -70,6 +63,7 @@ namespace Ekklesia.Domain.Tests.Member
         [InlineData("a5984601531")]
         [InlineData("00000000000")]
         [InlineData("6798601721")]
+        [InlineData("")]
         private void TestInValidNumber(string number)
         {
             Member.Phone = number;
