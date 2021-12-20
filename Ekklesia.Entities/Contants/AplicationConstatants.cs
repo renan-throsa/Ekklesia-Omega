@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ekklesia.Entities.Contants
 {
-    class AplicationConstatants
+    public class AplicationConstatants
     {
     }
 }

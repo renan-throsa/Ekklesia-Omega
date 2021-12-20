@@ -27,7 +27,7 @@ namespace Ekklesia.Domain.Tests.Member
         [InlineData("Gaius Július Caesar")]
         [InlineData("Gaius Július César")]
         [InlineData("Gaius Július Çésar")]
-        private void TestNameValid(string name)
+        private void TestValidName(string name)
         {
             Member.Name = name;
             var result = Validation.Validate(Member);
@@ -40,9 +40,39 @@ namespace Ekklesia.Domain.Tests.Member
         [InlineData("Gaius J*lius Caesar")]
         [InlineData("Gaius Július [aesar")]
         [InlineData("Gaiu$ Július Caesar")]
-        private void TestNameInvalid(string name)
+        private void TestInvalidName(string name)
         {
             Member.Name = name;
+            var result = Validation.Validate(Member);
+            Assert.False(result.IsValid);
+        }
+
+        [Fact]
+        private void TestEmptyNumber()
+        {
+            Member.Phone = string.Empty;
+            var result = Validation.Validate(Member);
+            Assert.False(result.IsValid);
+        }
+
+        [Theory]
+        [InlineData("63994544665")]
+        [InlineData("91993261520")]
+        private void TestValidNumber(string number)
+        {
+            Member.Phone = number;
+            var result = Validation.Validate(Member);
+            Assert.True(result.IsValid);
+        }
+
+        [Theory]
+        [InlineData("03994544665")]
+        [InlineData("a5984601531")]
+        [InlineData("00000000000")]
+        [InlineData("6798601721")]
+        private void TestInValidNumber(string number)
+        {
+            Member.Phone = number;
             var result = Validation.Validate(Member);
             Assert.False(result.IsValid);
         }
