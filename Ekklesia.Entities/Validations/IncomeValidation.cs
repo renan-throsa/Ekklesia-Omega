@@ -9,11 +9,11 @@ namespace Ekklesia.Entities.Validations
         public IncomeValidation()
         {
             RuleFor(r => r.Date)
-                .ExclusiveBetween(DateTime.Now.AddDays(-6), DateTime.Now.AddDays(1))
-                .WithMessage($"Uma receita prescisa ter uma data entre hoje e 6 dias atrás");
+                .ExclusiveBetween(DateTime.Now.AddMonths(-1), DateTime.Now.AddDays(1))
+                .WithMessage($"A data de uma receita prescisa entre hoje menos um mês antes.");
 
             RuleFor(r => r.Value)
-               .GreaterThan(0).WithMessage("Uma receita prescisa um valor maior que zero");
+               .GreaterThan(0).WithMessage("Uma receita prescisa um valor maior que zero.");
 
             RuleFor(r => r.Type)
                 .IsInEnum().WithMessage("Um receita precisa obrigatoriamente ter um tipo.");

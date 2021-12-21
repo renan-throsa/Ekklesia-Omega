@@ -4,18 +4,16 @@ using Ekklesia.Tests.Base;
 using System;
 using Xunit;
 
-namespace Ekklesia.Tests.Transaction
+namespace Ekklesia.Tests.Occasion
 {
-    public class IncomeTest : BaseTest<IncomeDTO, IncomeValidation>
+    public class AtypicalTest : BaseTest<AtypicalDTO, AtypicalValidation>
     {
 
-        [Theory]
-        [InlineData(float.MinValue)]
-        [InlineData(float.NaN)]
-        private void TestInvalidValue(float value)
+        [Fact]
+        private void TestEmptyDescription()
         {
-            DTO.Value = value;
-            var result = IsValid(nameof(DTO.Value));
+            DTO.Description = string.Empty;
+            var result = IsValid(nameof(DTO.Description));
             Assert.False(result.IsValid);
         }
 
@@ -42,6 +40,5 @@ namespace Ekklesia.Tests.Transaction
             var result = IsValid(nameof(DTO.Date));
             Assert.True(result.IsValid);
         }
-
     }
 }

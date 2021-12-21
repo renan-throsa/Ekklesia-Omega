@@ -2,20 +2,21 @@
 using Ekklesia.Entities.Validations;
 using Ekklesia.Tests.Base;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 
-namespace Ekklesia.Tests.Transaction
+namespace Ekklesia.Tests.Occasion
 {
-    public class IncomeTest : BaseTest<IncomeDTO, IncomeValidation>
+    public class BaptismTest : BaseTest<BaptismDTO, BaptismValidation>
     {
-
-        [Theory]
-        [InlineData(float.MinValue)]
-        [InlineData(float.NaN)]
-        private void TestInvalidValue(float value)
+        [Fact]
+        private void TestInvalideBaptizedsList()
         {
-            DTO.Value = value;
-            var result = IsValid(nameof(DTO.Value));
+            DTO.Baptizeds = null;
+            var result = IsValid(nameof(DTO.Baptizeds));
             Assert.False(result.IsValid);
         }
 
@@ -43,5 +44,12 @@ namespace Ekklesia.Tests.Transaction
             Assert.True(result.IsValid);
         }
 
+        [Fact]
+        private void TestEmptyDescription()
+        {
+            DTO.Place = string.Empty;
+            var result = IsValid(nameof(DTO.Place));
+            Assert.False(result.IsValid);
+        }
     }
 }

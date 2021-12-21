@@ -2,23 +2,16 @@
 using Ekklesia.Entities.Validations;
 using Ekklesia.Tests.Base;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 
-namespace Ekklesia.Tests.Transaction
+namespace Ekklesia.Tests.Occasion
 {
-    public class IncomeTest : BaseTest<IncomeDTO, IncomeValidation>
+    public class MeetingTest : BaseTest<MeetingDTO, MeetingValidation>
     {
-
-        [Theory]
-        [InlineData(float.MinValue)]
-        [InlineData(float.NaN)]
-        private void TestInvalidValue(float value)
-        {
-            DTO.Value = value;
-            var result = IsValid(nameof(DTO.Value));
-            Assert.False(result.IsValid);
-        }
-
         [Fact]
         private void TestInvalideUpperDate()
         {
@@ -43,5 +36,20 @@ namespace Ekklesia.Tests.Transaction
             Assert.True(result.IsValid);
         }
 
+        [Fact]
+        private void TestInvalideSpeaker()
+        {
+            DTO.Speaker = null;
+            var result = IsValid(nameof(DTO.Date));
+            Assert.False(result.IsValid);
+        }
+
+        [Fact]
+        private void TestInvalideParticipants()
+        {
+            DTO.Participants = null;
+            var result = IsValid(nameof(DTO.Participants));
+            Assert.False(result.IsValid);
+        }
     }
 }
