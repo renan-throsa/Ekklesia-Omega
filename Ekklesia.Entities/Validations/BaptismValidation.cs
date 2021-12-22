@@ -1,10 +1,7 @@
-﻿using Ekklesia.Entities.DTOs;
+﻿using Ekklesia.Entities.Contants;
+using Ekklesia.Entities.DTOs;
 using FluentValidation;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ekklesia.Entities.Validations
 {
@@ -12,12 +9,17 @@ namespace Ekklesia.Entities.Validations
     {
         public BaptismValidation()
         {
+            var UpperBound = DateTime.Now.AddDays(AplicationConstatants.UpperBoundDate);
+            var LowerBound = DateTime.Now.AddDays(AplicationConstatants.LowerBoundDate);
+
+            RuleFor(b => b.Date)
+                .ExclusiveBetween(LowerBound, UpperBound)
+                .WithMessage($"A data de batismo prescisa estar entre {LowerBound.ToString("M")} e {UpperBound.ToString("M")}.");
+
             RuleFor(b => b.Baptizeds)               
                 .NotEmpty().WithMessage("O batismo precisa ter ao menos um batizado.");
 
-            RuleFor(b => b.Date)
-                .ExclusiveBetween(DateTime.Now.AddMonths(-1), DateTime.Now.AddDays(1))
-                .WithMessage($"A data de batismo prescisa estar entre hoje e menos um mês atrás.");
+               
 
             RuleFor(b=> b.Place)
                 .NotEmpty().WithMessage("O lugar de batismos não pode ser vazio.");

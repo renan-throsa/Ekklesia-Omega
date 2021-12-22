@@ -1,4 +1,5 @@
-﻿using Ekklesia.Entities.DTOs;
+﻿using Ekklesia.Entities.Contants;
+using Ekklesia.Entities.DTOs;
 using FluentValidation;
 using System;
 
@@ -8,9 +9,12 @@ namespace Ekklesia.Entities.Validations
     {
         public ReunionValidation()
         {
+            var UpperBound = DateTime.Now.AddDays(AplicationConstatants.UpperBoundDate);
+            var LowerBound = DateTime.Now.AddDays(AplicationConstatants.LowerBoundDate);
+
             RuleFor(r => r.Date)
-                 .ExclusiveBetween(DateTime.Now.AddMonths(-1), DateTime.Now.AddDays(1))
-                .WithMessage($"A data da reunião prescisa estar entre hoje e menos um mês atrás.");
+                .ExclusiveBetween(LowerBound, UpperBound)
+                .WithMessage($"A data da reunião prescisa estar entre {LowerBound.ToString("M")} e {UpperBound.ToString("M")}.");
 
             RuleFor(r => r.EndTime).GreaterThan(r => r.Date).WithMessage("A data de fim de uma reunião não pode ser menor que a data da reunião.");
 

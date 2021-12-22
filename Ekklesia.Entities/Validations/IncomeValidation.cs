@@ -1,4 +1,5 @@
-﻿using Ekklesia.Entities.DTOs;
+﻿using Ekklesia.Entities.Contants;
+using Ekklesia.Entities.DTOs;
 using FluentValidation;
 using System;
 
@@ -8,9 +9,13 @@ namespace Ekklesia.Entities.Validations
     {
         public IncomeValidation()
         {
-            RuleFor(r => r.Date)
-                .ExclusiveBetween(DateTime.Now.AddMonths(-1), DateTime.Now.AddDays(1))
-                .WithMessage($"A data de uma receita prescisa entre hoje menos um mês antes.");
+            var UpperBound = DateTime.Now.AddDays(AplicationConstatants.UpperBoundDate);
+            var LowerBound = DateTime.Now.AddDays(AplicationConstatants.LowerBoundDate);
+
+            RuleFor(i => i.Date)
+                .ExclusiveBetween(LowerBound, UpperBound)
+                .WithMessage($"A data de uma receita prescisa estar entre {LowerBound.ToString("M")} e {UpperBound.ToString("M")}.");
+
 
             RuleFor(r => r.Value)
                .GreaterThan(0).WithMessage("Uma receita prescisa um valor maior que zero.");

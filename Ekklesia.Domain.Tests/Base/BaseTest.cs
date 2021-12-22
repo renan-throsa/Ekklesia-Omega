@@ -1,8 +1,5 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
-using System;
-using System.Linq;
-using System.Linq.Expressions;
 
 namespace Ekklesia.Tests.Base
 {

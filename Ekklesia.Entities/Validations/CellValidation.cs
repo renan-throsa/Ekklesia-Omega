@@ -1,4 +1,5 @@
-﻿using Ekklesia.Entities.DTOs;
+﻿using Ekklesia.Entities.Contants;
+using Ekklesia.Entities.DTOs;
 using FluentValidation;
 using System;
 
@@ -8,9 +9,13 @@ namespace Ekklesia.Entities.Validations
     {
         public CellValidation()
         {
-            RuleFor(a => a.Date)
-               .ExclusiveBetween(DateTime.Now.AddMonths(-1), DateTime.Now.AddDays(1))
-               .WithMessage($"Um evento atípico prescisa estar entre hoje e menos um mês atrás.");
+            var UpperBound = DateTime.Now.AddDays(AplicationConstatants.UpperBoundDate);
+            var LowerBound = DateTime.Now.AddDays(AplicationConstatants.LowerBoundDate);
+
+            RuleFor(c => c.Date)
+                .ExclusiveBetween(LowerBound, UpperBound)
+                .WithMessage($"A data de uma célula prescisa estar entre {LowerBound.ToString("M")} e {UpperBound.ToString("M")}.");
+              
 
             RuleFor(c => c.Convertions)
                 .GreaterThanOrEqualTo(0)
