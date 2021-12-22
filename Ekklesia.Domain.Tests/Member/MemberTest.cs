@@ -1,24 +1,17 @@
 ﻿using Ekklesia.Entities.DTOs;
 using Ekklesia.Entities.Validations;
+using Ekklesia.Tests.Base;
 using Xunit;
 
 namespace Ekklesia.Domain.Tests.Member
 {
-    public class MemberTest
+    public class MemberTest : BaseTest<MemberDTO, MemberValidation>
     {
-        private MemberDTO Member { get; }
-        private MemberValidation Validation { get; }
-        public MemberTest()
-        {
-            Member = new MemberDTO();
-            Validation = new MemberValidation();
-        }
-
         [Fact]
         private void TestEmptyName()
         {
-            Member.Name = string.Empty;
-            var result = Validation.Validate(Member);
+            DTO.Name = string.Empty;
+            var result = IsValid(nameof(DTO.Name));
             Assert.False(result.IsValid);
         }
 
@@ -29,8 +22,8 @@ namespace Ekklesia.Domain.Tests.Member
         [InlineData("Gaius Július Çésar")]
         private void TestValidName(string name)
         {
-            Member.Name = name;
-            var result = Validation.Validate(Member);
+            DTO.Name = name;
+            var result = IsValid(nameof(DTO.Name));
             Assert.True(result.IsValid);
         }
 
@@ -42,26 +35,19 @@ namespace Ekklesia.Domain.Tests.Member
         [InlineData("Gaiu$ Július Caesar")]
         private void TestInvalidName(string name)
         {
-            Member.Name = name;
-            var result = Validation.Validate(Member);
+            DTO.Name = name;
+            var result = IsValid(nameof(DTO.Name));
             Assert.False(result.IsValid);
         }
 
-        [Fact]
-        private void TestEmptyNumber()
-        {
-            Member.Phone = string.Empty;
-            var result = Validation.Validate(Member);
-            Assert.False(result.IsValid);
-        }
 
         [Theory]
         [InlineData("63994544665")]
         [InlineData("91993261520")]
         private void TestValidNumber(string number)
         {
-            Member.Phone = number;
-            var result = Validation.Validate(Member);
+            DTO.Phone = number;
+            var result = IsValid(nameof(DTO.Phone));
             Assert.True(result.IsValid);
         }
 
@@ -70,10 +56,11 @@ namespace Ekklesia.Domain.Tests.Member
         [InlineData("a5984601531")]
         [InlineData("00000000000")]
         [InlineData("6798601721")]
+        [InlineData("")]
         private void TestInValidNumber(string number)
         {
-            Member.Phone = number;
-            var result = Validation.Validate(Member);
+            DTO.Phone = number;
+            var result = IsValid(nameof(DTO.Phone));
             Assert.False(result.IsValid);
         }
     }

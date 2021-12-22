@@ -7,9 +7,15 @@
         public string Photo { get; set; }
         public Role Role { get; set; }
 
-        public override bool Equals(object obj)
+        public Member()
         {
-            Member member = obj as Member;
+            this.Name = string.Empty;
+            this.Phone = string.Empty;
+            this.Photo = string.Empty;
+        }
+        public override bool Equals(object? obj)
+        {
+            Member? member = obj as Member;
 
             if (member == null)
             {

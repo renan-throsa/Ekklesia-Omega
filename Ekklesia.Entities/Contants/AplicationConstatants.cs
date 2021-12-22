@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Ekklesia.Entities.Contants
+﻿namespace Ekklesia.Entities.Contants
 {
     public class AplicationConstatants
     {
+        public const int UpperBoundDate = 1;
+        public const int LowerBoundDate = -7;
     }
 }
