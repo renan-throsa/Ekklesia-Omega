@@ -8,14 +8,9 @@ namespace Ekkleisa.Repository.Contract.IRepositories
     {
         Task<T> Add(T entity);
         Task<IEnumerable<T>> All();
-        Task<IEnumerable<T>> BulkAdd(IEnumerable<T> entities);
-        Task<IEnumerable<T>> BulkAddAsync(IEnumerable<T> entities);
-        Task<IEnumerable<T>> BulkDelete(IEnumerable<T> entities);
-        Task<IEnumerable<T>> BulkDelete(IEnumerable<object> ids);
-        Task<IEnumerable<T>> BulkDeleteAsync(IEnumerable<T> entities);
-        Task<IEnumerable<T>> BulkDeleteAsync(IEnumerable<object> ids);
+        Task<IEnumerable<T>> BulkAdd(IEnumerable<T> entities);        
+        Task<IEnumerable<T>> BulkDelete(IEnumerable<T> entities);        
         Task<IEnumerable<T>> BulkUpdate(IEnumerable<T> entities);
-        Task<IEnumerable<T>> BulkUpdateAsync(IEnumerable<T> entities);
         Task<T> Delete(T entity);
         Task<T> Delete(object id);
         Task<T> GetById(object id);

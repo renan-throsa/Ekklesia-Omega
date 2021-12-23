@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Ekkleisa.Repository.Contract.IRepositories
 {
-    public interface IMemberReprository : IRepository<Member>
+    interface IOccasionRepository : IRepository<Occasion>
     {
     }
 }

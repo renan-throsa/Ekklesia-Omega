@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ekklesia.Entities", "Ekkles
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ekklesia.Tests", "Ekklesia.Domain.Tests\Ekklesia.Tests.csproj", "{1B7C34E9-0FA8-42D5-8E6A-A4110D20CD97}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ekkleisa.Repository.Contract", "Ekkleisa.Repository.Contract\Ekkleisa.Repository.Contract.csproj", "{6F629638-8998-4518-940A-257D8F6A4400}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ekkleisa.Repository.Contract", "Ekkleisa.Repository.Contract\Ekkleisa.Repository.Contract.csproj", "{6F629638-8998-4518-940A-257D8F6A4400}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ekkleisa.Repository.Implementation", "Ekkleisa.Repository.Implementation\Ekkleisa.Repository.Implementation.csproj", "{A08B59DA-F172-4E2B-8C05-F3F125C51BDD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ekkleisa.Repository.Implementation", "Ekkleisa.Repository.Implementation\Ekkleisa.Repository.Implementation.csproj", "{A08B59DA-F172-4E2B-8C05-F3F125C51BDD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ekklesia.DependencyInjection", "Ekklesia.DependencyInjection\Ekklesia.DependencyInjection.csproj", "{1388B324-FF09-4BD3-B6CD-E19F682CF57B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{A08B59DA-F172-4E2B-8C05-F3F125C51BDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A08B59DA-F172-4E2B-8C05-F3F125C51BDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A08B59DA-F172-4E2B-8C05-F3F125C51BDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1388B324-FF09-4BD3-B6CD-E19F682CF57B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1388B324-FF09-4BD3-B6CD-E19F682CF57B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1388B324-FF09-4BD3-B6CD-E19F682CF57B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1388B324-FF09-4BD3-B6CD-E19F682CF57B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
