@@ -12,8 +12,8 @@ namespace Ekklesia.Entities.Entities
         public Member Coordinator { get; set; }
 
         //ATIVIDADES BÁSICAS PARA EVENTOS        
-        public int Reunions { get; set; }
-        public int Convertions { get; set; }
+        public int NumberOfReunions { get; set; }
+        public int NumberOfConvertions { get; set; }
 
         //MOVIMENTO FINANCEIRO
         public float PreviousMonth { get; set; }

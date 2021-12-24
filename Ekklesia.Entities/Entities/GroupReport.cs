@@ -2,9 +2,9 @@
 {
     public class GroupReport : Report
     {
-        public int ExternalCults { get; set; }
-        public int CellsNumber { get; set; }
-        public int Baptized { get; set; }
-        public int MeetingsWithTheCoordination { get; set; }
+        public int NumberOfExternalCults { get; set; }
+        public int NumberOfCells { get; set; }
+        public int NumberOfBaptizeds { get; set; }
+        public int NumberOfMeetingsWithTheCoordination { get; set; }
     }
 }

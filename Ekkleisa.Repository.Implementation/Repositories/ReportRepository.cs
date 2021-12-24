@@ -1,0 +1,25 @@
+﻿using Ekkleisa.Repository.Contract.IRepositories;
+using Ekkleisa.Repository.Implementation.Context;
+using Ekklesia.Entities.Entities;
+using Ekklesia.Entities.Filters;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Ekkleisa.Repository.Implementation.Repositories
+{
+    public class ReportRepository : Repository<Report>, IReportRepository
+    {
+        public ReportRepository(EkklesiaContext context)
+            : base(context, context.Reports)
+        {
+
+        }
+        public IEnumerable<Report> Browse(ReportFilter filter)
+        {
+            IQueryable<Report> query = GetQueryable();
+
+            query = query.OrderByDescending(x => x.Date);
+            return query.ToList();
+        }
+    }
+}

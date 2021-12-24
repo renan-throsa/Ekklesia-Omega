@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Ekklesia.Entities.Entities
 {
@@ -11,13 +7,13 @@ namespace Ekklesia.Entities.Entities
         public string Place { get; set; }
         public int BaptizerId { get; set; }
         public Member Baptizer { get; set; }
-        public ICollection<Member> Baptizeds { get; set; }
+        public ISet<OccasionMember> Baptizeds { get; set; }
 
         public Baptism()
         {
             this.Place = string.Empty;
             this.Baptizer = new Member();
-            this.Baptizeds = new HashSet<Member>();
+            this.Baptizeds = new HashSet<OccasionMember>();
         }
     }
 }

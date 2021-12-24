@@ -10,6 +10,8 @@ namespace Ekkleisa.Repository.Implementation.Context
     {
         public DbSet<Member> Members { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<Occasion> Occasions { get; set; }
+        public DbSet<Report> Reports { get; set; }
 
         private readonly string _connectionString;
 
@@ -30,9 +32,26 @@ namespace Ekkleisa.Repository.Implementation.Context
         {
             base.OnModelCreating(modelBuilder);            
             modelBuilder.ApplyConfiguration(new MemberMapping());
+
             modelBuilder.ApplyConfiguration(new TransactionMapping());
             modelBuilder.ApplyConfiguration(new ExpenseMapping());
             modelBuilder.ApplyConfiguration(new IncomeMapping());
+
+            modelBuilder.ApplyConfiguration(new OccasionMapping());
+            modelBuilder.ApplyConfiguration(new AtypicalMapping());
+            modelBuilder.ApplyConfiguration(new BaptismMapping());
+            modelBuilder.ApplyConfiguration(new CellMapping());
+            modelBuilder.ApplyConfiguration(new CultMapping());
+            modelBuilder.ApplyConfiguration(new ReunionMapping());
+            modelBuilder.ApplyConfiguration(new SundaySchoolMapping());
+            modelBuilder.ApplyConfiguration(new OccasionMemberMapping());
+
+            
+            modelBuilder.ApplyConfiguration(new ReportMapping());
+            modelBuilder.ApplyConfiguration(new BiblicalReportMpping());
+            modelBuilder.ApplyConfiguration(new CellReportMapping());
+            modelBuilder.ApplyConfiguration(new GroupReportMapping());
+
         }
     }
 }

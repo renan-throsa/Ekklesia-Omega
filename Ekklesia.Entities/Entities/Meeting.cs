@@ -4,7 +4,7 @@ namespace Ekklesia.Entities.Entities
 {
     public class Meeting : Occasion
     {
-        public ICollection<Member> Members { get; set; }
+        public ISet<Member> Members { get; set; }
         public Member Speaker { get; set; }
 
         public Meeting()

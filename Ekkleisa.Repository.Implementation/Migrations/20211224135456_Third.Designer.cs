@@ -4,14 +4,16 @@ using Ekkleisa.Repository.Implementation.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Ekkleisa.Repository.Implementation.Migrations
 {
     [DbContext(typeof(EkklesiaContext))]
-    partial class EkklesiaContextModelSnapshot : ModelSnapshot
+    [Migration("20211224135456_Third")]
+    partial class Third
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,54 +96,6 @@ namespace Ekkleisa.Repository.Implementation.Migrations
                     b.HasIndex("SundaySchoolId");
 
                     b.ToTable("OccasionMember");
-                });
-
-            modelBuilder.Entity("Ekklesia.Entities.Entities.Report", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<float>("Balance")
-                        .HasColumnType("real");
-
-                    b.Property<int>("CoordinatorId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Date")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("getdate()");
-
-                    b.Property<float>("Expense")
-                        .HasColumnType("real");
-
-                    b.Property<float>("Income")
-                        .HasColumnType("real");
-
-                    b.Property<int>("NumberOfConvertions")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumberOfReunions")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PreacherId")
-                        .HasColumnType("int");
-
-                    b.Property<float>("PreviousMonth")
-                        .HasColumnType("real");
-
-                    b.Property<float>("Tenth")
-                        .HasColumnType("real");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CoordinatorId");
-
-                    b.HasIndex("PreacherId");
-
-                    b.ToTable("Report");
                 });
 
             modelBuilder.Entity("Ekklesia.Entities.Entities.Transaction", b =>
@@ -284,66 +238,6 @@ namespace Ekkleisa.Repository.Implementation.Migrations
                     b.ToTable("SundaySchool");
                 });
 
-            modelBuilder.Entity("Ekklesia.Entities.Entities.BiblicalReport", b =>
-                {
-                    b.HasBaseType("Ekklesia.Entities.Entities.Report");
-
-                    b.Property<int>("NumberOfBibles")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumberOfPeopleInPedagogicalBody")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumberOfPeoplePresent")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumberOfReunionWithTeachers")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumberOfVisitants")
-                        .HasColumnType("int");
-
-                    b.ToTable("BiblicalReport");
-                });
-
-            modelBuilder.Entity("Ekklesia.Entities.Entities.CellReport", b =>
-                {
-                    b.HasBaseType("Ekklesia.Entities.Entities.Report");
-
-                    b.Property<int>("NumberCoordenationMeatings")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumberOfBoardMembers")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumberOfEvangelisms")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumberOfVisits")
-                        .HasColumnType("int");
-
-                    b.ToTable("CellReport");
-                });
-
-            modelBuilder.Entity("Ekklesia.Entities.Entities.GroupReport", b =>
-                {
-                    b.HasBaseType("Ekklesia.Entities.Entities.Report");
-
-                    b.Property<int>("NumberOfBaptizeds")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumberOfCells")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumberOfExternalCults")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumberOfMeetingsWithTheCoordination")
-                        .HasColumnType("int");
-
-                    b.ToTable("GroupReport");
-                });
-
             modelBuilder.Entity("Ekklesia.Entities.Entities.Expense", b =>
                 {
                     b.HasBaseType("Ekklesia.Entities.Entities.Transaction");
@@ -400,25 +294,6 @@ namespace Ekkleisa.Repository.Implementation.Migrations
                     b.Navigation("Member");
 
                     b.Navigation("Occasion");
-                });
-
-            modelBuilder.Entity("Ekklesia.Entities.Entities.Report", b =>
-                {
-                    b.HasOne("Ekklesia.Entities.Entities.Member", "Coordinator")
-                        .WithMany()
-                        .HasForeignKey("CoordinatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Ekklesia.Entities.Entities.Member", "Preacher")
-                        .WithMany()
-                        .HasForeignKey("PreacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Coordinator");
-
-                    b.Navigation("Preacher");
                 });
 
             modelBuilder.Entity("Ekklesia.Entities.Entities.Atypical", b =>
@@ -497,33 +372,6 @@ namespace Ekkleisa.Repository.Implementation.Migrations
                         .IsRequired();
 
                     b.Navigation("Teacher");
-                });
-
-            modelBuilder.Entity("Ekklesia.Entities.Entities.BiblicalReport", b =>
-                {
-                    b.HasOne("Ekklesia.Entities.Entities.Report", null)
-                        .WithOne()
-                        .HasForeignKey("Ekklesia.Entities.Entities.BiblicalReport", "Id")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Ekklesia.Entities.Entities.CellReport", b =>
-                {
-                    b.HasOne("Ekklesia.Entities.Entities.Report", null)
-                        .WithOne()
-                        .HasForeignKey("Ekklesia.Entities.Entities.CellReport", "Id")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Ekklesia.Entities.Entities.GroupReport", b =>
-                {
-                    b.HasOne("Ekklesia.Entities.Entities.Report", null)
-                        .WithOne()
-                        .HasForeignKey("Ekklesia.Entities.Entities.GroupReport", "Id")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Ekklesia.Entities.Entities.Expense", b =>

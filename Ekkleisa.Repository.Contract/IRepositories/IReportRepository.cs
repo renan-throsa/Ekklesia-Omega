@@ -1,13 +1,11 @@
 ﻿using Ekklesia.Entities.Entities;
-using System;
+using Ekklesia.Entities.Filters;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ekkleisa.Repository.Contract.IRepositories
 {
-    interface IReportRepository : IRepository<Report>
+    public interface IReportRepository : IRepository<Report>
     {
+        IEnumerable<Report> Browse(ReportFilter filter);
     }
 }

@@ -1,11 +1,11 @@
 ﻿namespace Ekklesia.Entities.Entities
 {
-    class BiblicalReport : Report
+    public class BiblicalReport : Report
     {
-        public int Bibles { get; set; }
-        public int ReunionWithTeachers { get; set; }
-        public int Visitants { get; set; }
-        public int PeoplePresent { get; set; }
-        public int PedagogicalBody { get; set; }
+        public int NumberOfBibles { get; set; }
+        public int NumberOfReunionWithTeachers { get; set; }
+        public int NumberOfVisitants { get; set; }
+        public int NumberOfPeoplePresent { get; set; }
+        public int NumberOfPeopleInPedagogicalBody { get; set; }
     }
 }
