@@ -2,18 +2,22 @@
 using Ekkleisa.Repository.Implementation.Context;
 using Ekklesia.Entities.Entities;
 using Ekklesia.Entities.Filters;
+using MongoDB.Bson;
+using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace Ekkleisa.Repository.Implementation.Repositories
 {
     public class MemberRepository : Repository<Member>, IMemberRepository
     {
-        
-        public MemberRepository(EkklesiaContext context)
-            : base(context, context.Members)
+
+        public MemberRepository(ApplicationContext context)
+            : base(context)
         {
-            
+
         }
 
         public IEnumerable<Member> Browse(MemberFilter filter)
@@ -21,20 +25,22 @@ namespace Ekkleisa.Repository.Implementation.Repositories
             IQueryable<Member> query = GetQueryable();
 
             if (filter != null)
-            {
+            {   
                 if (!string.IsNullOrEmpty(filter.Name))
                 {
-                    query = query.Where(p => p.Name.Contains(filter.Name));
+                    Expression<Func<Member, bool>> propName = x => x.Name.Equals(filter.Name);
+                    query = query.Where(propName);
                 }
                 if (filter.Role != null)
                 {
-                    query = query.Where(c => c.Role == filter.Role);
+                    Expression<Func<Member, bool>> propRole = x => x.Role == filter.Role;
+                    query = query.Where(propRole);
                 }
 
             }
-            query = query.OrderByDescending(x => x.Name);
-            return query.ToList();
+
+            return query.AsEnumerable();
         }
-        
+
     }
 }

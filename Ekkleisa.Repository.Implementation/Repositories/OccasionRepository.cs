@@ -9,8 +9,8 @@ namespace Ekkleisa.Repository.Implementation.Repositories
 {
     public class OccasionRepository : Repository<Occasion>, IOccasionRepository
     {
-        public OccasionRepository(EkklesiaContext context)
-            : base(context, context.Occasions)
+        public OccasionRepository(ApplicationContext context)
+            : base(context)
         {
 
         }

@@ -1,6 +1,6 @@
 ﻿namespace Ekklesia.Entities.Entities
 {
-    public class Member : BaseModel
+    public class Member : BaseEntity
     {
         public string Name { get; set; }
         public string Phone { get; set; }

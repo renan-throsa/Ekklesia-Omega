@@ -7,9 +7,9 @@ namespace Ekklesia.DependencyInjection
 {
     public static class ContanierExtensions
     {
-        public static IServiceCollection RegisterDbContext(this IServiceCollection service)
+        public static IServiceCollection RegisterApplicationContext(this IServiceCollection service)
         {
-            service.AddDbContext<EkklesiaContext>();
+            service.AddScoped<ApplicationContext>();
             return service;
         }
 

@@ -2,7 +2,7 @@
 
 namespace Ekklesia.Entities.Entities
 {
-    public abstract class Report : BaseModel
+    public abstract class Report : BaseEntity
     {
         //ATIVIDADES BÁSICAS DE RELATÓRIO
         public DateTime Date { get; set; }

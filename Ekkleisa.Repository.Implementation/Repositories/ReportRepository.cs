@@ -9,8 +9,8 @@ namespace Ekkleisa.Repository.Implementation.Repositories
 {
     public class ReportRepository : Repository<Report>, IReportRepository
     {
-        public ReportRepository(EkklesiaContext context)
-            : base(context, context.Reports)
+        public ReportRepository(ApplicationContext context)
+            : base(context)
         {
 
         }

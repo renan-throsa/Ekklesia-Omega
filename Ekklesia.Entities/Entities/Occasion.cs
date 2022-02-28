@@ -2,7 +2,7 @@
 
 namespace Ekklesia.Entities.Entities
 {
-    public abstract class Occasion : BaseModel
+    public abstract class Occasion : BaseEntity
     {
         public DateTime Date { get; set; }
 

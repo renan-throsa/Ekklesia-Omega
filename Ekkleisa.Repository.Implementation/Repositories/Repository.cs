@@ -2,90 +2,138 @@
 using Ekkleisa.Repository.Implementation.Context;
 using Ekklesia.Entities.Entities;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Bson;
+using MongoDB.Driver;
+using MongoDB.Driver.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Ekkleisa.Repository.Implementation.Repositories
 {
-    public abstract class Repository<T> : IRepository<T> where T : class, IEntity<int>
+    public abstract class Repository<T> : IRepository<T> where T : class, IEntity<ObjectId>
     {
-        private EkklesiaContext Context { get; }
-        private DbSet<T> Entities { get; }
+        private ApplicationContext Context { get; }
+        private readonly string Entity = $"c_{typeof(T).Name.ToLower()}";
 
-        public Repository(EkklesiaContext context, DbSet<T> entities)
+        private IMongoCollection<T> _entities;
+
+        public IMongoCollection<T> Entities
         {
-            Context = context;
-            Entities = entities;
+            get { return _entities ?? (_entities = GetOrCreateEntity()); }
         }
 
-        public async Task<T> Add(T entity)
+        public Repository(ApplicationContext context)
         {
-            await Entities.AddAsync(entity);
-            await Context.SaveChangesAsync();
+            Context = context;
+        }
+
+        public async Task<T> AddAsync(T entity)
+        {
+            await Entities.InsertOneAsync(entity);
             return entity;
         }
 
-        public async Task<IEnumerable<T>> All()
+        public async Task<IEnumerable<T>> AddAsync(IEnumerable<T> entities)
         {
-            return await Entities.ToListAsync();
-        }
-
-
-        public async Task<IEnumerable<T>> BulkAdd(IEnumerable<T> entities)
-        {
-            await Entities.AddRangeAsync(entities);
-            await Context.SaveChangesAsync();
+            await Entities.InsertManyAsync(entities);
             return entities;
         }
 
-        public async Task<IEnumerable<T>> BulkDelete(IEnumerable<T> entities)
+        public async Task<IEnumerable<T>> AllAsync()
         {
-            Entities.RemoveRange(entities);
-            await Context.SaveChangesAsync();
-            return entities;
+            var filter = Builders<T>.Filter.Empty;
+            return await Entities.Find(filter).ToListAsync();
+        }       
+
+        public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> filter)
+        {
+            var query = await Entities.FindAsync(filter);
+            return query.ToEnumerable();
         }
 
-        public async Task<IEnumerable<T>> BulkUpdate(IEnumerable<T> entities)
+        public async Task<T> FindSync(string Id)
         {
-            Entities.UpdateRange(entities);
-            await Context.SaveChangesAsync();
-            return entities;
+            if (ObjectId.TryParse(Id, out var _))
+            {
+                return await FindSync(ObjectId.Parse(Id));
+            }
+            throw new ArgumentException($"O Id fornecido não é válido. Id = {Id}");
         }
 
-        public Task<T> Delete(T entity)
+        public async Task<T> FindSync(ObjectId key)
         {
-            return Delete(entity.Id);
+            var query = await Entities.FindAsync(x => x.Id == key);
+            return await query.FirstOrDefaultAsync();
         }
 
-        public async Task<T> Delete(object id)
+        public Task<T> DeleteAsync(T entity)
         {
-            T m = await GetById(id);
+            return DeleteAsync(entity.Id);
+        }
+
+        public async Task DeleteAsync(string key)
+        {
+            await DeleteAsync(ObjectId.Parse(key));
+        }
+
+        public async Task<T> DeleteAsync(ObjectId Id)
+        {
+            T m = await FindSync(Id);
             if (m != null)
             {
-                Entities.Remove(m);
-                await Context.SaveChangesAsync();
+                await Entities.DeleteOneAsync(x => x.Id == Id);
             }
             return m;
         }
 
-        public async Task<T> GetById(object id)
+        public async Task<IEnumerable<T>> DeleteAsync(IEnumerable<T> entities)
         {
-            return await Entities.FindAsync((int)id);
+            foreach (var ent in entities)
+            {
+                var idObjeto = ent.Id;
+                await Entities.DeleteManyAsync(x => x.Id == idObjeto);
+            }
+            return entities;
         }
 
-        public IQueryable<T> GetQueryable()
+        public async Task<IEnumerable<T>> UpdateAsync(IEnumerable<T> entities)
         {
-            return Entities;
+            foreach (var ent in entities)
+            {
+                await UpdateAsync(ent);
+            }
+            return entities;
         }
 
-        public async Task<T> Update(T entity)
+        public async Task<T> UpdateAsync(T entity)
         {
-            var m = Entities.Attach(entity);
-            m.State = EntityState.Modified;
-            await Context.SaveChangesAsync();
+            await Entities.FindOneAndReplaceAsync(x => x.Id == entity.Id, entity);
             return entity;
         }
+
+        public IMongoQueryable<T> GetQueryable()
+        {
+            return Entities.AsQueryable();
+        }
+
+        private IMongoCollection<T> GetOrCreateEntity()
+        {
+            if (Context.DataBase.GetCollection<T>(Entity) == null)
+            {
+                return CreateEntity();
+            }
+            return Context.DataBase.GetCollection<T>(Entity);
+        }
+
+        private IMongoCollection<T> CreateEntity()
+        {
+            Context.DataBase.CreateCollection(Entity);
+            return Context.DataBase.GetCollection<T>(Entity);
+        }
+
 
 
     }

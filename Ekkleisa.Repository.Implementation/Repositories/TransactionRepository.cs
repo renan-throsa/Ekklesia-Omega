@@ -10,8 +10,8 @@ namespace Ekkleisa.Repository.Implementation.Repositories
 {
     public class TransactionRepository : Repository<Transaction>, ITransactionRepository
     {
-        public TransactionRepository(EkklesiaContext context) 
-            : base(context, context.Transactions)
+        public TransactionRepository(ApplicationContext context) 
+            : base(context)
         {
 
         }
