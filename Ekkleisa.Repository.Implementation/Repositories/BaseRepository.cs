@@ -13,19 +13,19 @@ using System.Threading.Tasks;
 
 namespace Ekkleisa.Repository.Implementation.Repositories
 {
-    public abstract class Repository<T> : IRepository<T> where T : class, IEntity<ObjectId>
+    public abstract class BaseRepository<T> : IRepository<T> where T : class, IEntity<ObjectId>
     {
         private ApplicationContext Context { get; }
         private readonly string Entity = $"c_{typeof(T).Name.ToLower()}";
 
         private IMongoCollection<T> _entities;
 
-        public IMongoCollection<T> Entities
+        protected IMongoCollection<T> Entities
         {
             get { return _entities ?? (_entities = GetOrCreateEntity()); }
         }
 
-        public Repository(ApplicationContext context)
+        public BaseRepository(ApplicationContext context)
         {
             Context = context;
         }
@@ -45,7 +45,8 @@ namespace Ekkleisa.Repository.Implementation.Repositories
         public async Task<IEnumerable<T>> AllAsync()
         {
             var filter = Builders<T>.Filter.Empty;
-            return await Entities.Find(filter).ToListAsync();
+            var query = await Entities.FindAsync(filter);
+            return query.ToEnumerable();
         }       
 
         public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> filter)

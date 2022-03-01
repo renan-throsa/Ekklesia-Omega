@@ -13,8 +13,7 @@ namespace Ekkleisa.Repository.Implementation.Context
         private readonly IConfiguration Configuration;
         private readonly string _connectionString;
         private readonly MongoClientSettings _settings;
-        private readonly string _nameDB;
-        private static bool _MongoMapped = false;
+        private readonly string _nameDB;        
 
         private IMongoDatabase _dataBase;
         public IMongoDatabase DataBase
@@ -37,7 +36,7 @@ namespace Ekkleisa.Repository.Implementation.Context
             _nameDB = Configuration.GetSection("ApplicationContext:DatabaseName").Value;
             RegisterMongoMap();
             Conectar();
-        }
+        }       
 
         public void Conectar()
         {
@@ -51,19 +50,15 @@ namespace Ekkleisa.Repository.Implementation.Context
         }
 
         private void RegisterMongoMap()
-        {
-            _MongoMapped = true;
-            if (!_MongoMapped)
-            {
-                //.RegisterSerializer(typeof(DateTime), new LocalTimeMongoSerializer());
+        {  
+            BsonClassMap.RegisterClassMap<BaseEntity>(cm => MongoMapping.BaseEntity(cm));
+            BsonClassMap.RegisterClassMap<Member>(cm => MongoMapping.Member(cm));
+            BsonClassMap.RegisterClassMap<Transaction>(cm => MongoMapping.Transaction(cm));
+            BsonClassMap.RegisterClassMap<Expense>(cm => MongoMapping.Expense(cm));
+            BsonClassMap.RegisterClassMap<Income>(cm => MongoMapping.Income(cm));
+            //BsonClassMap.RegisterClassMap<Follow>(cm => MongoMapping.Follow(cm));
+            //BsonClassMap.RegisterClassMap<Like>(cm => MongoMapping.Like(cm));
 
-                BsonClassMap.RegisterClassMap<BaseEntity>(cm => MongoMapping.BaseEntity(cm));
-                BsonClassMap.RegisterClassMap<Member>(cm => MongoMapping.Member(cm));
-                BsonClassMap.RegisterClassMap<Expense>(cm => MongoMapping.Expense(cm));
-                BsonClassMap.RegisterClassMap<Income>(cm => MongoMapping.Income(cm));                
-                //BsonClassMap.RegisterClassMap<Follow>(cm => MongoMapping.Follow(cm));
-                //BsonClassMap.RegisterClassMap<Like>(cm => MongoMapping.Like(cm));
-            }
         }
     }
 }

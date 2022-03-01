@@ -20,9 +20,15 @@ namespace Ekkleisa.Repository.Implementation.Mapping
             return cm;
         }
 
+        internal static BsonClassMap<Transaction> Transaction(BsonClassMap<Transaction> cm)
+        {
+            cm.AutoMap();            
+            return cm;
+        }
+
         internal static BsonClassMap<Expense> Expense(BsonClassMap<Expense> cm)
         {
-            cm.AutoMap();
+            cm.AutoMap();            
             return cm;
         }
 

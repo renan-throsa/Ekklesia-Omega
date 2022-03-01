@@ -11,7 +11,7 @@ using System.Linq.Expressions;
 
 namespace Ekkleisa.Repository.Implementation.Repositories
 {
-    public class MemberRepository : Repository<Member>, IMemberRepository
+    public class MemberRepository : BaseRepository<Member>, IMemberRepository
     {
 
         public MemberRepository(ApplicationContext context)

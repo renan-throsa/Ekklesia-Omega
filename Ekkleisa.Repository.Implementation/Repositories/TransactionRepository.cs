@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Ekkleisa.Repository.Implementation.Repositories
 {
-    public class TransactionRepository : Repository<Transaction>, ITransactionRepository
+    public class TransactionRepository : BaseRepository<Transaction>, ITransactionRepository
     {
         public TransactionRepository(ApplicationContext context) 
             : base(context)

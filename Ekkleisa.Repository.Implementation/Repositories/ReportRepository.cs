@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Ekkleisa.Repository.Implementation.Repositories
 {
-    public class ReportRepository : Repository<Report>, IReportRepository
+    public class ReportRepository : BaseRepository<Report>, IReportRepository
     {
         public ReportRepository(ApplicationContext context)
             : base(context)
