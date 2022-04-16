@@ -1,40 +1,41 @@
-﻿using System;
+﻿using Ekklesia.Entities.Entities;
+using MongoDB.Bson;
 
 namespace Ekklesia.Entities.DTOs
 {
-    public class BiblicalReportDTO
+    public class BiblicalReportDTO : ReportDTO
     {
-        //ABSTRACT
-        //ATIVIDADES BÁSICAS DE RELATÓRIO
-        public int Id { get; set; }
-        public DateTime Date { get; set; }
-        public int PreacherId { get; set; }
-        public MemberDTO Preacher { get; set; }
-        public int CoordinatorId { get; set; }
-        public MemberDTO Coordinator { get; set; }
-
-        //ATIVIDADES BÁSICAS PARA EVENTOS        
-        public int Reunions { get; set; }
-        public int Convertions { get; set; }
-
-        //MOVIMENTO FINANCEIRO
-        public float PreviousMonth { get; set; }
-        public float Income { get; set; }
-        public float Expense { get; set; }
-        public float Tenth { get; set; }
-        public float Balance { get; set; }        
 
         //CONCRET
         public int NumberOfBibles { get; set; }
         public int NumberOfReunionWithTeachers { get; set; }
-        public int NumberOfVisits { get; set; }
+        public int NumberOfVisitants { get; set; }
         public int NumberOfPeopleAttending { get; set; }
-        public int PedagogicalBody { get; set; }
+        public int NumberOfPeopleInPedagogicalBody { get; set; }
 
-        public BiblicalReportDTO()
+
+        public override Report ToEntity(params string[] props)
         {
-            this.Preacher = new MemberDTO();
-            this.Coordinator = new MemberDTO();
+            return new BiblicalReport
+            {
+                Id = string.IsNullOrEmpty(this.Id) ? ObjectId.Empty : ObjectId.Parse(this.Id),
+                Date = this.Date,
+                Preacher = this.Preacher.ToEntity(nameof(MemberDTO.Name), nameof(MemberDTO.Id)),
+                Coordinator = this.Coordinator.ToEntity(nameof(MemberDTO.Name), nameof(MemberDTO.Id)),
+                NumberOfReunions = this.NumberOfReunions,
+                NumberOfConvertions = this.NumberOfConvertions,
+                PreviousMonth = this.PreviousMonth,
+                Income = this.Income,
+                Expense = this.Expense,
+                Tenth = this.Tenth,
+                Balance = this.Balance,
+                NumberOfBibles = this.NumberOfBibles,
+                NumberOfReunionWithTeachers = this.NumberOfReunionWithTeachers,
+                NumberOfVisitants = this.NumberOfVisitants,
+                NumberOfPeopleAttending = this.NumberOfPeopleAttending,
+                NumberOfPeopleInPedagogicalBody = this.NumberOfPeopleInPedagogicalBody,
+
+            };
         }
     }
 }

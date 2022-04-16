@@ -1,11 +1,8 @@
 ﻿using Ekklesia.Entities.DTOs;
 using Ekklesia.Entities.Validations;
 using Ekklesia.Tests.Base;
+using MongoDB.Bson;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Ekklesia.Tests.Occasion
@@ -13,7 +10,7 @@ namespace Ekklesia.Tests.Occasion
     public class ReunionTest : BaseTest<ReunionDTO, ReunionValidation>
     {
         [Fact]
-        private void TestInvalideUpperDate()
+        public void TestInvalideUpperDate()
         {
             DTO.Date = DateTime.Now.AddDays(1);
             var result = IsValid(nameof(DTO.Date));
@@ -21,7 +18,7 @@ namespace Ekklesia.Tests.Occasion
         }
 
         [Fact]
-        private void TestInvalideLowerDate()
+        public void TestInvalideLowerDate()
         {
             DTO.Date = DateTime.Now.AddDays(-31);
             var result = IsValid(nameof(DTO.Date));
@@ -29,7 +26,7 @@ namespace Ekklesia.Tests.Occasion
         }
 
         [Fact]
-        private void TestInvalideEndDate()
+        public void TestInvalideEndDate()
         {
             DTO.Date = DateTime.Now;
             DTO.EndTime = DateTime.Now.AddHours(-5);
@@ -38,7 +35,7 @@ namespace Ekklesia.Tests.Occasion
         }
 
         [Fact]
-        private void TestValideEndDate()
+        public void TestValideEndDate()
         {
             DTO.Date = DateTime.Now;
             DTO.EndTime = DateTime.Now.AddHours(1);
@@ -47,7 +44,7 @@ namespace Ekklesia.Tests.Occasion
         }
 
         [Fact]
-        private void TestValideDate()
+        public void TestValideDate()
         {
             DTO.Date = DateTime.Now;
             var result = IsValid(nameof(DTO.Date));
@@ -55,15 +52,33 @@ namespace Ekklesia.Tests.Occasion
         }
 
         [Fact]
-        private void TestInvalideSpeaker()
+        public void TestInvalideSpeaker()
         {
             DTO.Speaker = null;
             var result = IsValid(nameof(DTO.Speaker));
             Assert.False(result.IsValid);
         }
 
+        [Theory]
+        [InlineData("Gaius Julius Caesar")]
+        [InlineData("Gaius Július Caesar")]
+        [InlineData("")]
+        public void TestValiditySpeakerName(string name)
+        {
+            DTO.Speaker = new MemberDTO { Name = name,Id = ObjectId.GenerateNewId().ToString() };
+            var result = IsValid(nameof(DTO.Speaker));
+            if (string.IsNullOrEmpty(name))
+            {
+                Assert.False(result.IsValid);
+            }
+            else
+            {
+                Assert.True(result.IsValid);
+            }
+        }
+
         [Fact]
-        private void TestInvalideParticipants()
+        public void TestInvalideParticipants()
         {
             DTO.Participants = null;
             var result = IsValid(nameof(DTO.Participants));
@@ -71,12 +86,12 @@ namespace Ekklesia.Tests.Occasion
         }
 
         [Fact]
-        private void TestEmptyTopic()
+        public void TestEmptyTopic()
         {
             DTO.Topic = string.Empty;
             var result = IsValid(nameof(DTO.Topic));
             Assert.False(result.IsValid);
         }
-        
+
     }
 }

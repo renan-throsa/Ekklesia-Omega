@@ -38,7 +38,7 @@ namespace Ekkleisa.Repository.Implementation.Context
             Conectar();
         }       
 
-        public void Conectar()
+        private void Conectar()
         {
             if (DataBase == null)
                 throw new MongoConnectionFailedException("Não foi possível conectar ao banco de dados.");

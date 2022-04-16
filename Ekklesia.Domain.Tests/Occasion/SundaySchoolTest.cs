@@ -2,10 +2,6 @@
 using Ekklesia.Entities.Validations;
 using Ekklesia.Tests.Base;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Ekklesia.Tests.Occasion
@@ -13,7 +9,7 @@ namespace Ekklesia.Tests.Occasion
     public class SundaySchoolTest : BaseTest<SundaySchoolDTO, SundaySchoolValidation>
     {
         [Fact]
-        private void TestInvalideUpperDate()
+        public void TestInvalideUpperDate()
         {
             DTO.Date = DateTime.Now.AddDays(1);
             var result = IsValid(nameof(DTO.Date));
@@ -21,7 +17,7 @@ namespace Ekklesia.Tests.Occasion
         }
 
         [Fact]
-        private void TestInvalideLowerDate()
+        public void TestInvalideLowerDate()
         {
             DTO.Date = DateTime.Now.AddDays(-31);
             var result = IsValid(nameof(DTO.Date));
@@ -29,7 +25,7 @@ namespace Ekklesia.Tests.Occasion
         }
 
         [Fact]
-        private void TestValideDate()
+        public void TestValideDate()
         {
             DTO.Date = DateTime.Now;
             var result = IsValid(nameof(DTO.Date));
@@ -37,7 +33,7 @@ namespace Ekklesia.Tests.Occasion
         }
 
         [Fact]
-        private void TestInvalideTeacher()
+        public void TestInvalideTeacher()
         {
             DTO.Teacher = null;
             var result = IsValid(nameof(DTO.Teacher));
@@ -45,7 +41,7 @@ namespace Ekklesia.Tests.Occasion
         }
 
         [Fact]
-        private void TestInvalideParticipants()
+        public void TestInvalideParticipants()
         {
             DTO.Participants = null;
             var result = IsValid(nameof(DTO.Participants));
@@ -53,7 +49,7 @@ namespace Ekklesia.Tests.Occasion
         }
 
         [Fact]
-        private void TestEmptyTheme()
+        public void TestEmptyTheme()
         {
             DTO.Theme = string.Empty;
             var result = IsValid(nameof(DTO.Theme));
@@ -61,7 +57,7 @@ namespace Ekklesia.Tests.Occasion
         }
 
         [Fact]
-        private void TestEmptyVerse()
+        public void TestEmptyVerse()
         {
             DTO.Verse = string.Empty;
             var result = IsValid(nameof(DTO.Verse));
@@ -71,22 +67,22 @@ namespace Ekklesia.Tests.Occasion
         [Theory]
         [InlineData(-1)]
         [InlineData(-0.0001)]
-        private void TestInValidVisitants(int number)
-        {
-            DTO.Visitants = number;
-            var result = IsValid(nameof(DTO.Visitants));
-            Assert.False(result.IsValid);
-        }
-
-        [Theory]
         [InlineData(0)]
         [InlineData(2)]
         [InlineData(3.5666)]
-        private void TestValidVisitants(int number)
+        public void TestValidityVisitants(int number)
         {
             DTO.Visitants = number;
             var result = IsValid(nameof(DTO.Visitants));
-            Assert.True(result.IsValid);
+            if (number >= 0)
+            {
+                Assert.True(result.IsValid);
+            }
+            else
+            {
+                Assert.False(result.IsValid);
+            }
         }
+
     }
 }

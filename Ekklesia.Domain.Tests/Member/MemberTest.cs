@@ -8,7 +8,7 @@ namespace Ekklesia.Domain.Tests.Member
     public class MemberTest : BaseTest<MemberDTO, MemberValidation>
     {
         [Fact]
-        private void TestEmptyName()
+        public void TestEmptyName()
         {
             DTO.Name = string.Empty;
             var result = IsValid(nameof(DTO.Name));
@@ -20,7 +20,7 @@ namespace Ekklesia.Domain.Tests.Member
         [InlineData("Gaius Július Caesar")]
         [InlineData("Gaius Július César")]
         [InlineData("Gaius Július Çésar")]
-        private void TestValidName(string name)
+        public void TestValidName(string name)
         {
             DTO.Name = name;
             var result = IsValid(nameof(DTO.Name));
@@ -33,7 +33,7 @@ namespace Ekklesia.Domain.Tests.Member
         [InlineData("Gaius J*lius Caesar")]
         [InlineData("Gaius Július [aesar")]
         [InlineData("Gaiu$ Július Caesar")]
-        private void TestInvalidName(string name)
+        public void TestInvalidName(string name)
         {
             DTO.Name = name;
             var result = IsValid(nameof(DTO.Name));
@@ -44,7 +44,7 @@ namespace Ekklesia.Domain.Tests.Member
         [Theory]
         [InlineData("63994544665")]
         [InlineData("91993261520")]
-        private void TestValidNumber(string number)
+        public void TestValidNumber(string number)
         {
             DTO.Phone = number;
             var result = IsValid(nameof(DTO.Phone));
@@ -57,7 +57,7 @@ namespace Ekklesia.Domain.Tests.Member
         [InlineData("00000000000")]
         [InlineData("6798601721")]
         [InlineData("")]
-        private void TestInValidNumber(string number)
+        public void TestInValidNumber(string number)
         {
             DTO.Phone = number;
             var result = IsValid(nameof(DTO.Phone));

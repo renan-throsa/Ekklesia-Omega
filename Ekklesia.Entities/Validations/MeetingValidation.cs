@@ -2,10 +2,6 @@
 using Ekklesia.Entities.DTOs;
 using FluentValidation;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ekklesia.Entities.Validations
 {
@@ -18,10 +14,13 @@ namespace Ekklesia.Entities.Validations
 
             RuleFor(m => m.Date)
                 .ExclusiveBetween(LowerBound, UpperBound)
-                .WithMessage($"A data de um encontro prescisa estar entre {LowerBound.ToString("M")} e {UpperBound.ToString("M")}.");
+                .WithMessage($"A data de um encontro prescisa estar entre {LowerBound.ToString("M")} e {UpperBound.ToString("M")}.");                     
 
+            RuleFor(r => r.Speaker)
+               .NotNull().WithMessage("Um encontro precisa ter um orador.")
+               .Must(speaker => !string.IsNullOrEmpty(speaker.Name) || !string.IsNullOrEmpty(speaker.Id))
+              .WithMessage("Um encontro precisa ter um orador.");
 
-            RuleFor(m => m.Speaker).NotNull().WithMessage("A reunião precisa ter um pregador.");
             RuleFor(m => m.Participants).NotEmpty().WithMessage("A reunião precisa ter ao menos um participante.");            
         }
     }

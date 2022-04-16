@@ -24,7 +24,7 @@ namespace Ekkleisa.Repository.Implementation.Mapping
                 .HasConversion<string>(e => e.ToString(), e => (ReunionType)Enum.Parse(typeof(ReunionType), e)
                 );
 
-            builder.HasMany(r => r.Members);
+            builder.HasMany(r => r.Participants);
         }
     }
 }

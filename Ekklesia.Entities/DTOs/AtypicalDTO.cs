@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Ekklesia.Entities.Entities;
+using MongoDB.Bson;
+using System;
 
 namespace Ekklesia.Entities.DTOs
 {
-    public class AtypicalDTO
+    public class AtypicalDTO : BaseDto<Atypical>
     {
-        public int Id { get; set; }
         public DateTime Date { get; set; }
         public string Description { get; set; }
 
@@ -12,6 +13,16 @@ namespace Ekklesia.Entities.DTOs
         {
             this.Date = DateTime.Now;
             this.Description = string.Empty;
+        }
+
+        public override Atypical ToEntity(params string[] props)
+        {
+            return new Atypical()
+            {
+                Id = string.IsNullOrEmpty(this.Id) ? ObjectId.Empty : ObjectId.Parse(this.Id),
+                Date = this.Date,
+                Description = this.Description,
+            };
         }
     }
 }

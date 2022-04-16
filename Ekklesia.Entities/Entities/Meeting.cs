@@ -4,18 +4,18 @@ namespace Ekklesia.Entities.Entities
 {
     public class Meeting : Occasion
     {
-        public ISet<Member> Members { get; set; }
+        public ISet<Member> Participants { get; set; }
         public Member Speaker { get; set; }
 
         public Meeting()
         {
             this.Speaker = new Member();
-            this.Members = new HashSet<Member>();
+            this.Participants = new HashSet<Member>();
         }
 
         public void AddMember(Member member)
         {
-            this.Members.Add(member);
+            this.Participants.Add(member);
         }
     }
 }

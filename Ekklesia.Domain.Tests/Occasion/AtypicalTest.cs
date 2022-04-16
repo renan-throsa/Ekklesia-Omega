@@ -10,7 +10,7 @@ namespace Ekklesia.Tests.Occasion
     {
 
         [Fact]
-        private void TestEmptyDescription()
+        public void TestEmptyDescription()
         {
             DTO.Description = string.Empty;
             var result = IsValid(nameof(DTO.Description));
@@ -18,7 +18,7 @@ namespace Ekklesia.Tests.Occasion
         }
 
         [Fact]
-        private void TestInvalideUpperDate()
+        public void TestInvalideUpperDate()
         {
             DTO.Date = DateTime.Now.AddDays(1);
             var result = IsValid(nameof(DTO.Date));
@@ -26,7 +26,7 @@ namespace Ekklesia.Tests.Occasion
         }
 
         [Fact]
-        private void TestInvalideLowerDate()
+        public void TestInvalideLowerDate()
         {
             DTO.Date = DateTime.Now.AddDays(-31);
             var result = IsValid(nameof(DTO.Date));
@@ -34,7 +34,7 @@ namespace Ekklesia.Tests.Occasion
         }
 
         [Fact]
-        private void TestValideDate()
+        public void TestValideDate()
         {
             DTO.Date = DateTime.Now;
             var result = IsValid(nameof(DTO.Date));

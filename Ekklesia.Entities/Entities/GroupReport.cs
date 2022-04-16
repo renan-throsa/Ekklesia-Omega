@@ -5,6 +5,6 @@
         public int NumberOfExternalCults { get; set; }
         public int NumberOfCells { get; set; }
         public int NumberOfBaptizeds { get; set; }
-        public int NumberOfMeetingsWithTheCoordination { get; set; }
+        public int NumberOfCoordinationMeetings { get; set; }
     }
 }

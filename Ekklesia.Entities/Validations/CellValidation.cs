@@ -17,7 +17,7 @@ namespace Ekklesia.Entities.Validations
                 .WithMessage($"A data de uma célula prescisa estar entre {LowerBound.ToString("M")} e {UpperBound.ToString("M")}.");
               
 
-            RuleFor(c => c.Convertions)
+            RuleFor(c => c.NumberOfConvertions)
                 .GreaterThanOrEqualTo(0)
                 .WithMessage("Número de conversões deve ser maior ou igual 0.");
         }

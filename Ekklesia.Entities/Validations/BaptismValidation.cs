@@ -16,12 +16,16 @@ namespace Ekklesia.Entities.Validations
                 .ExclusiveBetween(LowerBound, UpperBound)
                 .WithMessage($"A data de batismo prescisa estar entre {LowerBound.ToString("M")} e {UpperBound.ToString("M")}.");
 
-            RuleFor(b => b.Baptizeds)               
+            RuleFor(b => b.Baptizer)
+               .NotNull().WithMessage("Um batismo precisa ter um batizador.")
+               .Must(responsable => !string.IsNullOrEmpty(responsable.Name) || !string.IsNullOrEmpty(responsable.Id))
+              .WithMessage("Um batismo precisa ter um batizador.");
+
+            RuleFor(b => b.Baptizeds)
                 .NotEmpty().WithMessage("O batismo precisa ter ao menos um batizado.");
 
-               
 
-            RuleFor(b=> b.Place)
+            RuleFor(b => b.Place)
                 .NotEmpty().WithMessage("O lugar de batismos não pode ser vazio.");
 
         }

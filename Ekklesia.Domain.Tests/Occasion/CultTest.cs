@@ -11,47 +11,45 @@ namespace Ekklesia.Tests.Occasion
         [Theory]
         [InlineData(-1)]
         [InlineData(-0.0001)]
-        private void TestInValidConvertions(int number)
-        {
-            DTO.Convertions = number;
-            var result = IsValid(nameof(DTO.Convertions));
-            Assert.False(result.IsValid);
-        }
-
-        [Theory]
         [InlineData(0)]
         [InlineData(2)]
         [InlineData(3.5666)]
-        private void TestValidConvertions(int number)
+        public void TestValidityConvertions(int number)
         {
             DTO.Convertions = number;
             var result = IsValid(nameof(DTO.Convertions));
-            Assert.True(result.IsValid);
-        }
+            if (number >= 0)
+            {
+                Assert.True(result.IsValid);
+            }
+            else
+            {
+                Assert.False(result.IsValid);
+            }
+        }        
 
         [Theory]
         [InlineData(-1)]
         [InlineData(-0.0001)]
-        private void TestInValidNumberOfPeople(int number)
-        {
-            DTO.NumberOfPeople = number;
-            var result = IsValid(nameof(DTO.NumberOfPeople));
-            Assert.False(result.IsValid);
-        }
-
-        [Theory]
         [InlineData(0)]
         [InlineData(2)]
         [InlineData(3.5666)]
-        private void TestValidNumberOfPeople(int number)
+        public void TestValidityNumberOfPeople(int number)
         {
             DTO.NumberOfPeople = number;
             var result = IsValid(nameof(DTO.NumberOfPeople));
-            Assert.True(result.IsValid);
+            if (number >= 0)
+            {
+                Assert.True(result.IsValid);
+            }
+            else
+            {
+                Assert.False(result.IsValid);
+            }
         }
 
         [Fact]
-        private void TestInvalideUpperDate()
+        public void TestInvalideUpperDate()
         {
             DTO.Date = DateTime.Now.AddDays(1);
             var result = IsValid(nameof(DTO.Date));
@@ -59,7 +57,7 @@ namespace Ekklesia.Tests.Occasion
         }
 
         [Fact]
-        private void TestInvalideLowerDate()
+        public void TestInvalideLowerDate()
         {
             DTO.Date = DateTime.Now.AddDays(-31);
             var result = IsValid(nameof(DTO.Date));
@@ -67,7 +65,7 @@ namespace Ekklesia.Tests.Occasion
         }
 
         [Fact]
-        private void TestValideDate()
+        public void TestValideDate()
         {
             DTO.Date = DateTime.Now;
             var result = IsValid(nameof(DTO.Date));
@@ -75,7 +73,7 @@ namespace Ekklesia.Tests.Occasion
         }
 
         [Fact]
-        private void TestEmptyKeyVerse()
+        public void TestEmptyKeyVerse()
         {
             DTO.KeyVerse = string.Empty;
             var result = IsValid(nameof(DTO.KeyVerse));

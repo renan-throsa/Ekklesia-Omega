@@ -1,15 +1,11 @@
-﻿using Ekklesia.Entities.Enums;
+﻿using Ekklesia.Entities.Entities;
+using Ekklesia.Entities.Enums;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ekklesia.Entities.DTOs
 {
-    public class CultDTO
+    public class CultDTO : BaseDto<Cult>
     {
-        public int Id { get; set; }
         public DateTime Date { get; set; }
         public int NumberOfPeople { get; set; }
         public string KeyVerse { get; set; }
@@ -17,5 +13,21 @@ namespace Ekklesia.Entities.DTOs
         public bool Internal { get; set; }
         public int Convertions { get; set; }
 
+        public CultDTO()
+        {
+            this.CultType = null;
+            this.KeyVerse = String.Empty;
+        }
+        public override Cult ToEntity(params string[] props)
+        {
+            return new Cult
+            {
+                Date = Date,
+                NumberOfPeople = NumberOfPeople,
+                CultType = CultType.HasValue ? CultType.Value : Enums.CultType.JOVENS,
+                Internal = Internal,
+                Convertions = Convertions
+            };
+        }
     }
 }

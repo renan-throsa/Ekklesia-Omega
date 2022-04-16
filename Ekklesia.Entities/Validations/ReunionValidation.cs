@@ -20,7 +20,11 @@ namespace Ekklesia.Entities.Validations
 
             RuleFor(r => r.Participants).NotEmpty().WithMessage("Uma reunião precisa ter ao menos um participante.");
 
-            RuleFor(r => r.Speaker).NotNull().WithMessage("Uma reuniãp precisa ter um pregador.");
+            RuleFor(r => r.Speaker).NotNull().WithMessage("Uma reunião precisa ter um pregador.");
+
+            RuleFor(r => r.Speaker.Name).NotEmpty().When(r => r.Speaker != null).WithMessage("Uma reunião precisa ter um pregador válido.");
+
+            RuleFor(r => r.Speaker.Id).NotEmpty().When(r => r.Speaker != null).WithMessage("Uma reunião precisa ter um pregador válido.");
 
             RuleFor(r => r.ReunionType).IsInEnum()
                 .WithMessage("Uma reunião precisa obrigatoriamente ter um tipo.");

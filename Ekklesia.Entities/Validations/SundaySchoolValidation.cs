@@ -2,10 +2,6 @@
 using Ekklesia.Entities.DTOs;
 using FluentValidation;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ekklesia.Entities.Validations
 {
@@ -24,7 +20,11 @@ namespace Ekklesia.Entities.Validations
 
             RuleFor(ss => ss.Participants).NotEmpty().WithMessage("Uma escola dominical precisa ter ao menos um participante.");
 
-            RuleFor(ss => ss.Teacher).NotNull().WithMessage("Uma escola dominical precisa ter um professor.");
+            RuleFor(r => r.Teacher).NotNull().WithMessage("Uma escola dominical precisa ter um professor.");           
+
+            RuleFor(r => r.Teacher.Name).NotEmpty().When(r => r.Teacher != null).WithMessage("Uma escola dominical precisa ter um professor válido.");
+
+            RuleFor(r => r.Teacher.Id).NotEmpty().When(r => r.Teacher != null).WithMessage("Uma escola dominical precisa ter um professor válido.");
 
             RuleFor(ss => ss.Theme).NotEmpty().WithMessage("Uma escola dominical precisa ter um tema.");
 

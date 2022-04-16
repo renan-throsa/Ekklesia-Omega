@@ -2,7 +2,7 @@
 {
     public class Cell : Occasion
     {
-        public int Convertions { get; set; }
+        public int NumberOfConvertions { get; set; }
 
     }
 }

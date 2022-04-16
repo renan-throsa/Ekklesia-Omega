@@ -18,7 +18,7 @@ namespace Ekklesia.Entities.Validations
 
             RuleFor(c => c.Convertions)
                 .GreaterThanOrEqualTo(0)
-                .WithMessage("Número de conversões deve ser maior ou igual 0.");           
+                .WithMessage("O número de conversões deve ser maior ou igual 0.");           
 
 
             RuleFor(c => c.KeyVerse)

@@ -13,7 +13,7 @@ namespace Ekklesia.Tests.Occasion
     public class BaptismTest : BaseTest<BaptismDTO, BaptismValidation>
     {
         [Fact]
-        private void TestInvalideBaptizedsList()
+        public void TestInvalideBaptizedsList()
         {
             DTO.Baptizeds = null;
             var result = IsValid(nameof(DTO.Baptizeds));
@@ -21,7 +21,7 @@ namespace Ekklesia.Tests.Occasion
         }
 
         [Fact]
-        private void TestInvalideUpperDate()
+        public void TestInvalideUpperDate()
         {
             DTO.Date = DateTime.Now.AddDays(1);
             var result = IsValid(nameof(DTO.Date));
@@ -29,7 +29,7 @@ namespace Ekklesia.Tests.Occasion
         }
 
         [Fact]
-        private void TestInvalideLowerDate()
+        public void TestInvalideLowerDate()
         {
             DTO.Date = DateTime.Now.AddDays(-31);
             var result = IsValid(nameof(DTO.Date));
@@ -37,7 +37,7 @@ namespace Ekklesia.Tests.Occasion
         }
 
         [Fact]
-        private void TestValideDate()
+        public void TestValideDate()
         {
             DTO.Date = DateTime.Now;
             var result = IsValid(nameof(DTO.Date));
@@ -45,7 +45,7 @@ namespace Ekklesia.Tests.Occasion
         }
 
         [Fact]
-        private void TestEmptyDescription()
+        public void TestEmptyDescription()
         {
             DTO.Place = string.Empty;
             var result = IsValid(nameof(DTO.Place));

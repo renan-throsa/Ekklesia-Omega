@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31702.278
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ekklesia.Api", "Ekklesia.Api\Ekklesia.Api.csproj", "{5C692088-79CE-46DB-819B-21ADEE7F8EBB}"
 EndProject
@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ekkleisa.Repository.Contrac
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ekkleisa.Repository.Implementation", "Ekkleisa.Repository.Implementation\Ekkleisa.Repository.Implementation.csproj", "{A08B59DA-F172-4E2B-8C05-F3F125C51BDD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ekklesia.DependencyInjection", "Ekklesia.DependencyInjection\Ekklesia.DependencyInjection.csproj", "{1388B324-FF09-4BD3-B6CD-E19F682CF57B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ekklesia.DependencyInjection", "Ekklesia.DependencyInjection\Ekklesia.DependencyInjection.csproj", "{1388B324-FF09-4BD3-B6CD-E19F682CF57B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

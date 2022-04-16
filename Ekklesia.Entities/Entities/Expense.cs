@@ -4,6 +4,7 @@
     {
         public string Receipt { get; set; }
         public string Description { get; set; }
+        public Member Responsable { get; set; }
 
         public Expense()
         {
