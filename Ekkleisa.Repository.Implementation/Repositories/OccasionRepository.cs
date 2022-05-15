@@ -23,16 +23,16 @@ namespace Ekkleisa.Repository.Implementation.Repositories
             {
                 if (filter.Before != null)
                 {
-                    query = query.Where(o => filter.Before > o.Date);
+                    query = query.Where(o => filter.Before > o.StartTime);
                 }
 
                 if (filter.After != null)
                 {
-                    query = query.Where(o => o.Date > filter.After);
+                    query = query.Where(o => o.StartTime > filter.After);
                 }
 
             }
-            query = query.OrderByDescending(x => x.Date);
+            query = query.OrderByDescending(x => x.StartTime);
             return query.ToList();
         }
     }

@@ -2,7 +2,6 @@
 using Ekkleisa.Repository.Implementation.Context;
 using Ekklesia.Entities.Entities;
 using Ekklesia.Entities.Filters;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 

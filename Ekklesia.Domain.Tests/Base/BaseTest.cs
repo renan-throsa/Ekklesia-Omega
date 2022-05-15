@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Ekklesia.Entities.Enums;
+using FluentValidation;
 using FluentValidation.Results;
 
 namespace Ekklesia.Tests.Base
@@ -21,6 +22,11 @@ namespace Ekklesia.Tests.Base
             {
                 options.IncludeProperties(prop);
             });
+        }
+
+        protected ValidationResult IsValid(D DTO)
+        {
+            return Validation.Validate(DTO, options => options.IncludeRuleSets(OperationType.Insert.ToString()));
         }
     }
 }

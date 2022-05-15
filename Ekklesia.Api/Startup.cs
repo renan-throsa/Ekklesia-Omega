@@ -4,25 +4,29 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace Ekklesia.Api
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {   
+        {
             services.AddControllers();
+            services.RegisterSettings(Configuration);
+            services.RegisterValidators();
             services.RegisterApplicationContext();
-            services.RegisterDependencies();
-            //services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.RegisterRepositories();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

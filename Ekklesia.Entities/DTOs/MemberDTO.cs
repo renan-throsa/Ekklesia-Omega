@@ -29,7 +29,7 @@ namespace Ekklesia.Entities.DTOs
                     Name = this.Name,
                     Phone = this.Phone,
                     Photo = this.Photo,
-                    Role = this.Role.HasValue ? this.Role.Value : Entities.Role.Membro
+                    Role = this.Role.HasValue ? this.Role.Value : Entities.Role.MEMBRO
                 };
             }
 
@@ -37,12 +37,34 @@ namespace Ekklesia.Entities.DTOs
             Type type = member.GetType();
             foreach (string prop in props)
             {
-                PropertyInfo? propertyInfo = type.GetProperty(prop);
-                var value = this.GetType()?.GetProperty(prop)?.GetValue(this);
-                propertyInfo?.SetValue(member, value);
+                var propertyInfo = type.GetProperty(prop);
+                if (propertyInfo != null)
+                {
+                   
+                    //propertyInfo.SetValue(member, value);
+                    if (prop == nameof(Id))
+                    {
+                        propertyInfo.SetValue(member, ObjectId.Parse(Id));
+                    }
+                    if (prop == nameof(Name))
+                    {
+                        propertyInfo.SetValue(member, Name);
+                    }
+                    if (prop == nameof(Phone))
+                    {
+                        propertyInfo.SetValue(member, Phone);
+                    }
+                    if (prop == nameof(Photo))
+                    {
+                        propertyInfo.SetValue(member, Photo);
+                    }
+                    if (prop == nameof(Role))
+                    {
+                        propertyInfo.SetValue(member, Role);
+                    }
+                }
             }
             return member;
-
 
         }
     }

@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Ekkleisa.Repository.Contract\Ekkleisa.Repository.Contract.csproj" />
+    <ProjectReference Include="..\Ekklesia.Entities\Ekklesia.Entities.csproj" />
+  </ItemGroup>
+
+</Project>

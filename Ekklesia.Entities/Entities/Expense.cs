@@ -1,6 +1,6 @@
 ﻿namespace Ekklesia.Entities.Entities
 {
-    public class Expense : Transaction
+    public class Expense
     {
         public string Receipt { get; set; }
         public string Description { get; set; }
@@ -10,6 +10,8 @@
         {
             this.Receipt = string.Empty;
             this.Description = string.Empty;
+            this.Responsable = new Member();
         }
+        
     }
 }

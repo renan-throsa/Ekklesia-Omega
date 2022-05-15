@@ -1,9 +1,11 @@
-﻿namespace Ekklesia.Entities.DTOs
+﻿using Ekklesia.Entities.Entities;
+
+namespace Ekklesia.Entities.DTOs
 {
-    public abstract class BaseDto<T>
+    public abstract class BaseDto<TEntity> where TEntity : IEntity
     {
         public string Id { get; set; } = string.Empty;
-        public abstract T ToEntity(params string[] props);
+        public abstract TEntity ToEntity(params string[] props);
     }
 
 }
