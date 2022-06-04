@@ -11,8 +11,8 @@ namespace Ekklesia.Entities.DTOs
         public OccasionType Type { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public MemberDTO Host { get; set; }
-        public ISet<MemberDTO> Attendees { get; set; }
+        public MemberDTO? Host { get; set; }
+        public ISet<MemberDTO>? Attendees { get; set; }
         public string Place { get; set; }
         public string Topic { get; set; }
         public string Description { get; set; } = string.Empty;
@@ -38,8 +38,8 @@ namespace Ekklesia.Entities.DTOs
                 Type = this.Type,
                 StartTime = this.StartTime,
                 EndTime = this.EndTime,
-                Host = this.Host.ToEntity(),
-                Attendees = this.Attendees.Select(x => x.ToEntity()).ToHashSet(),
+                Host = this.Host?.ToEntity(),
+                Attendees = this.Attendees?.Select(x => x.ToEntity()).ToHashSet(),
                 Place = this.Place,
                 Topic = this.Topic,
                 Description = this.Description,

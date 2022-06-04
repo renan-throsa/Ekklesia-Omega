@@ -1,7 +1,6 @@
 ﻿using Ekklesia.Entities.Entities;
 using MongoDB.Bson;
 using System;
-using System.Reflection;
 
 namespace Ekklesia.Entities.DTOs
 {
@@ -17,6 +16,7 @@ namespace Ekklesia.Entities.DTOs
             this.Name = string.Empty;
             this.Phone = string.Empty;
             this.Photo = string.Empty;
+            this.Role = null;
         }
 
         public override Member ToEntity(params string[] props)
@@ -29,7 +29,7 @@ namespace Ekklesia.Entities.DTOs
                     Name = this.Name,
                     Phone = this.Phone,
                     Photo = this.Photo,
-                    Role = this.Role.HasValue ? this.Role.Value : Entities.Role.MEMBRO
+                    Role = this.Role.Value
                 };
             }
 
@@ -40,7 +40,7 @@ namespace Ekklesia.Entities.DTOs
                 var propertyInfo = type.GetProperty(prop);
                 if (propertyInfo != null)
                 {
-                   
+
                     //propertyInfo.SetValue(member, value);
                     if (prop == nameof(Id))
                     {

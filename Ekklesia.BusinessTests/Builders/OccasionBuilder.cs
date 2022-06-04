@@ -1,10 +1,9 @@
 ﻿using Ekklesia.Entities.DTOs;
-using Ekklesia.Entities.Entities;
 using Ekklesia.Entities.Enums;
 using System;
 using System.Collections.Generic;
 
-namespace Ekklesia.UnitTesting.Occasion
+namespace Ekklesia.IntegrationTesting.Builders
 {
     public class OccasionBuilder
     {

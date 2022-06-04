@@ -38,6 +38,7 @@ namespace Ekkleisa.Business.Implementation.Business
             {
                 var entity = dto.ToEntity();
                 task = _repository.AddAsync(entity);
+                dto.Id = entity.Id.ToString();                
             }
             else
             {
@@ -99,6 +100,7 @@ namespace Ekkleisa.Business.Implementation.Business
             {
                 var entity = _mapper.Map<TEntity>(tObject);
                 task = _repository.UpdateAsync(entity);
+                tObject.Id = entity.Id.ToString();
             }
             else
             {

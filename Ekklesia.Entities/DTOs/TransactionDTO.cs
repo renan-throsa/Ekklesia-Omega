@@ -9,7 +9,7 @@ namespace Ekklesia.Entities.DTOs
     {
         public DateTime Date { get; set; }
         public float Value { get; set; }
-        public TransactionType Type { get; set; }
+        public TransactionType? Type { get; set; }
 
         public IncomeDTO? Income { get; set; }
         public ExpenseDTO? Expense { get; set; }
@@ -21,8 +21,9 @@ namespace Ekklesia.Entities.DTOs
                 Id = string.IsNullOrEmpty(this.Id) ? ObjectId.Empty : ObjectId.Parse(this.Id),
                 Date = Date,
                 Value = Value,
-                Type = Type,
+                Type = Type.Value,
             };
+
             if (this.Type == TransactionType.RECEITA)
             {
                 transaction.Income = this.Income.ToEntity();
