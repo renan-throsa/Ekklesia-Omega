@@ -2,6 +2,6 @@
 {
     public enum RevenueType
     {
-        DÍZIMO, OFERTA
+        DÍZIMO = 1, OFERTA = 2
     }
 }

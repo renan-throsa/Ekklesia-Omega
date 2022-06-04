@@ -4,29 +4,25 @@ using System;
 
 namespace Ekklesia.Entities.DTOs
 {
-    public class CultDTO : BaseDto<Cult>
+    public class CultDTO
     {
-        public DateTime Date { get; set; }
         public int NumberOfPeople { get; set; }
         public string KeyVerse { get; set; }
-        public CultType? CultType { get; set; }
+        public CultType CultType { get; set; }
         public bool Internal { get; set; }
-        public int Convertions { get; set; }
 
         public CultDTO()
         {
-            this.CultType = null;
-            this.KeyVerse = String.Empty;
+            this.KeyVerse = string.Empty;
         }
-        public override Cult ToEntity(params string[] props)
+
+        public Cult ToEntity()
         {
             return new Cult
             {
-                Date = Date,
                 NumberOfPeople = NumberOfPeople,
-                CultType = CultType.HasValue ? CultType.Value : Enums.CultType.JOVENS,
+                CultType = CultType,
                 Internal = Internal,
-                Convertions = Convertions
             };
         }
     }

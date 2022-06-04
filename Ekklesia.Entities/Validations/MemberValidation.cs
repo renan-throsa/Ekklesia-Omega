@@ -18,8 +18,10 @@ namespace Ekklesia.Entities.Validations
                 RuleFor(m => m.Phone).Matches(@"^[1-9]{2}[1-9]{4,5}[0-9]{4}$")
                     .WithMessage("O número de telefone deve ter exatamente 11 caracteres.");
 
+                RuleFor(m => m.Role).NotNull().WithMessage("Um membro precisa ter um cargo.");
+
                 RuleFor(m => m.Role).IsInEnum()
-                    .WithMessage("Um membro precisa obrigatoriamente ter um cargo.");
+                    .WithMessage("Um membro precisa ter um cargo válido.");
 
             });
 
@@ -32,6 +34,8 @@ namespace Ekklesia.Entities.Validations
 
                 RuleFor(m => m.Phone).Matches(@"^[1-9]{2}[1-9]{4,5}[0-9]{4}$")
                     .WithMessage("O número de telefone deve ter exatamente 11 caracteres.");
+
+                RuleFor(m => m.Role).NotNull().WithMessage("Um membro precisa ter um cargo.");
 
                 RuleFor(m => m.Role).IsInEnum()
                     .WithMessage("Um membro precisa obrigatoriamente ter um cargo.");

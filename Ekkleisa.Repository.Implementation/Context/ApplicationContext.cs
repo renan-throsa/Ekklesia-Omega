@@ -1,7 +1,9 @@
 ﻿using Ekkleisa.Repository.Implementation.Mapping;
 using Ekklesia.Entities.Entities;
 using Ekklesia.Entities.Exceptions;
+using Ekklesia.Entities.Settings;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
@@ -10,33 +12,28 @@ namespace Ekkleisa.Repository.Implementation.Context
 {
     public class ApplicationContext
     {
-        private readonly IConfiguration Configuration;
-        private readonly string _connectionString;
-        private readonly MongoClientSettings _settings;
-        private readonly string _nameDB;        
+        private readonly DataBaseSettings _baseSettings;
+        private static bool _MongoMapped = false;
 
         private IMongoDatabase _dataBase;
         public IMongoDatabase DataBase
         {
-            get { return _dataBase ?? (_dataBase = Cliente.GetDatabase(_nameDB)); }
+            get { return _dataBase ?? (_dataBase = Cliente.GetDatabase(_baseSettings.DatabaseName)); }
         }
 
         private IMongoClient _cliente;
 
         public IMongoClient Cliente
         {
-            get { return _cliente ??= new MongoClient(_settings); }
+            get { return _cliente ??= new MongoClient(MongoClientSettings.FromUrl(new MongoUrl(_baseSettings.ConnectionString))); }
         }
 
-        public ApplicationContext(IConfiguration configuration)
+        public ApplicationContext(IOptions<DataBaseSettings> dataBaseSettings)
         {
-            Configuration = configuration;
-            _connectionString = Configuration.GetSection("ApplicationContext:ConnectionString").Value;
-            _settings = MongoClientSettings.FromUrl(new MongoUrl(_connectionString));
-            _nameDB = Configuration.GetSection("ApplicationContext:DatabaseName").Value;
+            _baseSettings = dataBaseSettings.Value;
             RegisterMongoMap();
             Conectar();
-        }       
+        }
 
         private void Conectar()
         {
@@ -50,14 +47,19 @@ namespace Ekkleisa.Repository.Implementation.Context
         }
 
         private void RegisterMongoMap()
-        {  
-            BsonClassMap.RegisterClassMap<BaseEntity>(cm => MongoMapping.BaseEntity(cm));
-            BsonClassMap.RegisterClassMap<Member>(cm => MongoMapping.Member(cm));
-            BsonClassMap.RegisterClassMap<Transaction>(cm => MongoMapping.Transaction(cm));
-            BsonClassMap.RegisterClassMap<Expense>(cm => MongoMapping.Expense(cm));
-            BsonClassMap.RegisterClassMap<Income>(cm => MongoMapping.Income(cm));
-            //BsonClassMap.RegisterClassMap<Follow>(cm => MongoMapping.Follow(cm));
-            //BsonClassMap.RegisterClassMap<Like>(cm => MongoMapping.Like(cm));
+        {
+            if (!_MongoMapped)
+            {
+                BsonClassMap.RegisterClassMap<BaseEntity>(cm => MongoMapping.BaseEntity(cm));
+                BsonClassMap.RegisterClassMap<Member>(cm => MongoMapping.Member(cm));
+                BsonClassMap.RegisterClassMap<Transaction>(cm => MongoMapping.Transaction(cm));
+                BsonClassMap.RegisterClassMap<Expense>(cm => MongoMapping.Expense(cm));
+                BsonClassMap.RegisterClassMap<Income>(cm => MongoMapping.Income(cm));
+                BsonClassMap.RegisterClassMap<Occasion>(cm => MongoMapping.Occasion(cm));
+                BsonClassMap.RegisterClassMap<Cult>(cm => MongoMapping.Cult(cm));
+                BsonClassMap.RegisterClassMap<SundaySchool>(cm => MongoMapping.SundaySchool(cm));
+
+            }
 
         }
     }

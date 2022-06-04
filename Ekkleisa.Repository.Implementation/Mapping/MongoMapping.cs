@@ -38,5 +38,23 @@ namespace Ekkleisa.Repository.Implementation.Mapping
             return cm;
         }
 
+        internal static BsonClassMap<Occasion> Occasion(BsonClassMap<Occasion> cm)
+        {
+            cm.AutoMap();
+            return cm;
+        }
+
+        internal static BsonClassMap<Cult> Cult(BsonClassMap<Cult> cm)
+        {
+            cm.AutoMap();
+            return cm;
+        }
+
+        internal static BsonClassMap<SundaySchool> SundaySchool(BsonClassMap<SundaySchool> cm)
+        {
+            cm.AutoMap();
+            return cm;
+        }
+
     }
 }

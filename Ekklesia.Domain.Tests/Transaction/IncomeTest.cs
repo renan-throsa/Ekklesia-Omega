@@ -1,7 +1,6 @@
 ﻿using Ekklesia.Entities.DTOs;
 using Ekklesia.Entities.Validations;
 using Ekklesia.Tests.Base;
-using System;
 using Xunit;
 
 namespace Ekklesia.Tests.Transaction
@@ -9,39 +8,20 @@ namespace Ekklesia.Tests.Transaction
     public class IncomeTest : BaseTest<IncomeDTO, IncomeValidation>
     {
 
-        [Theory]
-        [InlineData(float.MinValue)]
-        [InlineData(float.NaN)]
-        public void TestInvalidValue(float value)
+        [Fact]
+        public void TestObservationIvalidSize()
         {
-            DTO.Value = value;
-            var result = IsValid(nameof(DTO.Value));
+            DTO.Observation = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium q";
+            var result = IsValid(nameof(DTO.Observation));
             Assert.False(result.IsValid);
         }
 
         [Fact]
-        public void TestInvalideUpperDate()
+        public void TestObservationValidSize()
         {
-            DTO.Date = DateTime.Now.AddDays(1);
-            var result = IsValid(nameof(DTO.Date));
-            Assert.False(result.IsValid);
-        }
-
-        [Fact]
-        public void TestInvalideLowerDate()
-        {
-            DTO.Date = DateTime.Now.AddDays(-31);
-            var result = IsValid(nameof(DTO.Date));
-            Assert.False(result.IsValid);
-        }
-
-        [Fact]
-        public void TestValideDate()
-        {
-            DTO.Date = DateTime.Now;
-            var result = IsValid(nameof(DTO.Date));
+            DTO.Observation = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium.";
+            var result = IsValid(nameof(DTO.Observation));
             Assert.True(result.IsValid);
         }
-
     }
 }

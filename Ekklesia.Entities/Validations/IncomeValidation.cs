@@ -9,19 +9,10 @@ namespace Ekklesia.Entities.Validations
     {
         public IncomeValidation()
         {
-            var UpperBound = DateTime.Now.AddDays(AplicationConstatants.UpperBoundDate);
-            var LowerBound = DateTime.Now.AddDays(AplicationConstatants.LowerBoundDate);
-
-            RuleFor(i => i.Date)
-                .ExclusiveBetween(LowerBound, UpperBound)
-                .WithMessage($"A data de uma receita prescisa estar entre {LowerBound.ToString("M")} e {UpperBound.ToString("M")}.");
-
-
-            RuleFor(r => r.Value)
-               .GreaterThan(0).WithMessage("Uma receita prescisa um valor maior que zero.");
-
             RuleFor(r => r.Type)
                 .IsInEnum().WithMessage("Um receita precisa obrigatoriamente ter um tipo.");
+
+            RuleFor(r => r.Observation).MaximumLength(250).WithMessage("Obeservação não pode exceder 250 caracteres");
         }
 
     }
