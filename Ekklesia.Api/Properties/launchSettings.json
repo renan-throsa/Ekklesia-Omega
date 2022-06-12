@@ -18,7 +18,8 @@
     },
     "Ekklesia.Api": {
       "commandName": "Project",
-      "launchUrl": "Member",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

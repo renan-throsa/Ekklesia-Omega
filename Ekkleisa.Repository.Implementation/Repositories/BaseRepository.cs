@@ -55,11 +55,7 @@ namespace Ekkleisa.Repository.Implementation.Repositories
 
         public async Task<TEntity> FindSync(string Id)
         {
-            if (ObjectId.TryParse(Id, out var _))
-            {
-                return await FindSync(ObjectId.Parse(Id));
-            }
-            throw new ArgumentException($"O Id fornecido não é válido. Id = {Id}");
+            return await FindSync(ObjectId.Parse(Id));
         }
 
         public async Task<TEntity> FindSync(ObjectId key)
@@ -104,7 +100,7 @@ namespace Ekkleisa.Repository.Implementation.Repositories
             {
                 await UpdateAsync(ent);
             }
-            return entities;            
+            return entities;
         }
 
         public Task<TEntity> UpdateAsync(TEntity entity)

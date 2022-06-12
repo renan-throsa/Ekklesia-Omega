@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace Ekklesia.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class MemberController : ControllerBase
     {
-        private readonly IMemberBusiness _memberBusiness;
+        private readonly IMemberBusiness _memberBusiness;        
 
         public MemberController(IMemberBusiness memberBusiness)
         {
