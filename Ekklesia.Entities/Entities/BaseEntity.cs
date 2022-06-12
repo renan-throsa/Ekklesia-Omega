@@ -1,9 +1,11 @@
-﻿using MongoDB.Bson;
+﻿using Ekklesia.Entities.DTOs;
+using MongoDB.Bson;
 
 namespace Ekklesia.Entities.Entities
 {
-    public abstract class BaseEntity : IEntity<ObjectId>
+    public abstract class BaseEntity : IEntity
     {
         public ObjectId Id { get; set; }
+        
     }
 }

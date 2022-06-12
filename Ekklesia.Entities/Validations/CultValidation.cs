@@ -11,16 +11,8 @@ namespace Ekklesia.Entities.Validations
         {
             var UpperBound = DateTime.Now.AddDays(AplicationConstatants.UpperBoundDate);
             var LowerBound = DateTime.Now.AddDays(AplicationConstatants.LowerBoundDate);
-
-            RuleFor(c => c.Date)
-                .ExclusiveBetween(LowerBound, UpperBound)
-                .WithMessage($"A data de um culto prescisa estar entre {LowerBound.ToString("M")} e {UpperBound.ToString("M")}.");
-
-            RuleFor(c => c.Convertions)
-                .GreaterThanOrEqualTo(0)
-                .WithMessage("O número de conversões deve ser maior ou igual 0.");           
-
-
+                       
+           
             RuleFor(c => c.KeyVerse)
                 .NotEmpty()
                 .WithMessage("O vérsiculo chave não pode estar vazio.");

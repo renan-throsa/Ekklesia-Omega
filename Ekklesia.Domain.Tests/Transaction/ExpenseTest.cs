@@ -8,32 +8,7 @@ namespace Ekklesia.Tests.Transaction
 {
     public class ExpenseTest : BaseTest<ExpenseDTO, ExpenseValidation>
     {
-        [Theory]
-        [InlineData(float.MinValue)]
-        [InlineData(float.NaN)]
-        public void TestInvalidValue(float value)
-        {
-            DTO.Value = value;
-            var result = IsValid(nameof(DTO.Value));
-            Assert.False(result.IsValid);
-        }
-
-        [Fact]
-        public void TestInvalideUpperDate()
-        {
-            DTO.Date = DateTime.Now.AddDays(1);
-            var result = IsValid(nameof(DTO.Date));
-            Assert.False(result.IsValid);
-        }
-
-        [Fact]
-        public void TestInvalideLowerDate()
-        {
-            DTO.Date = DateTime.Now.AddDays(-32);
-            var result = IsValid(nameof(DTO.Date));
-            Assert.False(result.IsValid);
-        }
-
+        
         [Fact]
         public void TestInvalideResponsable()
         {
@@ -41,14 +16,7 @@ namespace Ekklesia.Tests.Transaction
             var result = IsValid(nameof(DTO.Responsable));
             Assert.False(result.IsValid);
         }
-
-        [Fact]
-        public void TestValideDate()
-        {
-            DTO.Date = DateTime.Now;
-            var result = IsValid(nameof(DTO.Date));
-            Assert.True(result.IsValid);
-        }
+               
 
         [Fact]
         public void TestEmptyDescription()
@@ -56,6 +24,22 @@ namespace Ekklesia.Tests.Transaction
             DTO.Description = string.Empty;
             var result = IsValid(nameof(DTO.Description));
             Assert.False(result.IsValid);
+        }
+
+        [Fact]
+        public void TestDescriptionIvalidSize()
+        {
+            DTO.Description = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium q";
+            var result = IsValid(nameof(DTO.Description));
+            Assert.False(result.IsValid);
+        }
+
+        [Fact]
+        public void TestDescriptionValidSize()
+        {
+            DTO.Description = "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium.";
+            var result = IsValid(nameof(DTO.Description));
+            Assert.True(result.IsValid);
         }
 
     }

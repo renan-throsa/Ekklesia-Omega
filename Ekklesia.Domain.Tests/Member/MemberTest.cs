@@ -63,5 +63,20 @@ namespace Ekklesia.Domain.Tests.Member
             var result = IsValid(nameof(DTO.Phone));
             Assert.False(result.IsValid);
         }
+
+
+        [Fact]
+        public void TestValidityDTOToEntity()
+        {
+            DTO.Name = "string";
+            DTO.Phone = "string";
+            DTO.Photo = "string";
+
+            var entity = DTO.ToEntity(nameof(DTO.Name), nameof(DTO.Phone), nameof(DTO.Photo));
+            Assert.Equal(entity.Name, DTO.Name);
+            Assert.Equal(entity.Phone, DTO.Phone);
+            Assert.Equal(entity.Photo, DTO.Photo);
+
+        }
     }
 }

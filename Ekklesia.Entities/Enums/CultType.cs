@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Ekklesia.Entities.Enums
+﻿namespace Ekklesia.Entities.Enums
 {
     public enum CultType
     {
-        JOVENS,
-        CRIANÇAS,
-        CÉLULA,
-        MULHERES,
-        HOMENS
+        JOVENS = 1,
+        CRIANÇAS = 2,
+        CÉLULA = 3,
+        MULHERES = 4,
+        HOMENS = 5
     }
 }

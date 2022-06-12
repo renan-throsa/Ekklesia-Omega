@@ -13,14 +13,14 @@ using System.Threading.Tasks;
 
 namespace Ekkleisa.Repository.Implementation.Repositories
 {
-    public abstract class BaseRepository<T> : IRepository<T> where T : class, IEntity<ObjectId>
+    public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : class, IEntity
     {
         private ApplicationContext Context { get; }
-        private readonly string Entity = $"c_{typeof(T).Name.ToLower()}";
+        private readonly string Entity = $"c_{typeof(TEntity).Name.ToLower()}";
 
-        private IMongoCollection<T> _entities;
+        private IMongoCollection<TEntity> _entities;
 
-        protected IMongoCollection<T> Entities
+        protected IMongoCollection<TEntity> Entities
         {
             get { return _entities ?? (_entities = GetOrCreateEntity()); }
         }
@@ -30,67 +30,61 @@ namespace Ekkleisa.Repository.Implementation.Repositories
             Context = context;
         }
 
-        public async Task<T> AddAsync(T entity)
+        public Task AddAsync(TEntity entity)
         {
-            await Entities.InsertOneAsync(entity);
-            return entity;
+            return Entities.InsertOneAsync(entity);
         }
 
-        public async Task<IEnumerable<T>> AddAsync(IEnumerable<T> entities)
+        public Task AddAsync(IEnumerable<TEntity> entities)
         {
-            await Entities.InsertManyAsync(entities);
-            return entities;
+            return Entities.InsertManyAsync(entities);
         }
 
-        public async Task<IEnumerable<T>> AllAsync()
+        public async Task<IEnumerable<TEntity>> AllAsync()
         {
-            var filter = Builders<T>.Filter.Empty;
-            var query = await Entities.FindAsync(filter);
-            return query.ToEnumerable();
-        }       
-
-        public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> filter)
-        {
+            var filter = Builders<TEntity>.Filter.Empty;
             var query = await Entities.FindAsync(filter);
             return query.ToEnumerable();
         }
 
-        public async Task<T> FindSync(string Id)
+        public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> filter)
         {
-            if (ObjectId.TryParse(Id, out var _))
-            {
-                return await FindSync(ObjectId.Parse(Id));
-            }
-            throw new ArgumentException($"O Id fornecido não é válido. Id = {Id}");
+            var query = await Entities.FindAsync(filter);
+            return query.ToEnumerable();
         }
 
-        public async Task<T> FindSync(ObjectId key)
+        public async Task<TEntity> FindSync(string Id)
+        {
+            return await FindSync(ObjectId.Parse(Id));
+        }
+
+        public async Task<TEntity> FindSync(ObjectId key)
         {
             var query = await Entities.FindAsync(x => x.Id == key);
             return await query.FirstOrDefaultAsync();
         }
 
-        public Task<T> DeleteAsync(T entity)
+        public Task DeleteAsync(TEntity entity)
         {
             return DeleteAsync(entity.Id);
         }
 
-        public async Task DeleteAsync(string key)
+        public Task DeleteAsync(string key)
         {
-            await DeleteAsync(ObjectId.Parse(key));
+            return DeleteAsync(ObjectId.Parse(key));
         }
 
-        public async Task<T> DeleteAsync(ObjectId Id)
+        public async Task<DeleteResult> DeleteAsync(ObjectId Id)
         {
-            T m = await FindSync(Id);
+            TEntity m = await FindSync(Id);
             if (m != null)
             {
-                await Entities.DeleteOneAsync(x => x.Id == Id);
+                return await Entities.DeleteOneAsync(x => x.Id == Id);
             }
-            return m;
+            return null;
         }
 
-        public async Task<IEnumerable<T>> DeleteAsync(IEnumerable<T> entities)
+        public async Task<IEnumerable<TEntity>> DeleteAsync(IEnumerable<TEntity> entities)
         {
             foreach (var ent in entities)
             {
@@ -100,7 +94,7 @@ namespace Ekkleisa.Repository.Implementation.Repositories
             return entities;
         }
 
-        public async Task<IEnumerable<T>> UpdateAsync(IEnumerable<T> entities)
+        public async Task<IEnumerable<TEntity>> UpdateAsync(IEnumerable<TEntity> entities)
         {
             foreach (var ent in entities)
             {
@@ -109,33 +103,30 @@ namespace Ekkleisa.Repository.Implementation.Repositories
             return entities;
         }
 
-        public async Task<T> UpdateAsync(T entity)
+        public Task<TEntity> UpdateAsync(TEntity entity)
         {
-            await Entities.FindOneAndReplaceAsync(x => x.Id == entity.Id, entity);
-            return entity;
+            return Entities.FindOneAndReplaceAsync(x => x.Id == entity.Id, entity);
         }
 
-        public IMongoQueryable<T> GetQueryable()
+        public IMongoQueryable<TEntity> GetQueryable()
         {
             return Entities.AsQueryable();
         }
 
-        private IMongoCollection<T> GetOrCreateEntity()
+        private IMongoCollection<TEntity> GetOrCreateEntity()
         {
-            if (Context.DataBase.GetCollection<T>(Entity) == null)
+            if (Context.DataBase.GetCollection<TEntity>(Entity) == null)
             {
                 return CreateEntity();
             }
-            return Context.DataBase.GetCollection<T>(Entity);
+            return Context.DataBase.GetCollection<TEntity>(Entity);
         }
 
-        private IMongoCollection<T> CreateEntity()
+        private IMongoCollection<TEntity> CreateEntity()
         {
             Context.DataBase.CreateCollection(Entity);
-            return Context.DataBase.GetCollection<T>(Entity);
+            return Context.DataBase.GetCollection<TEntity>(Entity);
         }
-
-
 
     }
 }

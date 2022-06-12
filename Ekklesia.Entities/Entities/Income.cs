@@ -1,17 +1,15 @@
 ﻿using Ekklesia.Entities.Enums;
-using System;
 
 namespace Ekklesia.Entities.Entities
 {
-    public class Income : Transaction
+    public class Income
     {
         public RevenueType Type { get; set; }
+        public string Observation { get; set; }
 
         public Income()
         {
-            this.Date = DateTime.Now;
+            this.Observation = string.Empty;
         }
-
-
     }
 }

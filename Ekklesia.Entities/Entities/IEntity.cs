@@ -1,7 +1,10 @@
-﻿namespace Ekklesia.Entities.Entities
+﻿using Ekklesia.Entities.DTOs;
+using MongoDB.Bson;
+
+namespace Ekklesia.Entities.Entities
 {
-    public interface IEntity<T>
+    public interface IEntity
     {
-        T Id { get; set; }
+        ObjectId Id { get; set; }        
     }
 }

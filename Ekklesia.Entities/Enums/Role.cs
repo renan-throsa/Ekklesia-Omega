@@ -2,8 +2,8 @@
 {
     public enum Role
     {
-        Membro,
-        Lider,
-        Professor
+        MEMBRO = 1,
+        LIDER = 2,
+        PROFESSOR = 3,
     }
 }
