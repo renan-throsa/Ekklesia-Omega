@@ -24,6 +24,17 @@ namespace Ekklesia.Tests.Base
             });
         }
 
+        protected ValidationResult IsValid(params string[] props)
+        {
+            return Validation.Validate(DTO, options =>
+            {
+                foreach (var prop in props)
+                {
+                    options.IncludeProperties(prop);
+                }
+            });
+        }
+
         protected ValidationResult IsValid(D DTO)
         {
             return Validation.Validate(DTO, options => options.IncludeRuleSets(OperationType.Insert.ToString()));

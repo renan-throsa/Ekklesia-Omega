@@ -9,8 +9,6 @@ namespace Ekklesia.Tests.Occasion
     public class OccasionTest : BaseTest<OccasionDTO, OccasionValidation>
     {
 
-
-
         [Fact]
         public void Test_InvalideUpperDate()
         {
@@ -39,6 +37,7 @@ namespace Ekklesia.Tests.Occasion
         public void TestInvalide_Host()
         {
             DTO.Host = null;
+            DTO.Type = Entities.Enums.OccasionType.REUNIAOLIDERANÇA;
             var result = IsValid(nameof(DTO.Host));
             Assert.False(result.IsValid);
         }
@@ -46,7 +45,8 @@ namespace Ekklesia.Tests.Occasion
         [Fact]
         public void TestInvalide_Attendees()
         {
-            DTO.Attendees = null;
+            DTO.Attendees = null;            
+            DTO.Type = Entities.Enums.OccasionType.REUNIAOLIDERANÇA;
             var result = IsValid(nameof(DTO.Attendees));
             Assert.False(result.IsValid);
         }

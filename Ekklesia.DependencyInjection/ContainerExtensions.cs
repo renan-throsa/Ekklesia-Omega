@@ -126,7 +126,7 @@ namespace Ekklesia.DependencyInjection
                     options.User.AllowedUserNameCharacters = null;
                     options.User.RequireUniqueEmail = true;
                 })
-                .AddEntityFrameworkStores<IdentityContext>()
+                .AddEntityFrameworkStores<IdentityContext>()                
                 .AddDefaultTokenProviders();
 
 
@@ -141,7 +141,7 @@ namespace Ekklesia.DependencyInjection
             }).AddJwtBearer(x =>
             {
                 x.RequireHttpsMetadata = true;
-                x.SaveToken = true;
+                x.SaveToken = true;               
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,

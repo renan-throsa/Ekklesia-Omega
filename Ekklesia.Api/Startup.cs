@@ -23,7 +23,7 @@ namespace Ekklesia.Api
         {
             services.AddDependencies(Configuration);
             services.AddIdentityConficuration(Configuration);
-            services.AddControllers();            
+            services.AddControllers();
             services.AddWebApiConfig();
             services.AddWebApiDoc();
             services.AddAutoMapper(typeof(Startup));
@@ -35,16 +35,21 @@ namespace Ekklesia.Api
             {
                 app.UseDeveloperExceptionPage();
             }
-            
-            app.UseRouting();            
-            app.UseAuthorization();
+            else
+            {
+                app.UseHsts();
+            }
+
+            app.UseRouting();
+            app.UseHttpsRedirection();
             app.UseAuthentication();
+            app.UseAuthorization();
             app.UseSuaggerConfig(provider);
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-                
+
         }
     }
 }
