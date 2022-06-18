@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
 
 namespace Ekklesia.Api
 {
@@ -22,14 +21,12 @@ namespace Ekklesia.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-            services.AddSettings(Configuration);
+            services.AddDependencies(Configuration);
+            services.AddIdentityConficuration(Configuration);
+            services.AddControllers();            
             services.AddWebApiConfig();
             services.AddWebApiDoc();
-            services.AddValidators();
-            services.AddApplicationContext();
-            services.AddRepositories();
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddAutoMapper(typeof(Startup));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
@@ -38,14 +35,16 @@ namespace Ekklesia.Api
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseRouting();
+            
+            app.UseRouting();            
             app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseSuaggerConfig(provider);
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-            app.UseSuaggerConfig(provider);
+                
         }
     }
 }

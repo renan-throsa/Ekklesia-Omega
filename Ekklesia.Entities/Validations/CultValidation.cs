@@ -13,15 +13,15 @@ namespace Ekklesia.Entities.Validations
             var LowerBound = DateTime.Now.AddDays(AplicationConstatants.LowerBoundDate);
                        
            
-            RuleFor(c => c.KeyVerse)
+            RuleFor(x => x.KeyVerse)
                 .NotEmpty()
                 .WithMessage("O vérsiculo chave não pode estar vazio.");
 
-            RuleFor(c => c.CultType)
+            RuleFor(x => x.CultType)
                 .IsInEnum()
                  .WithMessage("Um culto precisa obrigatoriamente ter um tipo.");
 
-            RuleFor(c => c.NumberOfPeople)
+            RuleFor(x => x.NumberOfPeople)
                 .GreaterThanOrEqualTo(0)
                 .WithMessage("Número de conversões deve ser maior ou igual 0.");
 

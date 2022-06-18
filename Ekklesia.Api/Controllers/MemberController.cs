@@ -1,5 +1,6 @@
 ﻿using Ekkleisa.Business.Contract.IBusiness;
 using Ekklesia.Entities.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,47 +10,50 @@ namespace Ekklesia.Api.Controllers
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
+    [Authorize]
     public class MemberController : ControllerBase
     {
-        private readonly IMemberBusiness _memberBusiness;        
+        private readonly IMemberBusiness _memberBusiness;
 
         public MemberController(IMemberBusiness memberBusiness)
         {
             this._memberBusiness = memberBusiness;
         }
 
-        // GET: api/<Member>
+
         [HttpGet]
         public async Task<IEnumerable<MemberDTO>> Get()
         {
             return await _memberBusiness.AllAsync();
         }
 
-        // GET api/<Member>/id
+
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
+        public async Task<ActionResult<MemberDTO>> Get(string id)
         {
             MemberDTO member = await _memberBusiness.FindSync(id);
-            if (member != null) return Ok(member);
-            return NotFound(id);
+            if (member == null) return NotFound(id);
+            return Ok(member);
         }
 
-        // POST api/<Member>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] MemberDTO dto)
+        public async Task<ActionResult<Response>> Post([FromBody] MemberDTO dto)
         {
-            await _memberBusiness.AddAsync(dto);
+            var result = await _memberBusiness.AddAsync(dto);
+            if (!result.success) return BadRequest(result);
             var url = Url.Action("Get", new { dto.Id });
             return Created(url, dto.Id);
         }
 
-        // PUT api/<User>
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] MemberDTO dto)
+        public async Task<ActionResult<Response>> Put([FromBody] MemberDTO dto)
         {
             MemberDTO member = await _memberBusiness.FindSync(dto.Id);
             if (member == null) return NotFound(dto.Id);
-            return Ok(_memberBusiness.UpdateAsync(dto));
+
+            var result = await _memberBusiness.UpdateAsync(dto);
+            if (!result.success) return BadRequest(result);
+            return Ok(result);
         }
 
     }

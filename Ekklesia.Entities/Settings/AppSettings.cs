@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Ekklesia.Entities.Settings
+{
+    public class AppSettings
+    {
+        public string Secret { get; set; } = string.Empty;
+        public string Issuer { get; set; } = string.Empty;
+        public string ValidAt { get; set; } = string.Empty;
+        public int ExpirationInHours { get; set; }
+
+    }
+}

@@ -34,23 +34,22 @@ namespace Ekkleisa.Business.Implementation.Business
             this._logger = logger;
         }
 
-        public Task AddAsync(TObject tObject)
+        public async Task<Response> AddAsync(TObject tObject)
         {
             _logger.LogInformation($"Adding object: {tObject.ToJson()}");
-            Task task;
             ValidationResult result = _validator.Validate(tObject, options => options.IncludeRuleSets(OperationType.Insert.ToString()));
+
             if (result.IsValid)
             {
-                var entity = tObject.ToEntity();
-                task = _repository.AddAsync(entity);
-                tObject.Id = entity.Id.ToString();
+                var entity = _mapper.Map<TEntity>(tObject);
+                await _repository.UpdateAsync(entity); ;
+                return Response(result.IsValid, _mapper.Map<TObject>(entity));
             }
             else
             {
-                _logger.LogError(result.ToJson());
-                task = Task.CompletedTask;
+                _logger.LogError(result.Errors.Select(x => x.ErrorMessage).ToJson());
+                return Response(result.IsValid, result.Errors.Select(x => x.ErrorMessage).ToList());
             }
-            return task;
         }
 
         public async Task AddAsync(IEnumerable<TObject> dtos)
@@ -81,7 +80,6 @@ namespace Ekkleisa.Business.Implementation.Business
                 _logger.LogError($"Unable to parse the object: {id}");
                 return null;
             }
-
         }
 
         public Task<IEnumerable<TObject>> FindAsync(Expression<Func<TObject, bool>> filter)
@@ -91,6 +89,7 @@ namespace Ekkleisa.Business.Implementation.Business
 
         public async Task<IEnumerable<TObject>> AllAsync()
         {
+            _logger.LogInformation($"Listing {typeof(TEntity).FullName}");
             var entities = await _repository.AllAsync();
             return entities.Select(x => _mapper.Map<TObject>(x));
         }
@@ -114,23 +113,23 @@ namespace Ekkleisa.Business.Implementation.Business
             return _repository.DeleteAsync(id);
         }
 
-        public Task UpdateAsync(TObject tObject)
+        public async Task<Response> UpdateAsync(TObject tObject)
         {
             _logger.LogInformation($"Updating object: {tObject.ToJson()}");
-            Task task;
+
             ValidationResult result = _validator.Validate(tObject, options => options.IncludeRuleSets(OperationType.Update.ToString()));
             if (result.IsValid)
             {
                 var entity = _mapper.Map<TEntity>(tObject);
-                task = _repository.UpdateAsync(entity);
-                tObject.Id = entity.Id.ToString();
+                await _repository.UpdateAsync(entity); ;
+                return Response(result.IsValid, _mapper.Map<TObject>(entity));
             }
             else
             {
-                _logger.LogError(result.ToJson());
-                task = Task.CompletedTask;
+                _logger.LogError(result.Errors.Select(x => x.ErrorMessage).ToJson());
+                return Response(result.IsValid, result.Errors.Select(x => x.ErrorMessage).ToList());
             }
-            return task;
+
         }
 
         public async Task<IEnumerable<TObject>> UpdateAsync(IEnumerable<TObject> tObjects)
@@ -141,5 +140,14 @@ namespace Ekkleisa.Business.Implementation.Business
         }
 
 
+        private Response Response(bool valide, object result = null)
+        {
+            return
+            new Response
+            {
+                success = valide,
+                payload = result
+            };
+        }
     }
 }
