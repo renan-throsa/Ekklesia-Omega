@@ -7,13 +7,16 @@ using Ekklesia.Entities.Settings;
 using Ekklesia.Entities.Validations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using System.Text;
 
@@ -21,7 +24,7 @@ namespace Ekklesia.DependencyInjection
 {
     public static class ContanierExtensions
     {
-        public static IServiceCollection AddWebApiConfig(this IServiceCollection services)
+        public static IServiceCollection AddWebApiConfig(this IServiceCollection services, IWebHostEnvironment env, IConfiguration configuration)
         {
             services.AddApiVersioning(options =>
             {
@@ -36,6 +39,31 @@ namespace Ekklesia.DependencyInjection
                 options.SubstituteApiVersionInUrl = true;
             });
 
+            services.AddCors(options =>
+            {
+                if (env.IsDevelopment())
+                {
+                    options.AddPolicy(env.EnvironmentName, builder =>
+                    {
+                        builder.AllowAnyMethod();
+                        builder.AllowAnyHeader();                       
+                        builder.AllowAnyOrigin();
+                        builder.AllowCredentials();
+                    });
+                }
+                if (env.IsProduction())
+                {
+                    var appSettingsSection = configuration.GetSection("AppSettings");
+                    var appSettings = appSettingsSection.Get<AppSettings>();
+                    options.AddPolicy(env.EnvironmentName, builder =>
+                    {                        
+                        builder.AllowAnyMethod();
+                        builder.WithHeaders(HeaderNames.ContentType, "application/json");
+                        builder.WithOrigins(appSettings.Audience);
+                        builder.AllowCredentials();
+                    });
+                }
+            });
             return services;
         }
 
@@ -126,7 +154,7 @@ namespace Ekklesia.DependencyInjection
                     options.User.AllowedUserNameCharacters = null;
                     options.User.RequireUniqueEmail = true;
                 })
-                .AddEntityFrameworkStores<IdentityContext>()                
+                .AddEntityFrameworkStores<IdentityContext>()
                 .AddDefaultTokenProviders();
 
 
@@ -141,14 +169,14 @@ namespace Ekklesia.DependencyInjection
             }).AddJwtBearer(x =>
             {
                 x.RequireHttpsMetadata = true;
-                x.SaveToken = true;               
+                x.SaveToken = true;
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = true,
                     ValidateAudience = true,
-                    ValidAudience = appSettings.ValidAt,
+                    ValidAudience = appSettings.Audience,
                     ValidIssuer = appSettings.Issuer
                 };
             });

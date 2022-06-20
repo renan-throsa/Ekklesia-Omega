@@ -92,7 +92,7 @@ namespace Ekkleisa.Business.Implementation.Business
             var token = tokenHandler.CreateToken(new SecurityTokenDescriptor
             {
                 Issuer = _appSettings.Issuer,
-                Audience = _appSettings.ValidAt,
+                Audience = _appSettings.Audience,
                 Expires = DateTime.UtcNow.AddHours(_appSettings.ExpirationInHours),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             });
