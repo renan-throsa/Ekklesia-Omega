@@ -20,7 +20,7 @@ namespace Ekklesia.IntegrationTesting
             var services = new ServiceCollection();
 
 
-            services.AddOptions<DataBaseSettings>().Configure(x => { x.ConnectionString = "mongodb://localhost:27017"; x.DatabaseName = "EKKLESIA_TST"; });
+            services.AddOptions<DataBaseSettings>().Configure(x => { x.ConnectionString = "mongodb://localhost:27017"; x.Database = "EKKLESIA_TST"; });
 
             services.AddSingleton<ApplicationContext>();
 

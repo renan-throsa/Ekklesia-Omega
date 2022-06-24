@@ -5,8 +5,10 @@ using Ekkleisa.Repository.Implementation.Context;
 using Ekkleisa.Repository.Implementation.Repositories;
 using Ekklesia.Entities.Settings;
 using Ekklesia.Entities.Validations;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -46,9 +48,8 @@ namespace Ekklesia.DependencyInjection
                     options.AddPolicy(env.EnvironmentName, builder =>
                     {
                         builder.AllowAnyMethod();
-                        builder.AllowAnyHeader();                       
-                        builder.AllowAnyOrigin();
-                        builder.AllowCredentials();
+                        builder.AllowAnyHeader();
+                        builder.AllowAnyOrigin();                       
                     });
                 }
                 if (env.IsProduction())
@@ -56,7 +57,7 @@ namespace Ekklesia.DependencyInjection
                     var appSettingsSection = configuration.GetSection("AppSettings");
                     var appSettings = appSettingsSection.Get<AppSettings>();
                     options.AddPolicy(env.EnvironmentName, builder =>
-                    {                        
+                    {
                         builder.AllowAnyMethod();
                         builder.WithHeaders(HeaderNames.ContentType, "application/json");
                         builder.WithOrigins(appSettings.Audience);
@@ -116,10 +117,13 @@ namespace Ekklesia.DependencyInjection
 
         public static IServiceCollection AddDependencies(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<DataBaseSettings>(configuration.GetSection(nameof(DataBaseSettings)));
-            services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
+            var DataBaseSettingsSection = configuration.GetSection(nameof(DataBaseSettings));
+            var dataBaseSettings = DataBaseSettingsSection.Get<DataBaseSettings>();
+            services.Configure<DataBaseSettings>(DataBaseSettingsSection);
 
             services.AddSingleton<ApplicationContext>();
+            services.AddHealthChecks().AddMongoDb(mongodbConnectionString: dataBaseSettings.ConnectionString, name: dataBaseSettings.NoSqlDataBase);
+
 
             services.AddSingleton<MemberValidation>();
             services.AddSingleton<TransactionValidation>();
@@ -143,10 +147,16 @@ namespace Ekklesia.DependencyInjection
 
         public static IServiceCollection AddIdentityConficuration(this IServiceCollection services, IConfiguration configuration)
         {
+            var identitySettingsSection = configuration.GetSection(nameof(IdentitySettings));
+            var dataBaseSettings = identitySettingsSection.Get<IdentitySettings>();
+
             services.AddDbContext<IdentityContext>(options =>
             {
-                options.UseSqlServer(configuration["IdentitySettings:ConnectionString"]);
+                options.UseSqlServer(dataBaseSettings.ConnectionString);
             });
+
+            services.AddHealthChecks().AddSqlServer(connectionString: dataBaseSettings.ConnectionString, name: dataBaseSettings.SqlDataBase);
+            services.AddHealthChecksUI().AddSqlServerStorage(dataBaseSettings.ConnectionString);
 
             services.AddDefaultIdentity<IdentityUser>(options =>
                 {
@@ -158,7 +168,7 @@ namespace Ekklesia.DependencyInjection
                 .AddDefaultTokenProviders();
 
 
-            var appSettingsSection = configuration.GetSection("AppSettings");
+            var appSettingsSection = configuration.GetSection(nameof(AppSettings));
             var appSettings = appSettingsSection.Get<AppSettings>();
 
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
@@ -200,5 +210,27 @@ namespace Ekklesia.DependencyInjection
             return app;
         }
 
+        public static IApplicationBuilder UseHealthChecksConfig(this IApplicationBuilder app)
+        {
+            app.UseEndpoints(endpoints =>
+            {                
+                endpoints.MapHealthChecks("/api/hc", new HealthCheckOptions()
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
+                endpoints.MapHealthChecksUI(options =>
+                {
+                    options.UIPath = "/api/hc-ui";
+                    options.ResourcesPath = "/api/hc-ui-resources";
+
+                    options.UseRelativeApiPath = false;
+                    options.UseRelativeResourcesPath = false;
+                    options.UseRelativeWebhookPath = false;
+                });
+
+            });           
+            return app;
+        }
     }
 }

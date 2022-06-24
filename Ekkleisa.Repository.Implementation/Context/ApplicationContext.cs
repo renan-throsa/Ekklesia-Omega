@@ -18,7 +18,7 @@ namespace Ekkleisa.Repository.Implementation.Context
         private IMongoDatabase _dataBase;
         public IMongoDatabase DataBase
         {
-            get { return _dataBase ?? (_dataBase = Cliente.GetDatabase(_baseSettings.DatabaseName)); }
+            get { return _dataBase ?? (_dataBase = Cliente.GetDatabase(_baseSettings.Database)); }
         }
 
         private IMongoClient _cliente;

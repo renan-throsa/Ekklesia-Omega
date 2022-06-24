@@ -1,5 +1,7 @@
 using Ekklesia.DependencyInjection;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
@@ -28,25 +30,27 @@ namespace Ekklesia.Api
             services.AddWebApiConfig(_environment, _configuration);
             services.AddWebApiDoc();
             services.AddAutoMapper(typeof(Startup));
+            services.AddHealthChecksUI();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
         {
             if (env.IsDevelopment())
             {
-
                 app.UseDeveloperExceptionPage();
             }
             else
             {
                 app.UseHsts();
             }
+
             app.UseCors(env.EnvironmentName);
             app.UseRouting();
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseSuaggerConfig(provider);
+            app.UseHealthChecksConfig();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
