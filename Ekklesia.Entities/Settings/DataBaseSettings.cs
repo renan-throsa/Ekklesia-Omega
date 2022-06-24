@@ -3,12 +3,14 @@
     public class DataBaseSettings
     {
         public string ConnectionString { get; set; }
-        public string DatabaseName { get; set; }
+        public string Database { get; set; }
+        public string NoSqlDataBase { get; set; }
 
         public DataBaseSettings()
         {
             ConnectionString = string.Empty;
-            DatabaseName = string.Empty;
+            Database = string.Empty;
+            NoSqlDataBase = string.Empty;
         }
     }
 }

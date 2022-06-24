@@ -11,7 +11,7 @@ namespace Ekkleisa.Business.Contract.IBusiness
 {
     public interface IBaseBusiness<TEntity, TObject> where TEntity : class, IEntity where TObject : BaseDto<TEntity>
     {
-        Task AddAsync(TObject tObject);
+        Task<Response> AddAsync(TObject tObject);
         Task AddAsync(IEnumerable<TObject> tObjects);
         Task<TObject> FindSync(ObjectId key);
         Task<TObject> FindSync(string Id);
@@ -20,7 +20,7 @@ namespace Ekkleisa.Business.Contract.IBusiness
         Task DeleteAsync(TObject tObject);
         Task DeleteAsync(string Id);
         Task<DeleteResult> DeleteAsync(ObjectId Id);
-        Task UpdateAsync(TObject tObject);
+        Task<Response> UpdateAsync(TObject tObject);
         Task<IEnumerable<TObject>> UpdateAsync(IEnumerable<TObject> tObjects);
 
     }
