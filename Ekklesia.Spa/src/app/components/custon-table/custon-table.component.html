@@ -1,0 +1,16 @@
+<div class="table-responsive">
+  <table class="table table-bordered table-striped table-hover">
+    <thead>
+      <tr>
+        <th scope="col" *ngFor="let column of columns">{{ column.name }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <ng-template *ngFor="let column of columns">
+          <th scope="row" *ngFor="let element of elements">{{resolveField(element,column.name)}}</th>
+        </ng-template>
+      </tr>
+    </tbody>
+  </table>
+</div>
