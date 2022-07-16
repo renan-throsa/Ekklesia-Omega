@@ -49,7 +49,7 @@ namespace Ekklesia.DependencyInjection
                     {
                         builder.AllowAnyMethod();
                         builder.AllowAnyHeader();
-                        builder.AllowAnyOrigin();                       
+                        builder.AllowAnyOrigin();
                     });
                 }
                 if (env.IsProduction())
@@ -112,6 +112,14 @@ namespace Ekklesia.DependencyInjection
 
             });
 
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
+                });
+            });
+           
             return services;
         }
 
@@ -212,8 +220,9 @@ namespace Ekklesia.DependencyInjection
 
         public static IApplicationBuilder UseHealthChecksConfig(this IApplicationBuilder app)
         {
+            app.UseCors();
             app.UseEndpoints(endpoints =>
-            {                
+            {
                 endpoints.MapHealthChecks("/api/hc", new HealthCheckOptions()
                 {
                     Predicate = _ => true,
@@ -229,7 +238,7 @@ namespace Ekklesia.DependencyInjection
                     options.UseRelativeWebhookPath = false;
                 });
 
-            });           
+            });
             return app;
         }
     }

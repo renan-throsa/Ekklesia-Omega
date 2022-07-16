@@ -1,7 +1,7 @@
+using AutoMapper;
+using Ekkleisa.Business.Implementation.Mapping;
 using Ekklesia.DependencyInjection;
-using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
@@ -29,7 +29,7 @@ namespace Ekklesia.Api
             services.AddControllers();
             services.AddWebApiConfig(_environment, _configuration);
             services.AddWebApiDoc();
-            services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper(typeof(Mapping));            
             services.AddHealthChecksUI();
         }
 

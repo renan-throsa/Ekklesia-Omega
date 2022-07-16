@@ -15,19 +15,19 @@ export abstract class BaseService<T> {
     this.baseUrl = configBaseServiceURL + this.controller
   }
 
-  public Browse(): Observable<any> {
+  public browse(): Observable<any> {
     return this.http.get(this.baseUrl)
   }
 
-  public Read(id: string): Observable<any> {
+  public read(id: string): Observable<any> {
     return this.http.get(this.baseUrl + '/' + id)
   }
 
-  public Add(entidade: T): Observable<any> {
+  public add(entidade: T): Observable<any> {
     return this.http.post(this.baseUrl, entidade)
   }
 
-  public Edit(entidade: T): Observable<any> {
+  public edit(entidade: T): Observable<any> {
     return this.http.put(this.baseUrl, entidade)
   }
 }

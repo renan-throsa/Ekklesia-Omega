@@ -1,1 +1,96 @@
-<p>signup works!</p>
+<form [formGroup]="form" (ngSubmit)="signup">
+  <div class="mb-3">
+    <label for="inputName" class="form-label">Nome</label>
+    <input
+      type="text"
+      class="form-control"
+      id="inputName"
+      formControlName="name"
+      [ngClass]="{ 'is-invalid': isNameInvalid }"
+    />
+    <div *ngIf="controls.name?.errors?.required" class="invalid-feedback">
+      Um nome é necessário
+    </div>
+    <div *ngIf="controls.name?.errors?.pattern" class="invalid-feedback">
+      Um nome precisa ter um padrão
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="inputPhone" class="form-label">Telefone</label>
+    <input
+      type="tel"
+      class="form-control"
+      id="inputPhone"      
+      formControlName="phone"
+      [textMask]="{mask: MASKS.telefone.textMask}"
+      [ngClass]="{ 'is-invalid': isPhoneInvalid }"
+    />
+    <div *ngIf="controls.phone?.errors?.required" class="invalid-feedback">
+      Telefone é necessário
+    </div>
+    <div *ngIf="controls.phone?.errors?.telefone" class="invalid-feedback">
+      Um telefone precisa ter um padrão
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="inputEmail" class="form-label">Endereço de email</label>
+    <input
+      type="email"
+      class="form-control"
+      id="inputEmail"
+      formControlName="email"
+      [ngClass]="{ 'is-invalid': isEmailInvalid }"
+    />
+    <div *ngIf="controls.email?.errors?.required" class="invalid-feedback">
+      Email é necessário
+    </div>
+    <div *ngIf="controls.email?.errors?.email" class="invalid-feedback">
+      Email inválido
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="inputPassword" class="form-label">Senha</label>
+    <input
+      type="password"
+      class="form-control"
+      id="inputPassword"
+      formControlName="password"
+      [ngClass]="{ 'is-invalid': isPasswordInvalid }"
+    />
+    <div *ngIf="controls.password?.errors?.required" class="invalid-feedback">
+      Senha é necessária
+    </div>
+    <div *ngIf="controls.password?.errors?.pattern" class="invalid-feedback">
+      Uma senha precisa ter um padrão
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="inputPasswordConfirmation" class="form-label"
+      >Confirmar Senha</label
+    >
+    <input
+      type="password"
+      class="form-control"
+      id="inputPasswordConfirmation"
+      formControlName="passwordConfirmation"
+    />
+  </div>
+
+  <div class="mb-3 form-check">
+    <input
+      type="checkbox"
+      class="form-check-input"
+      id="checkBox"
+      formControlName="remember"
+    />
+    <label class="form-check-label" for="checkBox">Lembrar-se de mim?</label>
+  </div>
+
+  <button type="submit" class="btn btn-primary" [disabled]="isformInvalid">
+    Registrar
+  </button>
+</form>

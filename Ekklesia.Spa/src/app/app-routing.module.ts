@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-import { HomeComponent } from './pages/home/home.component'
 
 const routes: Routes = [
   {
@@ -11,7 +10,24 @@ const routes: Routes = [
   {
     path: 'member',
     loadChildren: () =>
-      import('./pages/members/members.module').then((m) => m.MembersModule)
+      import('./pages/members/members.module').then((m) => m.MembersModule),
+  },
+  {
+    path: 'transaction',
+    loadChildren: () =>
+      import('./pages/transactions/transactions.module').then(
+        (m) => m.TransactionsModule,
+      ),
+  },
+  {
+    path: 'account',
+    loadChildren: () =>
+      import('./pages/account/account.module').then((m) => m.AccountModule),
+  },
+  {
+    path: '**',
+    loadChildren: () =>
+      import('./pages/error/error.pages.module').then((m) => m.ErrorPagesModule),
   },
 ]
 

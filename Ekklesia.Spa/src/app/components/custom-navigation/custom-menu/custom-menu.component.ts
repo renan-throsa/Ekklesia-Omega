@@ -1,23 +1,32 @@
-import { Component, OnInit } from '@angular/core'
+import { Component } from '@angular/core'
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome'
-import { faDove, faL } from '@fortawesome/free-solid-svg-icons'
+import { faDove } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
   selector: 'app-custom-menu',
   templateUrl: './custom-menu.component.html',
-  styleUrls: [],
 })
-export class CustomMenuComponent implements OnInit {
-  isCollapsed: boolean;
+export class CustomMenuComponent {
+  isCollapsed: boolean
+  nav: Nav[]
   constructor(library: FaIconLibrary) {
     library.addIcons(faDove)
-    this.isCollapsed = true;
+    this.isCollapsed = true
+    this.nav = [
+      { link: '/member', name: 'Membros', exact: true },
+      { link: '/transaction', name: 'Transações', exact: true },
+      { link: '/account', name: 'Perfil', exact: true },
+    ]
   }
 
-  collapse(){
-    this.isCollapsed = !this.isCollapsed;
-    console.log(this.isCollapsed);
-    
+  collapse() {
+    this.isCollapsed = !this.isCollapsed
+    console.log(this.isCollapsed)
   }
-  ngOnInit(): void {}
+}
+
+interface Nav {
+  link: string
+  name: string
+  exact: true
 }

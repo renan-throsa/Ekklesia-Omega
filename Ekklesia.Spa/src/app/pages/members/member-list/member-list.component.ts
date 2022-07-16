@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { BaseTable } from 'src/app/components/Shared/BaseTable'
 import { Member } from 'src/app/models/Member'
+import { MemberService } from 'src/app/services/member.service'
 
 @Component({
   selector: 'app-member-list',
@@ -8,23 +9,31 @@ import { Member } from 'src/app/models/Member'
   styleUrls: [],
 })
 export class MemberListComponent extends BaseTable<Member> implements OnInit {
-  constructor() {
+  members: Member[]
+  constructor(private _memberService: MemberService) {
     super()
+    this.members = []
     this.columns = [
-      {       
+      {
         name: 'Nome',
         field: 'name',
       },
-      {       
+      {
         name: 'Telefone',
         field: 'phone',
       },
-      {       
+      {
         name: 'Cargo',
         field: 'role',
       },
     ]
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this._memberService.browse().subscribe((result: Member[]) => {
+      console.log("chamando");
+      console.log(result);      
+      this.members = result
+    })
+  }
 }

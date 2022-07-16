@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
 import { MemberEditComponent } from './member-edit/member-edit.component'
 import { MemberListComponent } from './member-list/member-list.component'
+import { MemberNewComponent } from './member-new/member-new.component'
 
 const routes: Routes = [
   {
@@ -9,12 +10,12 @@ const routes: Routes = [
     component: MemberListComponent,
   },
   {
-    path: 'edit',
+    path: 'edit/:id',
     component: MemberEditComponent,
   },
   {
     path: 'new',
-    component: MemberEditComponent,
+    component: MemberNewComponent,
   },
 ]
 
