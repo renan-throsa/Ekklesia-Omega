@@ -6,12 +6,14 @@ export class Member {
   phone: string
   photo: string
   role: Role
+  roleName:string
 
   constructor() {
     this.id = ''
     this.name = ''
     this.phone = ''
     this.photo = ''
-    this.role = Role.MEMBRO
+    this.roleName = '' 
+    this.role = Role.INDEFINIDO
   }
 }

@@ -41,8 +41,8 @@ namespace Ekkleisa.Business.Implementation.Business
 
             if (result.IsValid)
             {
-                var entity = _mapper.Map<TEntity>(tObject);
-                await _repository.UpdateAsync(entity); ;
+                var entity = tObject.ToEntity();
+                await _repository.AddAsync(entity); ;
                 return Response(result.IsValid, _mapper.Map<TObject>(entity));
             }
             else
@@ -97,7 +97,7 @@ namespace Ekkleisa.Business.Implementation.Business
         public Task DeleteAsync(TObject tObject)
         {
             _logger.LogInformation($"Deleting by key:{tObject.Id}");
-            var entity = _mapper.Map<TEntity>(tObject);
+            var entity = tObject.ToEntity();
             return _repository.DeleteAsync(entity);
         }
 
@@ -120,7 +120,7 @@ namespace Ekkleisa.Business.Implementation.Business
             ValidationResult result = _validator.Validate(tObject, options => options.IncludeRuleSets(OperationType.Update.ToString()));
             if (result.IsValid)
             {
-                var entity = _mapper.Map<TEntity>(tObject);
+                var entity = tObject.ToEntity();
                 await _repository.UpdateAsync(entity); ;
                 return Response(result.IsValid, _mapper.Map<TObject>(entity));
             }
@@ -133,8 +133,8 @@ namespace Ekkleisa.Business.Implementation.Business
         }
 
         public async Task<IEnumerable<TObject>> UpdateAsync(IEnumerable<TObject> tObjects)
-        {
-            var entities = _mapper.Map<IEnumerable<TEntity>>(tObjects);
+        {            
+            var entities = tObjects.Select(x => x.ToEntity());
             entities = await _repository.UpdateAsync(entities);
             return _mapper.Map<IEnumerable<TObject>>(entities);
         }

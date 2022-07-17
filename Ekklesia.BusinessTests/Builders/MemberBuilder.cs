@@ -9,7 +9,7 @@ namespace Ekklesia.IntegrationTesting.Builders
         private string Name { get; set; }
         private string Phone { get; set; }
         private string Photo { get; set; }
-        private Role? Role { get; set; }
+        private Role Role { get; set; }
 
         public MemberBuilder()
         {

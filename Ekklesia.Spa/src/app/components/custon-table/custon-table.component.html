@@ -2,15 +2,17 @@
   <table class="table table-bordered table-striped table-hover">
     <thead>
       <tr>
-        <th scope="col" *ngFor="let column of columns">{{ column.name }}</th>
+        <th *ngFor="let column of columns">{{ column.name }}</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <ng-template *ngFor="let column of columns">
-          <th scope="row" *ngFor="let element of elements">{{resolveField(element,column.name)}}</th>
-        </ng-template>
-      </tr>
+      <ng-container *ngFor="let element of elements">
+        <tr>
+          <td *ngFor="let column of columns">
+            {{ resolveField(element, column.field) }}
+          </td>
+        </tr>
+      </ng-container>
     </tbody>
   </table>
 </div>

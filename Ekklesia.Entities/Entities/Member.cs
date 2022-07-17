@@ -1,4 +1,6 @@
-﻿namespace Ekklesia.Entities.Entities
+﻿using Ekklesia.Entities.Enums;
+
+namespace Ekklesia.Entities.Entities
 {
     public class Member : BaseEntity
     {
@@ -7,11 +9,13 @@
         public string Photo { get; set; }
         public Role Role { get; set; }
 
+
         public Member()
         {
             this.Name = string.Empty;
             this.Phone = string.Empty;
             this.Photo = string.Empty;
+            this.Role = Role.INDEFINIDO;
         }
         public override bool Equals(object? obj)
         {

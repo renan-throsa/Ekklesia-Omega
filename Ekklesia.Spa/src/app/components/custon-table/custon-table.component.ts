@@ -24,7 +24,8 @@ export class CustonTableComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  public resolveField(obj: any, field: any): any {
+  public resolveField(obj: any, field: any): any {   
+    
     if (field == null || field.trim() === '') {
       return null
     }
@@ -42,6 +43,9 @@ export class CustonTableComponent implements OnInit {
     if (typeof obj[field] === 'number') {
       return obj[field].toLocaleString()
     }
+    
+    
     return obj[field]
   }
+ 
 }

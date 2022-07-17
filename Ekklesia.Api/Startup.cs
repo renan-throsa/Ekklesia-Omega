@@ -29,7 +29,7 @@ namespace Ekklesia.Api
             services.AddControllers();
             services.AddWebApiConfig(_environment, _configuration);
             services.AddWebApiDoc();
-            services.AddAutoMapper(typeof(Mapping));            
+            services.AddAutoMapper(typeof(AutomapperConfig));
             services.AddHealthChecksUI();
         }
 

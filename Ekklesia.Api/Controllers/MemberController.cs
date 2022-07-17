@@ -10,7 +10,7 @@ namespace Ekklesia.Api.Controllers
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class MemberController : ControllerBase
     {
         private readonly IMemberBusiness _memberBusiness;

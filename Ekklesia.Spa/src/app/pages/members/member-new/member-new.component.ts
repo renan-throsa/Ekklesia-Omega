@@ -8,6 +8,8 @@ import {
 import { Router } from '@angular/router'
 import { MASKS, NgBrazilValidators } from 'ng-brazil'
 import { Member } from 'src/app/models/Member'
+import { Role, RoleMapping } from 'src/app/models/Role'
+import { MemberService } from 'src/app/services/member.service'
 
 @Component({
   selector: 'app-member-new',
@@ -15,6 +17,8 @@ import { Member } from 'src/app/models/Member'
 })
 export class MemberNewComponent {
   form: FormGroup
+  roles: (string | Role)[]
+  roleapping = RoleMapping
   MASKS = MASKS
 
   get isNameInvalid(): boolean {
@@ -29,7 +33,15 @@ export class MemberNewComponent {
     return this.form.controls
   }
 
-  constructor(private _formBuilder: FormBuilder, private _router: Router) {
+  constructor(
+    private _formBuilder: FormBuilder,
+    private _memberService: MemberService,
+    private _router: Router,
+  ) {
+    this.roles = Object.values(Role).filter(
+      (value) => typeof value === 'number',
+    )
+
     this.form = this._formBuilder.group({
       name: [
         '',
@@ -53,8 +65,13 @@ export class MemberNewComponent {
   }
 
   save() {
-    const member = Object.assign(new Member(), this.form.value)
-    console.log(member)
+    const member: Member = Object.assign(new Member(), this.form.value)
+    member.phone = member.phone.replace(/\D/g, '')
+    const observer = {
+      next: (x: Response) => this._router.navigate(['member']),
+      error: (err: any) => console.error('Observer got an error: ' + err),
+    }
+    this._memberService.add(member).subscribe(observer)
   }
 
   cancel() {

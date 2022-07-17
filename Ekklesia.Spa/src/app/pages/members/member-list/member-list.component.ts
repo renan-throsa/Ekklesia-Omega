@@ -24,15 +24,13 @@ export class MemberListComponent extends BaseTable<Member> implements OnInit {
       },
       {
         name: 'Cargo',
-        field: 'role',
+        field: 'roleName',
       },
     ]
   }
 
   ngOnInit(): void {
-    this._memberService.browse().subscribe((result: Member[]) => {
-      console.log("chamando");
-      console.log(result);      
+    this._memberService.browse().subscribe((result: Member[]) => {    
       this.members = result
     })
   }
