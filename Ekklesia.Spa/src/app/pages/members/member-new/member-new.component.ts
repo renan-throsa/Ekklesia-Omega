@@ -8,7 +8,7 @@ import {
 import { Router } from '@angular/router'
 import { MASKS, NgBrazilValidators } from 'ng-brazil'
 import { Member } from 'src/app/models/Member'
-import { Role, RoleMapping } from 'src/app/models/Role'
+import { RoleEnum, RoleMapping } from 'src/app/models/RoleEnum'
 import { MemberService } from 'src/app/services/member.service'
 
 @Component({
@@ -17,7 +17,7 @@ import { MemberService } from 'src/app/services/member.service'
 })
 export class MemberNewComponent {
   form: FormGroup
-  roles: (string | Role)[]
+  roles: (string | RoleEnum)[]
   roleapping = RoleMapping
   MASKS = MASKS
 
@@ -38,7 +38,7 @@ export class MemberNewComponent {
     private _memberService: MemberService,
     private _router: Router,
   ) {
-    this.roles = Object.values(Role).filter(
+    this.roles = Object.values(RoleEnum).filter(
       (value) => typeof value === 'number',
     )
 
@@ -64,7 +64,7 @@ export class MemberNewComponent {
     return Boolean(hasErros)
   }
 
-  save() {
+  onSave() {
     const member: Member = Object.assign(new Member(), this.form.value)
     member.phone = member.phone.replace(/\D/g, '')
     const observer = {
@@ -74,7 +74,7 @@ export class MemberNewComponent {
     this._memberService.add(member).subscribe(observer)
   }
 
-  cancel() {
-    this._router.navigate(['member'])
+  onCancel() {
+    this._router.navigate(['/member'])
   }
 }

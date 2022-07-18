@@ -10,14 +10,17 @@ import {
 import { MASKS, NgBrazilValidators } from 'ng-brazil'
 
 import { Member } from 'src/app/models/Member'
+import { MemberService } from 'src/app/services/member.service'
+import { RoleEnum, RoleMapping } from 'src/app/models/RoleEnum'
 
 @Component({
   selector: 'app-member-edit',
   templateUrl: './member-edit.component.html',
 })
 export class MemberEditComponent implements OnInit {
-  member: Member
   form: FormGroup
+  roles: (string | RoleEnum)[]
+  roleapping = RoleMapping
   MASKS = MASKS
 
   get isNameInvalid(): boolean {
@@ -40,9 +43,13 @@ export class MemberEditComponent implements OnInit {
     private _route: ActivatedRoute,
     private _router: Router,
     private _formBuilder: FormBuilder,
+    private _memberService: MemberService,
   ) {
-    this.member = new Member()
+    this.roles = Object.values(RoleEnum).filter(
+      (value) => typeof value === 'number',
+    )
     this.form = this._formBuilder.group({
+      id: ['', [Validators.required]],
       name: [
         '',
         [
@@ -57,8 +64,21 @@ export class MemberEditComponent implements OnInit {
     })
   }
   ngOnInit(): void {
+    let observer = {
+      next: (response: Member) => {
+        this.form.patchValue({ id: response.id })
+        this.form.patchValue({ name: response.name })
+        this.form.patchValue({ phone: response.phone })
+        this.form.patchValue({ photo: response.photo })
+        this.form.patchValue({ role: response.role })
+      },
+      error: (error: any) =>
+        console.error('Não foi possível obter o membro: ' + error),
+    }
+
     this._route.params.subscribe((params) => {
-      console.log(params['id'])
+      let id = params['id']
+      this._memberService.read(id).subscribe(observer)
     })
   }
 
@@ -69,13 +89,17 @@ export class MemberEditComponent implements OnInit {
     return Boolean(hasErros)
   }
 
-  save() {
-    console.log(this.form.value)
-    const account = Object.assign(new Member(), this.form.value)
-    console.log(account)
+  onSave() {
+    const member: Member = Object.assign(new Member(), this.form.value)
+    member.phone = member.phone.replace(/\D/g, '')
+    const observer = {
+      next: (x: Response) => this._router.navigate(['member']),
+      error: (err: any) => console.error('Observer got an error: ' + err),
+    }
+    this._memberService.edit(member).subscribe(observer)
   }
 
-  cancel() {
+  onCancel() {
     this._router.navigate(['member'])
   }
 }

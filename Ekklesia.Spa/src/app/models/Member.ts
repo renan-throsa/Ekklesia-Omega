@@ -1,11 +1,12 @@
-import { Role } from './Role'
+import { RoleEnum } from "./RoleEnum"
+
 
 export class Member {
   id: string
   name: string
   phone: string
   photo: string
-  role: Role
+  role: RoleEnum
   roleName:string
 
   constructor() {
@@ -14,6 +15,6 @@ export class Member {
     this.phone = ''
     this.photo = ''
     this.roleName = '' 
-    this.role = Role.INDEFINIDO
+    this.role = RoleEnum.INDEFINIDO
   }
 }

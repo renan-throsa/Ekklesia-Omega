@@ -11,6 +11,13 @@
           <td *ngFor="let column of columns">
             {{ resolveField(element, column.field) }}
           </td>
+          <td>
+            <a
+              [routerLink]="['edit', element.id]"
+              class="btn btn-secondary"
+              >Editar</a
+            >
+          </td>
         </tr>
       </ng-container>
     </tbody>
