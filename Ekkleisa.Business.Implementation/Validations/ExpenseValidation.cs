@@ -1,7 +1,7 @@
 ﻿using Ekklesia.Entities.DTOs;
 using FluentValidation;
 
-namespace Ekklesia.Entities.Validations
+namespace Ekkleisa.Business.Implementation.Validations
 {
     public class ExpenseValidation : AbstractValidator<ExpenseDTO>
     {
@@ -12,10 +12,8 @@ namespace Ekklesia.Entities.Validations
 
             RuleFor(r => r.Responsable.Name).NotEmpty().When(r => r.Responsable != null).WithMessage("Uma despesa precisa ter um reponsável válido.");
 
-            RuleFor(r => r.Responsable.Id).NotEmpty().When(r => r.Responsable != null).WithMessage("Uma despesa precisa ter um reponsável válido.");            
-
-            RuleFor(e => e.Description).MaximumLength(250).WithMessage("Descrição não pode exceder 250 caracteres")
-               .NotEmpty().WithMessage("A descrição de uma despesa não pode ser vazia.");
+            RuleFor(r => r.Responsable.Id).NotEmpty().When(r => r.Responsable != null).WithMessage("Uma despesa precisa ter um reponsável válido.");
+            
         }
     }
 }

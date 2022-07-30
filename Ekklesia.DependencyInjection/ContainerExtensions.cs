@@ -1,10 +1,10 @@
 ﻿using Ekkleisa.Business.Contract.IBusiness;
 using Ekkleisa.Business.Implementation.Business;
+using Ekkleisa.Business.Implementation.Validations;
 using Ekkleisa.Repository.Contract.IRepositories;
 using Ekkleisa.Repository.Implementation.Context;
 using Ekkleisa.Repository.Implementation.Repositories;
 using Ekklesia.Entities.Settings;
-using Ekklesia.Entities.Validations;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;

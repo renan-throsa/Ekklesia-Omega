@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { BaseTable } from 'src/app/components/Shared/BaseTable'
+import { BaseTable } from 'src/app/components/shared/base-table'
 import { Member } from 'src/app/models/Member'
 import { MemberService } from 'src/app/services/member.service'
 

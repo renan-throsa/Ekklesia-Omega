@@ -1,4 +1,5 @@
 ﻿using Ekklesia.Entities.Enums;
+using System;
 
 namespace Ekklesia.Entities.Entities
 {
@@ -8,7 +9,7 @@ namespace Ekklesia.Entities.Entities
         public string Phone { get; set; }
         public string Photo { get; set; }
         public Role Role { get; set; }
-
+        public DateTime BirthDay { get; set; }
 
         public Member()
         {

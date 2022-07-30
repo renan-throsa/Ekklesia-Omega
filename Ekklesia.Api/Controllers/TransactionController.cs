@@ -1,5 +1,7 @@
 ﻿using Ekkleisa.Business.Contract.IBusiness;
+using Ekkleisa.Business.Implementation.Business;
 using Ekklesia.Entities.DTOs;
+using Humanizer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -11,7 +13,7 @@ namespace Ekklesia.Api.Controllers
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class TransactionController : ControllerBase
     {
         private readonly ITransactionBusiness _transactionBusiness;
@@ -21,14 +23,14 @@ namespace Ekklesia.Api.Controllers
             this._transactionBusiness = memberBusiness;
         }
 
-       
+
         [HttpGet]
         public async Task<IEnumerable<TransactionDTO>> Browse()
         {
             return await _transactionBusiness.AllAsync();
         }
 
-        
+
         [HttpGet("{id}")]
         public async Task<ActionResult<TransactionDTO>> Get(string id)
         {
@@ -37,14 +39,13 @@ namespace Ekklesia.Api.Controllers
             return NotFound(id);
         }
 
-        
+
         [HttpPost]
         public async Task<ActionResult<Response>> Post([FromBody] TransactionDTO transaction)
         {
             var result = await _transactionBusiness.AddAsync(transaction);
-            if (!result.success) return BadRequest(result);
-            var url = Url.Action("Get", new { transaction.Id });
-            return Created(url, transaction.Id);
+            if (!result.success) return BadRequest(result);           
+            return Ok(result);           
         }
 
         [HttpPut]
@@ -57,6 +58,6 @@ namespace Ekklesia.Api.Controllers
             if (!result.success) return BadRequest(result);
             return Ok(result);
         }
-       
+
     }
 }

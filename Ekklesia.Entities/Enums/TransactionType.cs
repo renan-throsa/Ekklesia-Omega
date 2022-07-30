@@ -2,6 +2,8 @@
 {
     public enum TransactionType
     {
-        RECEITA = 1, DESPESA = 2
+        DIZIMO = 1,
+        OFERTA = 2,
+        DESPESA = 3,
     }
 }

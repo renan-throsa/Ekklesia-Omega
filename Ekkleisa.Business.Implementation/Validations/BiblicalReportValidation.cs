@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ekklesia.Entities.Validations
+namespace Ekkleisa.Business.Implementation.Validations
 {
     public class BiblicalReportValidation : AbstractValidator<BiblicalReportDTO>
     {

@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Ekkleisa.Business.Implementation\Ekkleisa.Business.Implementation.csproj" />
     <ProjectReference Include="..\Ekklesia.Entities\Ekklesia.Entities.csproj" />
   </ItemGroup>
 

@@ -1,61 +1,86 @@
-<h4>Novo Membro</h4>
-<form (ngSubmit)="onSave()" [formGroup]="form">
-  <div class="mb-3">
-    <label for="inputName" class="form-label">Nome</label>
-    <input
-      class="form-control"
-      id="imputName"
-      type="text"
-      formControlName="name"
-      [ngClass]="{ 'is-invalid': isNameInvalid }"
-    />
-    <div *ngIf="controls.name?.errors?.required" class="invalid-feedback">
-      Um nome é necessário
-    </div>
-    <div *ngIf="controls.name?.errors?.pattern" class="invalid-feedback">
-      Um nome precisa ter um padrão
-    </div>
+<div class="card">
+  <div class="card-header">
+    <h3>Novo Membro</h3>
   </div>
 
-  <div class="mb-3">
-    <label for="inputPhone" class="form-label">Telefone</label>
-    <input
-      type="tel"
-      class="form-control"
-      id="inputPhone"
-      formControlName="phone"
-      [textMask]="{ mask: MASKS.telefone.textMask }"
-      [ngClass]="{ 'is-invalid': isPhoneInvalid }"
-    />
-    <div *ngIf="controls.phone?.errors?.required" class="invalid-feedback">
-      Telefone é necessário
-    </div>
-    <div *ngIf="controls.phone?.errors?.telefone" class="invalid-feedback">
-      Um telefone precisa ter um padrão
-    </div>
-  </div>
-  <div class="mb-3">
-    <label for="roleMember" class="form-label">Posição</label>
-    <select id="roleMember" class="form-select" formControlName="role">
-      <option *ngFor="let value of roles" [ngValue]="value">
-        {{ roleapping[value] }}
-      </option>
-    </select>
+  <div class="card-body">
+    <form [formGroup]="form">
+      <div class="row">
+        <div class="col">
+          <label for="inputName" class="form-label">Nome</label>
+          <input
+            class="form-control"
+            id="imputName"
+            type="text"
+            formControlName="name"
+            [ngClass]="{ 'is-invalid': isNameInvalid }"
+          />
+          <div *ngIf="controls.name?.errors?.required" class="invalid-feedback">
+            Um nome é necessário
+          </div>
+          <div *ngIf="controls.name?.errors?.pattern" class="invalid-feedback">
+            Um nome precisa ter um padrão
+          </div>
+        </div>
+        <div class="col">
+          <label for="inputPhone" class="form-label">Telefone</label>
+          <input
+            type="tel"
+            class="form-control"
+            id="inputPhone"
+            formControlName="phone"
+            [textMask]="{ mask: MASKS.telefone.textMask }"
+            [ngClass]="{ 'is-invalid': isPhoneInvalid }"
+          />
+          <div
+            *ngIf="controls.phone?.errors?.required"
+            class="invalid-feedback"
+          >
+            Telefone é necessário
+          </div>
+          <div
+            *ngIf="controls.phone?.errors?.telefone"
+            class="invalid-feedback"
+          >
+            Um telefone precisa ter um padrão
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label for="roleMember" class="form-label">Posição</label>
+          <select id="roleMember" class="form-select" formControlName="role">
+            <option *ngFor="let value of roles" [ngValue]="value">
+              {{ roleapping[value] }}
+            </option>
+          </select>
+        </div>
+        <div class="col">
+          <label for="formFile" class="form-label">Escolha uma foto</label>
+          <input class="form-control" type="file" id="formFile" />
+        </div>
+      </div>
+    </form>
   </div>
 
-  <div class="mb-3">
-    <label for="formFile" class="form-label">Escolha uma foto</label>
-    <input class="form-control" type="file" id="formFile" />
+  <div class="card-footer">
+    <div class="row">
+      <div class="col-1">
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="form.invalid"
+          (click)="onSave()"
+        >
+          Salvar
+        </button>
+      </div>
+      <div class="col-1">
+        <button type="button" class="btn btn-danger" (click)="onCancel()">
+          Cancelar
+        </button>
+      </div>
+    </div>
   </div>
-
-  <div class="btn-group me-2" role="group">
-    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
-      Salvar
-    </button>
-  </div>
-  <div class="btn-group" role="group">
-    <button type="button" class="btn btn-danger" (click)="onCancel()">
-      Cancelar
-    </button>
-  </div>
-</form>
+</div>

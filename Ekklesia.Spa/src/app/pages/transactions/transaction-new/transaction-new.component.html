@@ -1,1 +1,131 @@
-<p>transaction-new works!</p>
+<div class="card">
+  <div class="card-header">
+    <h3>Nova Transação</h3>
+  </div>
+
+  <div class="card-body">
+    <form [formGroup]="form">
+      <div class="row">
+        <div class="col">
+          <label for="inputDate" class="form-label">Data</label>
+          <input
+            class="form-control"
+            id="inputDate"
+            type="datetime-local"
+            formControlName="date"
+            [ngClass]="{ 'is-invalid': isDateInvalid }"
+          />
+          <div *ngIf="controls.date?.errors?.required" class="invalid-feedback">
+            Data é necessária
+          </div>
+          <div *ngIf="controls.date?.errors?.maxDate" class="invalid-feedback">
+            A maior data para uma transação é: {{ maxDateStr }}
+          </div>
+          <div *ngIf="controls.date?.errors?.minDate" class="invalid-feedback">
+            A menor data para uma transação é: {{ minDateStr }}
+          </div>
+        </div>
+
+        <div class="col">
+          <label for="inputAmount" class="form-label">Valor</label>
+          <input
+            type="number"
+            class="form-control"
+            id="inputAmount"
+            formControlName="amount"
+            [ngClass]="{ 'is-invalid': isAmountInvalid }"
+          />
+          <div
+            *ngIf="controls.amount?.errors?.required"
+            class="invalid-feedback"
+          >
+            Valor é necessário
+          </div>
+          <div *ngIf="controls.amount?.errors?.min" class="invalid-feedback">
+            Valor precisa ser maior que zero.
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label for="transactionType" class="form-label">Tipo</label>
+          <select
+            id="transactionType"
+            class="form-select"
+            formControlName="type"
+          >
+            <option *ngFor="let value of types" [ngValue]="value">
+              {{ transactionMapping[value] }}
+            </option>
+          </select>
+        </div>
+
+        <div class="col">
+          <label for="accountableMember" class="form-label">Responsável</label>
+          <select
+            id="accountableMember"
+            class="form-select"
+            formControlName="responsable"
+          >
+            <option *ngFor="let responsable of members" [ngValue]="responsable">
+              {{ responsable.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label for="inputDescription" class="form-label">Observação</label>
+          <textarea
+            class="form-control"
+            id="inputDescription"
+            formControlName="description"
+            [ngClass]="{ 'is-invalid': isDescriptionInvalid }"
+            rows="5"
+            placeholder="Opcional para receita. Obrigatório para despesa"
+          ></textarea>
+          <div
+            *ngIf="controls.description?.errors?.required"
+            class="invalid-feedback"
+          >
+            Observação é necessária para despesa.
+          </div>
+
+          <div
+            *ngIf="controls.description?.errors?.maxLength"
+            class="invalid-feedback"
+          >
+            O tamanho máximo da observação deve ser 250 caracteres.
+          </div>
+        </div>
+
+        <div class="col">
+          <label for="formFile" class="form-label">Imagem do recibo</label>
+          <input class="form-control" type="file" id="formFile" />
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="card-footer">
+    <div class="row">
+      <div class="col-1">
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="form.invalid"
+          (click)="onSave()"
+        >
+          Salvar
+        </button>
+      </div>
+      <div class="col-1">
+        <button type="button" class="btn btn-danger" (click)="onCancel()">
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

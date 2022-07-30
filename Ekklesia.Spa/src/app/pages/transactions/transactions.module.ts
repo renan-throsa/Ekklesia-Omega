@@ -5,8 +5,11 @@ import { TransactionNewComponent } from './transaction-new/transaction-new.compo
 import { TransactionEditComponent } from './transaction-edit/transaction-edit.component'
 import { TransactionSearchComponent } from './transaction-search/transaction-search.component'
 import { TransactionRoutingModule } from './transaction-routing.module'
-import { CustonTableModule } from 'src/app/components/custon-table/custon-table.module'
+import { CustonTableModule } from 'src/app/components/custom-table/custon-table.module'
 import { CustomPainelModule } from 'src/app/components/custom-painel/custom-painel.module'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { NgBrazil } from 'ng-brazil'
+import { CustomFormsModule } from 'ng2-validation'
 
 @NgModule({
   declarations: [
@@ -26,6 +29,10 @@ import { CustomPainelModule } from 'src/app/components/custom-painel/custom-pain
     TransactionRoutingModule,
     CustonTableModule,
     CustomPainelModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgBrazil,
+    CustomFormsModule,
   ],
 })
 export class TransactionsModule {}

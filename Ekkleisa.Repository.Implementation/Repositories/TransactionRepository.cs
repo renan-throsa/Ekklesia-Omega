@@ -23,12 +23,12 @@ namespace Ekkleisa.Repository.Implementation.Repositories
             {
                 if (filter.DiscountBiggerThan != 0)
                 {
-                    query = query.Where(p => filter.DiscountBiggerThan > p.Value);
+                    query = query.Where(p => filter.DiscountBiggerThan > p.Amount);
                 }
 
                 if (filter.DiscountLessThan != 0)
                 {
-                    query = query.Where(p => filter.DiscountLessThan < p.Value);
+                    query = query.Where(p => filter.DiscountLessThan < p.Amount);
                 }
 
                 if (filter.Before != null)
@@ -42,7 +42,7 @@ namespace Ekkleisa.Repository.Implementation.Repositories
                 }
 
             }
-            query = query.OrderByDescending(x => x.Value);
+            query = query.OrderByDescending(x => x.Amount);
             return query.ToList();
         }
     }

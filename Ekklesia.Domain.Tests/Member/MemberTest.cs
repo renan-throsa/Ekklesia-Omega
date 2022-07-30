@@ -1,5 +1,5 @@
-﻿using Ekklesia.Entities.DTOs;
-using Ekklesia.Entities.Validations;
+﻿using Ekkleisa.Business.Implementation.Validations;
+using Ekklesia.Entities.DTOs;
 using Ekklesia.Tests.Base;
 using Xunit;
 

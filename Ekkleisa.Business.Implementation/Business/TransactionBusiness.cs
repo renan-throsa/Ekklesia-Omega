@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Ekkleisa.Business.Contract.IBusiness;
+using Ekkleisa.Business.Implementation.Validations;
 using Ekkleisa.Repository.Contract.IRepositories;
 using Ekklesia.Entities.DTOs;
 using Ekklesia.Entities.Entities;
-using Ekklesia.Entities.Validations;
 using Microsoft.Extensions.Logging;
 using System;
 

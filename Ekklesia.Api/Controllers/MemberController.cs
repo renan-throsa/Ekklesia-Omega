@@ -37,12 +37,11 @@ namespace Ekklesia.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Response>> Post([FromBody] MemberDTO dto)
+        public async Task<ActionResult<Response>> Post([FromBody] MemberDTO member)
         {
-            var result = await _memberBusiness.AddAsync(dto);
+            var result = await _memberBusiness.AddAsync(member);
             if (!result.success) return BadRequest(result);
-            var url = Url.Action("Get", new { dto.Id });
-            return Created(url, dto.Id);
+            return Ok(result);
         }
 
         [HttpPut]

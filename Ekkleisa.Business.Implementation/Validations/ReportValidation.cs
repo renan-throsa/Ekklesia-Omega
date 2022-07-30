@@ -1,7 +1,7 @@
 ﻿using Ekklesia.Entities.DTOs;
 using FluentValidation;
 
-namespace Ekklesia.Entities.Validations
+namespace Ekkleisa.Business.Implementation.Validations
 {
     public class ReportValidation : AbstractValidator<ReportDTO>
     {

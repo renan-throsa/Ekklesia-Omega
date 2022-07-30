@@ -1,7 +1,7 @@
 ﻿using Ekkleisa.Business.Contract.IBusiness;
+using Ekkleisa.Business.Implementation.Validations;
 using Ekklesia.Entities.DTOs;
 using Ekklesia.Entities.Settings;
-using Ekklesia.Entities.Validations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;

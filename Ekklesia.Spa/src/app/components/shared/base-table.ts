@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core'
-import { Column } from '../custon-table/Column'
+import { Column } from '../custom-table/Column'
 
 @Component({ template: '' })
 export abstract class BaseTable<T> {

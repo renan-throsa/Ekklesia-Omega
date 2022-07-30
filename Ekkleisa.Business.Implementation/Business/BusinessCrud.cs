@@ -42,7 +42,7 @@ namespace Ekkleisa.Business.Implementation.Business
             if (result.IsValid)
             {
                 var entity = tObject.ToEntity();
-                await _repository.AddAsync(entity); ;
+                await _repository.AddAsync(entity);
                 return Response(result.IsValid, _mapper.Map<TObject>(entity));
             }
             else

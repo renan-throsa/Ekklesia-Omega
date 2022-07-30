@@ -4,7 +4,7 @@ using Ekklesia.Entities.Enums;
 using FluentValidation;
 using System;
 
-namespace Ekklesia.Entities.Validations
+namespace Ekkleisa.Business.Implementation.Validations
 {
     public class OccasionValidation : AbstractValidator<OccasionDTO>
     {

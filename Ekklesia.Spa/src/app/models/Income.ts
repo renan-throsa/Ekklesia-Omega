@@ -1,9 +1,11 @@
+import { IncomeEnum } from './IncomeEnum'
+
 export class Income {
-  type: number
+  revenueType: IncomeEnum
   observation: string
 
   constructor() {
-    this.type = 0
+    this.revenueType = IncomeEnum.INDEFINIDO
     this.observation = ''
   }
 }

@@ -2,7 +2,7 @@
 using Ekklesia.Entities.Enums;
 using FluentValidation;
 
-namespace Ekklesia.Entities.Validations
+namespace Ekkleisa.Business.Implementation.Validations
 {
     public class MemberValidation : AbstractValidator<MemberDTO>
     {

@@ -17,8 +17,8 @@ namespace Ekklesia.Entities.DTOs
         public string Name { get; set; }
         public string Phone { get; set; }
         public string Photo { get; set; }
-        
-               
+        public DateTime BirthDay { get; set; }
+
 
         public MemberDTO()
         {
@@ -38,7 +38,8 @@ namespace Ekklesia.Entities.DTOs
                     Name = this.Name,
                     Phone = this.Phone,
                     Photo = this.Photo,
-                    Role = this.Role
+                    Role = this.Role,
+                    BirthDay = this.BirthDay,
                 };
             }
 
@@ -53,7 +54,7 @@ namespace Ekklesia.Entities.DTOs
                     //propertyInfo.SetValue(member, value);
                     if (prop == nameof(Id))
                     {
-                        propertyInfo.SetValue(member, ObjectId.Parse(Id));
+                        propertyInfo.SetValue(member, string.IsNullOrEmpty(Id) ? ObjectId.Empty : ObjectId.Parse(Id));
                     }
                     if (prop == nameof(Name))
                     {
@@ -70,6 +71,10 @@ namespace Ekklesia.Entities.DTOs
                     if (prop == nameof(Role))
                     {
                         propertyInfo.SetValue(member, Role);
+                    }
+                    if (prop == nameof(BirthDay))
+                    {
+                        propertyInfo.SetValue(member, BirthDay);
                     }
                 }
             }

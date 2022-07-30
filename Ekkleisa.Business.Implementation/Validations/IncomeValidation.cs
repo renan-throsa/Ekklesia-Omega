@@ -3,7 +3,7 @@ using Ekklesia.Entities.DTOs;
 using FluentValidation;
 using System;
 
-namespace Ekklesia.Entities.Validations
+namespace Ekkleisa.Business.Implementation.Validations
 {
     public class IncomeValidation : AbstractValidator<IncomeDTO>
     {
