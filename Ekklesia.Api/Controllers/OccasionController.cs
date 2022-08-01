@@ -1,5 +1,6 @@
 ﻿using Ekkleisa.Business.Contract.IBusiness;
 using Ekklesia.Entities.DTOs;
+using Ekklesia.Entities.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -26,35 +27,33 @@ namespace Ekklesia.Api.Controllers
             return await _occasionBusiness.AllAsync();
         }
 
-        
+
         [HttpGet("{id}")]
-        public async Task<ActionResult<OccasionDTO>> Get(string id)
+        public async Task<ActionResult<Response>> Get(string id)
         {
-            OccasionDTO occasion = await _occasionBusiness.FindSync(id);
-            if (occasion != null) return Ok(occasion);
-            return NotFound(id);
+            var response = await _occasionBusiness.FindSync(id);
+            if (response.status == ResponseStatus.NotFound) return NotFound(response);
+            return Ok(response);
         }
 
 
         [HttpPost]
-        public async Task<ActionResult<Response>> Post([FromBody] OccasionDTO dto)
+        public async Task<ActionResult<Response>> Post([FromBody] OccasionDTO occasion)
         {
-            var result = await _occasionBusiness.AddAsync(dto);
-            if (!result.success) return BadRequest(result);
-            var url = Url.Action("Get", new { dto.Id });
-            return Created(url, dto.Id);
+            var result = await _occasionBusiness.AddAsync(occasion);
+            if (result.status == ResponseStatus.BadRequest) return BadRequest(result);
+            return Ok(result);
         }
 
 
         [HttpPut]
-        public async Task<ActionResult<Response>> Put([FromBody] OccasionDTO dto)
-        {
-            OccasionDTO occasion = await _occasionBusiness.FindSync(dto.Id);
-            if (occasion == null) return NotFound(dto.Id);
+        public async Task<ActionResult<Response>> Put([FromBody] OccasionDTO occasion)
+        {          
 
-            var result = await _occasionBusiness.UpdateAsync(dto);
-            if (!result.success) return BadRequest(result);
-            return Ok(result);
+            var response = await _occasionBusiness.UpdateAsync(occasion);
+            if (response.status == ResponseStatus.NotFound) return NotFound(occasion.Id);
+            if (response.status == ResponseStatus.BadRequest) return BadRequest(occasion);
+            return Ok(response);
         }
     }
 }

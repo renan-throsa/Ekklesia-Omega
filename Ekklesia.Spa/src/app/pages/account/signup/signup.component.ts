@@ -6,13 +6,17 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms'
+import { Router } from '@angular/router'
 import { MASKS, NgBrazilValidators } from 'ng-brazil'
 import { CustomValidators } from 'ng2-validation'
 import { Account } from 'src/app/models/Account'
+import { SignUp } from 'src/app/models/SignUp'
+import { IdentityService } from 'src/app/services/identity.service'
+import { UtilsValidators } from 'src/app/utils/utils-validators'
 
 @Component({
   selector: 'app-signup',
-  templateUrl: './signup.component.html'
+  templateUrl: './signup.component.html',
 })
 export class SignupComponent implements OnInit {
   form: FormGroup
@@ -34,18 +38,23 @@ export class SignupComponent implements OnInit {
     return this.hasErros('password')
   }
 
-  get isformInvalid(): boolean {
-    return !this.form.dirty && !this.form.valid
-  }
-
   get controls(): { [key: string]: AbstractControl } {
     return this.form.controls
   }
 
-  constructor(private _formBuilder: FormBuilder) {
+  constructor(
+    private _formBuilder: FormBuilder,
+    private _accountService: IdentityService,
+    private _router: Router,
+  ) {
     const password = new FormControl('', [
       Validators.required,
-      Validators.pattern(/^((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{6,20})$/),
+      Validators.minLength(8),
+      Validators.maxLength(16),
+      UtilsValidators.withLowerCase,
+      UtilsValidators.withUpperCase,
+      UtilsValidators.withNumbers,
+      UtilsValidators.withSpecialCharacter,
     ])
 
     const passwordConfirmation = new FormControl('', [
@@ -55,17 +64,23 @@ export class SignupComponent implements OnInit {
     this.form = this._formBuilder.group({
       name: [
         '',
-        Validators.required,
-        Validators.pattern(
-          /^[A-ZÀ-Ÿ][A-zÀ-ÿ']+\s([A-zÀ-ÿ']\s?)*[A-ZÀ-Ÿ][A-zÀ-ÿ']+$/g,
-        ),
+        [
+          Validators.required,
+          Validators.minLength(5),
+          Validators.maxLength(50),
+          UtilsValidators.withLowerCase,
+          UtilsValidators.withUpperCase,
+          UtilsValidators.withoutNumbers,
+          UtilsValidators.withoutSpecialCharacter,
+        ],
       ],
-      phone: ['', Validators.required, NgBrazilValidators.telefone],
+      phone: ['', [Validators.required, NgBrazilValidators.telefone]],
       email: ['', [Validators.email, Validators.required]],
       password: password,
       passwordConfirmation: passwordConfirmation,
-      remember: ['', Validators.required],
+      remember: ['', [Validators.required]],
     })
+    
   }
 
   ngOnInit(): void {}
@@ -77,9 +92,13 @@ export class SignupComponent implements OnInit {
     return Boolean(hasErros)
   }
 
-  signup() {
-    console.log(this.form.value)
-    const account = Object.assign(new Account(), this.form.value)
-    console.log(account)
+  signup() {    
+    return
+    let account = Object.assign(new SignUp(), this.form.value)
+    const observer = {
+      next: (x: Response) => this._router.navigate(['member']),
+      error: (err: any) => console.error(err.error),
+    }
+    this._accountService.signup(account).subscribe(observer)
   }
 }

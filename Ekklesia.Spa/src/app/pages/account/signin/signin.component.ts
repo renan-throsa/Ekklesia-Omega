@@ -5,7 +5,9 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms'
-import { NgBrazilValidators } from 'ng-brazil'
+import { Router } from '@angular/router'
+import { SignIn } from 'src/app/models/SignIn'
+import { IdentityService } from 'src/app/services/identity.service'
 
 @Component({
   selector: 'app-signin',
@@ -14,40 +16,24 @@ import { NgBrazilValidators } from 'ng-brazil'
 export class SigninComponent {
   form: FormGroup
 
-  get isNameInvalid(): boolean {
-    return this.hasErros('name')
-  }
-
-  get isPhoneInvalid(): boolean {
-    return this.hasErros('phone')
-  }
-
   get isEmailInvalid(): boolean {
     return this.hasErros('email')
   }
 
   get isPasswordInvalid(): boolean {
     return this.hasErros('password')
-  }
-
-  get isformInvalid(): boolean {
-    return !this.form.dirty && !this.form.valid
-  }
+  }  
 
   get controls(): { [key: string]: AbstractControl } {
     return this.form.controls
   }
 
-  constructor(private _formBuilder: FormBuilder) {
+  constructor(
+    private _formBuilder: FormBuilder,
+    private _accountService: IdentityService,
+    private _router: Router,
+  ) {
     this.form = this._formBuilder.group({
-      name: [
-        '',
-        Validators.required,
-        Validators.pattern(
-          /^[A-ZÀ-Ÿ][A-zÀ-ÿ']+\s([A-zÀ-ÿ']\s?)*[A-ZÀ-Ÿ][A-zÀ-ÿ']+$/g,
-        ),
-      ],
-      phone: ['', Validators.required, NgBrazilValidators.telefone],
       email: ['', [Validators.email, Validators.required]],
       password: [
         '',
@@ -58,12 +44,17 @@ export class SigninComponent {
           ),
         ],
       ],
-      remember: ['', Validators.required],
+      remember: [''],
     })
   }
 
   signin() {
-    console.log('Teste de sign in.')
+    let account = Object.assign(new SignIn(), this.form.value)
+    const observer = {
+      next: (x: Response) => this._router.navigate(['member']),
+      error: (err: any) => console.error(err.error),
+    }
+    this._accountService.signin(account).subscribe(observer)
   }
 
   private hasErros(field: string): boolean {

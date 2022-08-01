@@ -69,7 +69,10 @@ export class MemberNewComponent {
     member.phone = member.phone.replace(/\D/g, '')
     const observer = {
       next: (x: Response) => this._router.navigate(['member']),
-      error: (err: any) => console.error('Observer got an error: ' + err),
+      error: (error: any) =>
+        console.error(
+          'Não foi possível salvar o membro. Erro:' + error.statusText,
+        ),
     }
     this._memberService.add(member).subscribe(observer)
   }

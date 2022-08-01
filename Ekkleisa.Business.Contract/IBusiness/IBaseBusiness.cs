@@ -13,8 +13,8 @@ namespace Ekkleisa.Business.Contract.IBusiness
     {
         Task<Response> AddAsync(TObject tObject);
         Task AddAsync(IEnumerable<TObject> tObjects);
-        Task<TObject> FindSync(ObjectId key);
-        Task<TObject> FindSync(string Id);
+        Task<Response> FindSync(ObjectId key);
+        Task<Response> FindSync(string Id);
         Task<IEnumerable<TObject>> FindAsync(Expression<Func<TObject, bool>> filter);
         Task<IEnumerable<TObject>> AllAsync();
         Task DeleteAsync(TObject tObject);

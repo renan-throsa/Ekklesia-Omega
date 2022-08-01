@@ -1,6 +1,7 @@
 ﻿using Ekkleisa.Business.Contract.IBusiness;
 using Ekkleisa.Business.Implementation.Business;
 using Ekklesia.Entities.DTOs;
+using Ekklesia.Entities.Enums;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -22,7 +23,7 @@ namespace Ekklesia.Api.Controllers
         public async Task<ActionResult<Response>> SignUp(SignUpDTO Dto)
         {
             var response = await _accountBusiness.SignUp(Dto);
-            if (response.success) return Ok(response);
+            if (response.status == ResponseStatus.Ok) return Ok(response);
             return BadRequest(response);
         }
 
@@ -30,7 +31,7 @@ namespace Ekklesia.Api.Controllers
         public async Task<ActionResult<Response>> SignIn(SignInDTO Dto)
         {
             var response = await _accountBusiness.SignIn(Dto);
-            if (response.success) return Ok(response);
+            if (response.status == ResponseStatus.Ok) return Ok(response);
             return BadRequest(response);
         }
     }

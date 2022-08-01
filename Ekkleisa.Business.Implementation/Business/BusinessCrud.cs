@@ -43,12 +43,12 @@ namespace Ekkleisa.Business.Implementation.Business
             {
                 var entity = tObject.ToEntity();
                 await _repository.AddAsync(entity);
-                return Response(result.IsValid, _mapper.Map<TObject>(entity));
+                return Response(ResponseStatus.Created, _mapper.Map<TObject>(entity));
             }
             else
             {
                 _logger.LogError(result.Errors.Select(x => x.ErrorMessage).ToJson());
-                return Response(result.IsValid, result.Errors.Select(x => x.ErrorMessage).ToList());
+                return Response(ResponseStatus.BadRequest, result.Errors.Select(x => x.ErrorMessage).ToList());
             }
         }
 
@@ -58,22 +58,34 @@ namespace Ekkleisa.Business.Implementation.Business
             await _repository.AddAsync(entities);
         }
 
-        public async Task<TObject> FindSync(ObjectId key)
+        public async Task<Response> FindSync(ObjectId key)
         {
             _logger.LogInformation($"Searching by key:{key}");
             var entity = await _repository.FindSync(key);
-            if (entity == null) _logger.LogWarning($"Key:{key} not found.");
-            return _mapper.Map<TObject>(entity);
+            if (entity == null)
+            {
+                var message = $"Key:{key} not found.";
+                _logger.LogWarning(message);
+                return Response(ResponseStatus.NotFound);
+            }
+
+            return Response(ResponseStatus.Found, _mapper.Map<TObject>(entity));
         }
 
-        public async Task<TObject> FindSync(string id)
+        public async Task<Response> FindSync(string id)
         {
             _logger.LogInformation($"Searching by key:{id}");
             if (ObjectId.TryParse(id, out var _))
             {
                 var entity = await _repository.FindSync(id);
-                if (entity == null) _logger.LogWarning($"Key:{id} not found.");
-                return _mapper.Map<TObject>(entity);
+                if (entity == null)
+                {
+                    var message = $"Key:{id} was not found.";
+                    _logger.LogWarning(message);
+                    return Response(ResponseStatus.NotFound, message);
+                }
+
+                return Response(ResponseStatus.Found, _mapper.Map<TObject>(entity));
             }
             else
             {
@@ -120,32 +132,39 @@ namespace Ekkleisa.Business.Implementation.Business
             ValidationResult result = _validator.Validate(tObject, options => options.IncludeRuleSets(OperationType.Update.ToString()));
             if (result.IsValid)
             {
-                var entity = tObject.ToEntity();
+                var entity = await _repository.FindSync(tObject.Id);
+                if (entity == null)
+                {
+                    var message = $"Key:{tObject.Id} not found.";
+                    _logger.LogWarning(message);
+                    return Response(ResponseStatus.NotFound);
+                }
+                entity = tObject.ToEntity();
                 await _repository.UpdateAsync(entity); ;
-                return Response(result.IsValid, _mapper.Map<TObject>(entity));
+                return Response(ResponseStatus.Ok, _mapper.Map<TObject>(entity));
             }
             else
             {
                 _logger.LogError(result.Errors.Select(x => x.ErrorMessage).ToJson());
-                return Response(result.IsValid, result.Errors.Select(x => x.ErrorMessage).ToList());
+                return Response(ResponseStatus.BadRequest, result.Errors.Select(x => x.ErrorMessage).ToList());
             }
 
         }
 
         public async Task<IEnumerable<TObject>> UpdateAsync(IEnumerable<TObject> tObjects)
-        {            
+        {
             var entities = tObjects.Select(x => x.ToEntity());
             entities = await _repository.UpdateAsync(entities);
             return _mapper.Map<IEnumerable<TObject>>(entities);
         }
 
 
-        private Response Response(bool valide, object result = null)
+        private Response Response(ResponseStatus valide, object result = null)
         {
             return
             new Response
             {
-                success = valide,
+                status = valide,
                 payload = result
             };
         }

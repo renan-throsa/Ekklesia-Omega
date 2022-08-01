@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ekklesia.Entities.Settings
 {
-    public class AppSettings
+    public class SecutitySettings
     {
         public string Secret { get; set; } = string.Empty;
         public string Issuer { get; set; } = string.Empty;

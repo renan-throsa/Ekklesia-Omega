@@ -29,11 +29,7 @@ export class MemberEditComponent implements OnInit {
 
   get isPhoneInvalid(): boolean {
     return this.hasErros('phone')
-  }
-
-  get isformInvalid(): boolean {
-    return !this.form.dirty && !this.form.valid
-  }
+  }  
 
   get controls(): { [key: string]: AbstractControl } {
     return this.form.controls
@@ -72,8 +68,7 @@ export class MemberEditComponent implements OnInit {
         this.form.patchValue({ photo: response.photo })
         this.form.patchValue({ role: response.role })
       },
-      error: (error: any) =>
-        console.error('Não foi possível obter o membro: ' + error),
+      error: (err: any) => console.error(err.error.payload),
     }
 
     this._route.params.subscribe((params) => {

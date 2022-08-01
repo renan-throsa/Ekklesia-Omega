@@ -6,8 +6,7 @@ import {
   Validators,
 } from '@angular/forms'
 import { Router } from '@angular/router'
-import { BaseConverter } from 'src/app/components/shared/base-converter'
-import { CustomValidators } from 'src/app/components/shared/custom-validators'
+import { UtilsValidators } from 'src/app/utils/utils-validators'
 import { Member } from 'src/app/models/Member'
 import { Transaction } from 'src/app/models/Transaction'
 import {
@@ -16,6 +15,7 @@ import {
 } from 'src/app/models/TransactionEnum'
 import { MemberService } from 'src/app/services/member.service'
 import { TransactionService } from 'src/app/services/transaction.service'
+import { BaseConverter } from 'src/app/utils/base-converter'
 
 @Component({
   selector: 'app-transaction-new',
@@ -74,8 +74,8 @@ export class TransactionNewComponent implements OnInit {
         '',
         [
           Validators.required,
-          CustomValidators.maxDate(this.maxDate),
-          CustomValidators.minDate(this.minDate),
+          UtilsValidators.maxDate(this.maxDate),
+          UtilsValidators.minDate(this.minDate),
         ],
       ],
       amount: ['', [Validators.required, Validators.min(0.1)]],
@@ -89,8 +89,8 @@ export class TransactionNewComponent implements OnInit {
     this.controls.type.valueChanges.subscribe((type: number) => {
       if (type == TransactionEnum.DESPESA) {
         this.controls.description.setValidators(Validators.required)
-      }else{
-        this.controls.description.clearValidators();
+      } else {
+        this.controls.description.clearValidators()
       }
       this.controls.description.updateValueAndValidity()
     })
@@ -104,7 +104,7 @@ export class TransactionNewComponent implements OnInit {
     const transaction: Transaction = Object.assign(
       new Transaction(),
       this.form.value,
-    )       
+    )
     const observer = {
       next: (x: Response) => this._router.navigate(['transaction']),
       error: (err: any) => console.error('Observer got an error: ' + err),
