@@ -102,7 +102,7 @@ namespace Ekkleisa.Business.Implementation.Business
             return new TokenDTO
             {
                 User = new UserDTO(user.UserName, user.Email, user.PhoneNumber),
-                AccessToken = encodedToken,
+                Token = encodedToken,
                 ExpiresIn = TimeSpan.FromHours(_appSettings.ExpirationInHours).TotalSeconds
             };
 

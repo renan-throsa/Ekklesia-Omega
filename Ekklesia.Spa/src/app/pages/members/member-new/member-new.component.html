@@ -9,17 +9,54 @@
         <div class="col">
           <label for="inputName" class="form-label">Nome</label>
           <input
-            class="form-control"
-            id="imputName"
             type="text"
+            class="form-control"
+            id="inputName"
             formControlName="name"
             [ngClass]="{ 'is-invalid': isNameInvalid }"
           />
+
           <div *ngIf="controls.name?.errors?.required" class="invalid-feedback">
-            Um nome é necessário
+            Nome é necessário
           </div>
-          <div *ngIf="controls.name?.errors?.pattern" class="invalid-feedback">
-            Um nome precisa ter um padrão
+
+          <div
+            *ngIf="controls.name?.errors?.minlength"
+            class="invalid-feedback"
+          >
+            O comprimento do nome deve ser de pelo menos 5 caracteres.
+          </div>
+
+          <div
+            *ngIf="controls.name?.errors?.maxlength"
+            class="invalid-feedback"
+          >
+            O comprimento do nome deve ser de no máximo 50 caracteres.
+          </div>
+
+          <div
+            *ngIf="controls.name?.errors?.withLowerCase"
+            class="invalid-feedback"
+          >
+            O nome deve conter pelo menos uma letra minúscula.
+          </div>
+          <div
+            *ngIf="controls.name?.errors?.withUpperCase"
+            class="invalid-feedback"
+          >
+            O nome deve conter pelo menos uma letra maiúscula.
+          </div>
+          <div
+            *ngIf="controls.name?.errors?.withoutNumbers"
+            class="invalid-feedback"
+          >
+            O nome não deve conter múmeros.
+          </div>
+          <div
+            *ngIf="controls.name?.errors?.withoutSpecialCharacter"
+            class="invalid-feedback"
+          >
+            O nome não deve conter caracteres especiais.
           </div>
         </div>
         <div class="col">

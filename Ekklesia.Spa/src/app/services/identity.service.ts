@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { Observable } from 'rxjs'
+import { Observable, pluck } from 'rxjs'
 import { SignIn } from '../models/SignIn'
 import { SignUp } from '../models/SignUp'
 import { BaseService } from './base.service'
@@ -13,13 +13,19 @@ export class IdentityService extends BaseService {
     super(http, 'Account')
   }
 
-  signin(user: SignIn): Observable<any> {
-    return this.http.post(this.baseUrl + '/SignIn', user)
+  signIn(user: SignIn): Observable<any> {
+    return this.http.post(this.baseUrl + '/SignIn', user).pipe(pluck('payload'))
   }
 
-  signup(user: SignUp): Observable<any> {
-    return this.http.post(this.baseUrl + '/SignUp', user)
+  signUp(user: SignUp): Observable<any> {
+    return this.http.post(this.baseUrl + '/SignUp', user).pipe(pluck('payload'))
   }
 
-  logout() {}
+  isAuthenticated(): boolean {
+    return this.getToken() ? true : false
+  }
+
+  logOut() {
+    this.cleanUserDataLocaly()
+  }
 }

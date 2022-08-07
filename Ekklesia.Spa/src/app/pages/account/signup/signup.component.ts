@@ -92,13 +92,12 @@ export class SignupComponent implements OnInit {
     return Boolean(hasErros)
   }
 
-  signup() {    
-    return
+  signup() {        
     let account = Object.assign(new SignUp(), this.form.value)
     const observer = {
       next: (x: Response) => this._router.navigate(['member']),
       error: (err: any) => console.error(err.error),
     }
-    this._accountService.signup(account).subscribe(observer)
+    this._accountService.signUp(account).subscribe(observer)
   }
 }

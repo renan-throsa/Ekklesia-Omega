@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http'
-import { catchError, Observable, pluck } from 'rxjs'
+import { Observable, pluck } from 'rxjs'
 import { BaseService } from './base.service'
 
 export abstract class ApplicationService<T> extends BaseService {

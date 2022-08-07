@@ -5,7 +5,11 @@ import { BrowserModule } from '@angular/platform-browser'
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
 import { CustomNavigationModule } from './components/custom-navigation/custom-navigation.module'
-import { MemberService } from './services/member.service'
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { ToastrModule } from 'ngx-toastr'
+import { AuthGard } from './services/auth.guard'
+import { InputGuard } from './services/input.guard'
 
 @NgModule({
   declarations: [AppComponent],
@@ -14,8 +18,15 @@ import { MemberService } from './services/member.service'
     CustomNavigationModule,
     AppRoutingModule,
     HttpClientModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      timeOut: 5000,
+      preventDuplicates: true,
+      closeButton: true,
+      progressBar: true,
+    }),
   ],
+  providers: [AuthGard, InputGuard],
   bootstrap: [AppComponent],
-  providers: [MemberService],
 })
 export class AppModule {}
