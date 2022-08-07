@@ -14,7 +14,7 @@ namespace Ekklesia.Api.Controllers
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class TransactionController : ControllerBase
     {
         private readonly ITransactionBusiness _transactionBusiness;

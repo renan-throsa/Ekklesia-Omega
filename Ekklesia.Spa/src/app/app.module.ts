@@ -8,8 +8,9 @@ import { CustomNavigationModule } from './components/custom-navigation/custom-na
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { ToastrModule } from 'ngx-toastr'
-import { AuthGard } from './services/auth.guard'
+import { IdentityGard } from './services/identity.guard'
 import { InputGuard } from './services/input.guard'
+import { NgxSpinnerModule } from 'ngx-spinner'
 
 @NgModule({
   declarations: [AppComponent],
@@ -19,6 +20,7 @@ import { InputGuard } from './services/input.guard'
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    NgxSpinnerModule,
     ToastrModule.forRoot({
       timeOut: 5000,
       preventDuplicates: true,
@@ -26,7 +28,7 @@ import { InputGuard } from './services/input.guard'
       progressBar: true,
     }),
   ],
-  providers: [AuthGard, InputGuard],
+  providers: [IdentityGard, InputGuard],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

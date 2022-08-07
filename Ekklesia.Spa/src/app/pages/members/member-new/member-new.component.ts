@@ -17,6 +17,8 @@ import { MemberService } from 'src/app/services/member.service'
 import { ToastrService } from 'ngx-toastr'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { CustomModalComponent } from 'src/app/components/custom-modal/custom-modal.component'
+import { NgxSpinnerService } from 'ngx-spinner'
+import { finalize } from 'rxjs'
 
 @Component({
   selector: 'app-member-new',
@@ -46,6 +48,7 @@ export class MemberNewComponent {
     private _router: Router,
     private _toasterService: ToastrService,
     private _modalService: NgbModal,
+    private _spinner: NgxSpinnerService,
   ) {
     this.roles = Object.values(RoleEnum).filter(
       (value) => typeof value === 'number',
@@ -77,6 +80,7 @@ export class MemberNewComponent {
   }
 
   public onSave(): void {
+    this._spinner.show()
     const member: Member = Object.assign(new Member(), this.form.value)
     member.phone = member.phone.replace(/\D/g, '')
     const observer = {
@@ -95,7 +99,10 @@ export class MemberNewComponent {
         console.error('Erro:' + error.statusText)
       },
     }
-    this._memberService.add(member).subscribe(observer)
+    this._memberService
+      .add(member)
+      .pipe(finalize(() => this._spinner.hide()))
+      .subscribe(observer)
   }
 
   public onCancel(): void {

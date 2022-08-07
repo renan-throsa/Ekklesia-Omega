@@ -26,7 +26,7 @@ export class CustomProfileComponent implements OnInit {
 
   isLoggedIn(): boolean {    
     if (this._accountService.isAuthenticated()) {
-      this.userName = this._accountService.getUser()?.name
+      this.userName = this._accountService.getUser().name
       return true
     }
     return false

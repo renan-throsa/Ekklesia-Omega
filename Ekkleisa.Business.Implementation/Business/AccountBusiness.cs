@@ -95,6 +95,7 @@ namespace Ekkleisa.Business.Implementation.Business
                 Issuer = _appSettings.Issuer,
                 Audience = _appSettings.Audience,
                 Expires = DateTime.UtcNow.AddHours(_appSettings.ExpirationInHours),
+                IssuedAt = DateTime.UtcNow,                
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             });
 
@@ -103,7 +104,7 @@ namespace Ekkleisa.Business.Implementation.Business
             {
                 User = new UserDTO(user.UserName, user.Email, user.PhoneNumber),
                 Token = encodedToken,
-                ExpiresIn = TimeSpan.FromHours(_appSettings.ExpirationInHours).TotalSeconds
+                ExpiresAt = DateTime.UtcNow.AddHours(_appSettings.ExpirationInHours)
             };
 
         }

@@ -16,6 +16,11 @@ import {
 import { MemberService } from 'src/app/services/member.service'
 import { TransactionService } from 'src/app/services/transaction.service'
 import { BaseConverter } from 'src/app/utils/base-converter'
+import { finalize } from 'rxjs'
+import { NgxSpinnerService } from 'ngx-spinner'
+import { ToastrService } from 'ngx-toastr'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { CustomModalComponent } from 'src/app/components/custom-modal/custom-modal.component'
 
 @Component({
   selector: 'app-transaction-new',
@@ -58,6 +63,9 @@ export class TransactionNewComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private _memberService: MemberService,
     private _router: Router,
+    private _spinner: NgxSpinnerService,
+    private _toasterService: ToastrService,
+    private _modalService: NgbModal,
   ) {
     this.members = []
     this.types = Object.values(TransactionEnum).filter(
@@ -95,9 +103,12 @@ export class TransactionNewComponent implements OnInit {
       this.controls.description.updateValueAndValidity()
     })
 
-    this._memberService.browse().subscribe((members: Member[]) => {
-      this.members = members
-    })
+    this._memberService
+      .browse()
+      .pipe(finalize(() => this._spinner.hide()))
+      .subscribe((members: Member[]) => {
+        this.members = members
+      })
   }
 
   onSave() {
@@ -107,13 +118,34 @@ export class TransactionNewComponent implements OnInit {
     )
     const observer = {
       next: (x: Response) => this._router.navigate(['transaction']),
-      error: (err: any) => console.error('Observer got an error: ' + err),
+      error: (error: any) => {
+        this._toasterService.error(
+          'Algo deu errado 😵. Tente novamente mais tarde.',
+          'Erro',
+        )
+        console.error('Erro:' + error.statusText)
+      },
     }
-    this._transactioService.add(transaction).subscribe(observer)
+
+    this._transactioService
+      .add(transaction)
+      .pipe(finalize(() => this._spinner.hide()))
+      .subscribe(observer)
   }
 
   onCancel() {
-    this._router.navigate(['transaction'])
+    if (this.form.dirty) {
+      const modalRef = this._modalService.open(CustomModalComponent)
+      modalRef.result.then(
+        (res) => {
+          this.form = this._formBuilder.group({})
+          this._router.navigate(['transaction'])
+        },
+        (dismiss) => {},
+      )
+    } else {
+      this._router.navigate(['transaction'])
+    }
   }
 
   private hasErros(field: string): boolean {

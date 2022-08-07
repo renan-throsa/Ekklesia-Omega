@@ -14,18 +14,14 @@ export class IdentityService extends BaseService {
   }
 
   signIn(user: SignIn): Observable<any> {
-    return this.http.post(this.baseUrl + '/SignIn', user).pipe(pluck('payload'))
+    return this._http.post(this.baseUrl + '/SignIn', user).pipe(pluck('payload'))
   }
 
   signUp(user: SignUp): Observable<any> {
-    return this.http.post(this.baseUrl + '/SignUp', user).pipe(pluck('payload'))
-  }
-
-  isAuthenticated(): boolean {
-    return this.getToken() ? true : false
-  }
+    return this._http.post(this.baseUrl + '/SignUp', user).pipe(pluck('payload'))
+  } 
 
   logOut() {
-    this.cleanUserDataLocaly()
+    this.cleanUserData()
   }
 }

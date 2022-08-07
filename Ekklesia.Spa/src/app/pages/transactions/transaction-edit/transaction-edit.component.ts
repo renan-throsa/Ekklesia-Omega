@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core'
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { NgxSpinnerService } from 'ngx-spinner'
+import { ToastrService } from 'ngx-toastr'
+import { finalize } from 'rxjs'
+import { CustomModalComponent } from 'src/app/components/custom-modal/custom-modal.component'
 import { Member } from 'src/app/models/Member'
 import { Transaction } from 'src/app/models/Transaction'
 import {
@@ -33,6 +38,9 @@ export class TransactionEditComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private _router: Router,
     private _route: ActivatedRoute,
+    private _spinner: NgxSpinnerService,
+    private _toasterService: ToastrService,
+    private _modalService: NgbModal,
   ) {
     this.members = []
     this.types = Object.values(TransactionEnum).filter(
@@ -53,6 +61,7 @@ export class TransactionEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this._spinner.show()
     let observer = {
       next: (response: Transaction) => {
         this.transaction = Object.assign(new Transaction(), response)
@@ -65,27 +74,56 @@ export class TransactionEditComponent implements OnInit {
           responsable: this.transaction.responsable?.name,
         })
       },
-      error: (error: any) =>
-        console.error('Não foi possível obter a transação: ' + error),
+      error: (error: any) => {
+        this._toasterService.error(
+          'Algo deu errado 😵. Tente novamente mais tarde.',
+          'Erro',
+        )
+        console.error('Erro:' + error.statusText)
+      },
     }
 
     this._route.params.subscribe((params) => {
       let id = params['id']
-      this._transactioService.read(id).subscribe(observer)
+      this._transactioService
+        .read(id)
+        .pipe(finalize(() => this._spinner.hide()))
+        .subscribe(observer)
     })
   }
 
   onSave() {
-    this.transaction.description = this.controls.description.value    
+    this._spinner.show()
+    this.transaction.description = this.controls.description.value
     const observer = {
       next: (x: Response) => this._router.navigate(['transaction']),
-      error: (err: any) => console.error('Observer got an error: ' + err),
+      error: (error: any) => {
+        this._toasterService.error(
+          'Algo deu errado 😵. Tente novamente mais tarde.',
+          'Erro',
+        )
+        console.error('Erro:' + error.statusText)
+      },
     }
-    this._transactioService.edit(this.transaction).subscribe(observer)
+    this._transactioService
+      .edit(this.transaction)
+      .pipe(finalize(() => this._spinner.hide()))
+      .subscribe(observer)
   }
 
   onCancel() {
-    this._router.navigate(['transaction'])
+    if (this.form.dirty) {
+      const modalRef = this._modalService.open(CustomModalComponent)
+      modalRef.result.then(
+        (res) => {
+          this.form = this._formBuilder.group({})
+          this._router.navigate(['transaction'])
+        },
+        (dismiss) => {},
+      )
+    } else {
+      this._router.navigate(['transaction'])
+    }
   }
 
   private hasErros(field: string): boolean {

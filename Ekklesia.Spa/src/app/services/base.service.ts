@@ -4,34 +4,40 @@ import { Account } from '../models/Account'
 
 export abstract class BaseService {
   public readonly baseUrl: string
+  public readonly user: Account
+
   constructor(
-    protected http: HttpClient,
-    protected readonly controller: string,
+    protected _http: HttpClient,
+    protected readonly _controller: string,
   ) {
     const configBaseServiceURL = environment.urlAPI
-    this.baseUrl = configBaseServiceURL + this.controller
+    this.baseUrl = configBaseServiceURL + this._controller
+    this.user = new Account()
   }
 
   protected getHeader(): HttpHeaders {
     return new HttpHeaders({
       'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + this.getToken(),
+      Authorization: `Bearer ${this.getToken()}`,
     })
   }
 
-  public getUser(): Account | null {
+  public isAuthenticated(): boolean {
+    return localStorage.getItem('ekklesia.token') ? true : false
+  }
+
+  public isTokenValid(): boolean {
+    const expiresAt = localStorage.getItem('ekklesia.expiresAt')
+    if (!expiresAt) {
+      return false
+    }
+    return new Date(expiresAt).getTime() > new Date().getDate()
+  }
+
+  public getUser(): Account {
     let user = localStorage.getItem('ekklesia.user')
-    return user ? Object.assign(new Account(), JSON.parse(user)) : null
-  }
-
-  public saveUserDataLocaly(response: any) {     
-    this.saveToken(response.token)
-    this.saveUser(response.user)
-  }
-
-  protected cleanUserDataLocaly() {
-    localStorage.removeItem('ekklesia.token')
-    localStorage.removeItem('ekklesia.user')
+    user ? Object.assign(this.user, JSON.parse(user)) : null
+    return this.user
   }
 
   public getToken(): string {
@@ -39,11 +45,27 @@ export abstract class BaseService {
     return token ? token : ''
   }
 
-  public saveToken(token: string) {
-    localStorage.setItem('ekklesia.token', JSON.stringify(token))
+  public saveUserData(response: any) {
+    this.saveToken(response.token)
+    this.saveUser(response.user)
+    this.saveExpirationTime(response.expiresAt)
   }
 
-  public saveUser(user: string) {
+  protected cleanUserData() {
+    localStorage.removeItem('ekklesia.token')
+    localStorage.removeItem('ekklesia.user')
+    localStorage.removeItem('ekklesia.expiresAt')
+  }
+
+  protected saveToken(token: string) {
+    localStorage.setItem('ekklesia.token', token)
+  }
+
+  protected saveUser(user: string) {
     localStorage.setItem('ekklesia.user', JSON.stringify(user))
+  }
+
+  protected saveExpirationTime(time: string) {
+    localStorage.setItem('ekklesia.expiresAt', time)
   }
 }

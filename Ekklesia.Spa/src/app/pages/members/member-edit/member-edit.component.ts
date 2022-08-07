@@ -16,6 +16,8 @@ import { Member } from 'src/app/models/Member'
 import { MemberService } from 'src/app/services/member.service'
 import { RoleEnum, RoleMapping } from 'src/app/models/RoleEnum'
 import { CustomModalComponent } from 'src/app/components/custom-modal/custom-modal.component'
+import { NgxSpinnerService } from 'ngx-spinner'
+import { finalize } from 'rxjs'
 
 @Component({
   selector: 'app-member-edit',
@@ -50,6 +52,7 @@ export class MemberEditComponent implements OnInit {
     private _memberService: MemberService,
     private _toasterService: ToastrService,
     private _modalService: NgbModal,
+    private _spinner: NgxSpinnerService,
   ) {
     this.roles = Object.values(RoleEnum).filter(
       (value) => typeof value === 'number',
@@ -73,6 +76,7 @@ export class MemberEditComponent implements OnInit {
     })
   }
   ngOnInit(): void {
+    this._spinner.show()
     let observer = {
       next: (response: Member) => {
         this.form.patchValue({ id: response.id })
@@ -93,7 +97,10 @@ export class MemberEditComponent implements OnInit {
 
     this._route.params.subscribe((params) => {
       let id = params['id']
-      this._memberService.read(id).subscribe(observer)
+      this._memberService
+        .read(id)
+        .pipe(finalize(() => this._spinner.hide()))
+        .subscribe(observer)
     })
   }
 

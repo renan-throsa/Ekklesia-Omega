@@ -56,7 +56,7 @@ export class SigninComponent {
     let account = Object.assign(new SignIn(), this.form.value)
     const observer = {
       next: (x: any) => {
-        this._accountService.saveUserDataLocaly(x)
+        this._accountService.saveUserData(x)
         this._toasterService.success(
           `Seja bem bindo, ${this._accountService.getUser()?.name}!`,
           'Sucesso ✌️',
