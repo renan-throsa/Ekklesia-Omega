@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { NgxSpinnerService } from 'ngx-spinner'
 import { ToastrService } from 'ngx-toastr'
-import { finalize, Observable } from 'rxjs'
+import { finalize, map, Observable, tap } from 'rxjs'
 import { BaseTable } from 'src/app/components/shared/base-table'
 import { Member } from 'src/app/models/Member'
 import { MemberService } from 'src/app/services/member.service'
@@ -12,14 +12,14 @@ import { MemberService } from 'src/app/services/member.service'
   styleUrls: [],
 })
 export class MemberListComponent extends BaseTable<Member> implements OnInit {
-  members: Member[]
+  members: Member[] 
+
   constructor(
     private _memberService: MemberService,
     private _spinner: NgxSpinnerService,
     private _toasterService: ToastrService,
   ) {
     super()
-    this._spinner.show()
     this.members = []
     this.columns = [
       {
@@ -52,9 +52,10 @@ export class MemberListComponent extends BaseTable<Member> implements OnInit {
       },
     }
 
-    this._memberService
+    let sub = this._memberService
       .browse()
       .pipe(finalize(() => this._spinner.hide()))
       .subscribe(observer)
+    sub.unsubscribe()
   }
 }

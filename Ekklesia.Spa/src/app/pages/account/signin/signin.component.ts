@@ -64,11 +64,8 @@ export class SigninComponent {
         this._router.navigate(['member'])
       },
       error: (err: any) => {
-        this._toasterService.error(
-          'Algo deu errado 😵. Tente novamente mais tarde.',
-          'Erro',
-        )
-        console.error(err.error)
+        this._toasterService.error(err.error.payload, 'Algo deu errado 😵')
+        console.log(err.error)
       },
     }
     this._accountService.signIn(account).subscribe(observer)

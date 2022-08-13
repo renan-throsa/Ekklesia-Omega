@@ -1,6 +1,7 @@
 ﻿using Ekkleisa.Business.Contract.IBusiness;
 using Ekklesia.Entities.DTOs;
 using Ekklesia.Entities.Enums;
+using Ekklesia.Entities.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -26,6 +27,11 @@ namespace Ekklesia.Api.Controllers
         public async Task<IEnumerable<MemberDTO>> Get()
         {
             return await _memberBusiness.AllAsync();
+        }
+
+        public ActionResult<FilterResult> FiltrarGrid([FromBody] GridFilter filter)
+        {
+            return Ok(_memberBusiness.FilterGrid(filter));
         }
 
 

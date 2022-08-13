@@ -20,6 +20,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
+using System;
 using System.Text;
 
 namespace Ekklesia.DependencyInjection
@@ -119,7 +120,7 @@ namespace Ekklesia.DependencyInjection
                     builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
                 });
             });
-           
+
             return services;
         }
 
@@ -128,12 +129,12 @@ namespace Ekklesia.DependencyInjection
             var DataBaseSettingsSection = configuration.GetSection(nameof(DataBaseSettings));
             services.Configure<DataBaseSettings>(DataBaseSettingsSection);
             var dataBaseSettings = DataBaseSettingsSection.Get<DataBaseSettings>();
-            
+
 
             var securitySettingsSection = configuration.GetSection(nameof(SecutitySettings));
             services.Configure<SecutitySettings>(securitySettingsSection);
             var securitySettings = securitySettingsSection.Get<SecutitySettings>();
-            
+
 
             services.AddSingleton<ApplicationContext>();
             services.AddHealthChecks().AddMongoDb(mongodbConnectionString: dataBaseSettings.ConnectionString, name: dataBaseSettings.NoSqlDataBase);
@@ -164,6 +165,9 @@ namespace Ekklesia.DependencyInjection
             var identitySettingsSection = configuration.GetSection(nameof(IdentitySettings));
             var dataBaseSettings = identitySettingsSection.Get<IdentitySettings>();
 
+            var securitySettingsSection = configuration.GetSection(nameof(SecutitySettings));
+            var securitySettings = securitySettingsSection.Get<SecutitySettings>();
+
             services.AddDbContext<IdentityContext>(options =>
             {
                 options.UseSqlServer(dataBaseSettings.ConnectionString);
@@ -175,15 +179,18 @@ namespace Ekklesia.DependencyInjection
             services.AddDefaultIdentity<IdentityUser>(options =>
                 {
                     //options.SignIn.RequireConfirmedEmail = true;
-                    options.User.AllowedUserNameCharacters = "aáâbcdeéêfghiíîjklmnoóôpqrstuúûvwxyzAÁÂBCDEÉÊFGHIÍÎJKLMNOÓÔPQRSTUÚÛVWXYZ/ "; 
+                    options.User.AllowedUserNameCharacters = "aáâbcdeéêfghiíîjklmnoóôpqrstuúûvwxyzAÁÂBCDEÉÊFGHIÍÎJKLMNOÓÔPQRSTUÚÛVWXYZ/ ";
                     options.User.RequireUniqueEmail = true;
+                    options.Lockout = new LockoutOptions
+                    {
+                        AllowedForNewUsers = true,
+                        DefaultLockoutTimeSpan = TimeSpan.FromMinutes(securitySettings.DefaultLockoutTime),
+                        MaxFailedAccessAttempts = securitySettings.MaxFailedAccessAttempts
+                    };
                 })
                 .AddEntityFrameworkStores<IdentityContext>()
                 .AddDefaultTokenProviders();
 
-
-            var securitySettingsSection = configuration.GetSection(nameof(SecutitySettings));            
-            var securitySettings = securitySettingsSection.Get<SecutitySettings>();
 
             var key = Encoding.ASCII.GetBytes(securitySettings.Secret);
             services.AddAuthentication(x =>

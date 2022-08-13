@@ -47,8 +47,9 @@ namespace Ekkleisa.Business.Implementation.Business
 
             var user = await _userManager.FindByEmailAsync(Dto.Email);
             var result = await _signInManager.PasswordSignInAsync(user, Dto.Password, isPersistent: false, lockoutOnFailure: true);
-            if (!result.Succeeded) return Response(ResponseStatus.BadRequest, "Usuário ou senha incorreto.");
-            if (result.IsLockedOut) return Response(ResponseStatus.BadRequest, "Usuário bloquado por tentativas inválidas.");
+            if (result.IsLockedOut) return Response(ResponseStatus.BadRequest, $"Usuário bloquado por tentativas inválidas. Bloqueio temina às {user.LockoutEnd}");
+            if (!result.Succeeded) return Response(ResponseStatus.BadRequest, $"Usuário ou senha incorreto. Tentativas Restantes: {_appSettings.MaxFailedAccessAttempts - user.AccessFailedCount}");
+
 
             await _signInManager.SignInAsync(user, isPersistent: Dto.RememberMe);
             var token = GetToken(user);
@@ -95,7 +96,7 @@ namespace Ekkleisa.Business.Implementation.Business
                 Issuer = _appSettings.Issuer,
                 Audience = _appSettings.Audience,
                 Expires = DateTime.UtcNow.AddHours(_appSettings.ExpirationInHours),
-                IssuedAt = DateTime.UtcNow,                
+                IssuedAt = DateTime.UtcNow,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             });
 

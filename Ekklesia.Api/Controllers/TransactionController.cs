@@ -2,7 +2,6 @@
 using Ekkleisa.Business.Implementation.Business;
 using Ekklesia.Entities.DTOs;
 using Ekklesia.Entities.Enums;
-using Humanizer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;

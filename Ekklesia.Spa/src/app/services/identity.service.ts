@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { Observable, pluck } from 'rxjs'
+import { Observable, pluck, tap } from 'rxjs'
 import { SignIn } from '../models/SignIn'
 import { SignUp } from '../models/SignUp'
 import { BaseService } from './base.service'
@@ -14,7 +14,7 @@ export class IdentityService extends BaseService {
   }
 
   signIn(user: SignIn): Observable<any> {
-    return this._http.post(this.baseUrl + '/SignIn', user).pipe(pluck('payload'))
+    return this._http.post(this.baseUrl + '/SignIn', user).pipe(tap(console.log),pluck('payload'))
   }
 
   signUp(user: SignUp): Observable<any> {
