@@ -1,7 +1,7 @@
 ﻿using Ekkleisa.Business.Contract.IBusiness;
 using Ekkleisa.Business.Implementation.Business;
 using Ekklesia.Entities.DTOs;
-using Humanizer;
+using Ekklesia.Entities.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ namespace Ekklesia.Api.Controllers
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class TransactionController : ControllerBase
     {
         private readonly ITransactionBusiness _transactionBusiness;
@@ -32,11 +32,11 @@ namespace Ekklesia.Api.Controllers
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<TransactionDTO>> Get(string id)
+        public async Task<ActionResult<Response>> Get(string id)
         {
-            TransactionDTO transaction = await _transactionBusiness.FindSync(id);
-            if (transaction != null) return Ok(transaction);
-            return NotFound(id);
+            var response = await _transactionBusiness.FindSync(id);
+            if (response.status == ResponseStatus.NotFound) return NotFound(id);
+            return Ok(response);
         }
 
 
@@ -44,19 +44,17 @@ namespace Ekklesia.Api.Controllers
         public async Task<ActionResult<Response>> Post([FromBody] TransactionDTO transaction)
         {
             var result = await _transactionBusiness.AddAsync(transaction);
-            if (!result.success) return BadRequest(result);           
-            return Ok(result);           
+            if (result.status == ResponseStatus.BadRequest) return BadRequest(result);
+            return Ok(result);
         }
 
         [HttpPut]
-        public async Task<ActionResult<Response>> Put([FromBody] TransactionDTO transactionDTO)
+        public async Task<ActionResult<Response>> Put([FromBody] TransactionDTO transaction)
         {
-            TransactionDTO transaction = await _transactionBusiness.FindSync(transactionDTO.Id);
-            if (transaction == null) return NotFound(transaction.Id);
-
-            var result = await _transactionBusiness.UpdateAsync(transactionDTO);
-            if (!result.success) return BadRequest(result);
-            return Ok(result);
+            var response = await _transactionBusiness.UpdateAsync(transaction);
+            if (response.status == ResponseStatus.NotFound) return NotFound(transaction.Id);
+            if (response.status == ResponseStatus.BadRequest) return BadRequest(transaction);
+            return Ok(response);
         }
 
     }

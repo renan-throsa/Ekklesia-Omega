@@ -1,3 +1,11 @@
-<h4>Lista de Transações</h4>
-<app-custom-painel></app-custom-painel>
-<app-custon-table [columns]="columns" [elements]="transactions"></app-custon-table>
+<div class="card">
+  <div class="card-header"><h4>Lista de Transações</h4></div>
+  <div class="card-body">
+    <app-custom-painel></app-custom-painel>
+    <app-custon-table
+      [columns]="columns"
+      [elements]="transactions"
+    ></app-custon-table>
+  </div>
+  <div class="card-footer text-muted">rodapé</div>
+</div>

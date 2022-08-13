@@ -1,5 +1,7 @@
 ﻿using Ekkleisa.Business.Contract.IBusiness;
 using Ekklesia.Entities.DTOs;
+using Ekklesia.Entities.Enums;
+using Ekklesia.Entities.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -10,7 +12,7 @@ namespace Ekklesia.Api.Controllers
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class MemberController : ControllerBase
     {
         private readonly IMemberBusiness _memberBusiness;
@@ -27,32 +29,35 @@ namespace Ekklesia.Api.Controllers
             return await _memberBusiness.AllAsync();
         }
 
+        public ActionResult<FilterResult> FiltrarGrid([FromBody] GridFilter filter)
+        {
+            return Ok(_memberBusiness.FilterGrid(filter));
+        }
+
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<MemberDTO>> Get(string id)
+        public async Task<ActionResult<Response>> Get(string id)
         {
-            MemberDTO member = await _memberBusiness.FindSync(id);
-            if (member == null) return NotFound(id);
-            return Ok(member);
+            var response = await _memberBusiness.FindSync(id);
+            if (response.status == ResponseStatus.NotFound) return NotFound(response);
+            return Ok(response);
         }
 
         [HttpPost]
         public async Task<ActionResult<Response>> Post([FromBody] MemberDTO member)
         {
             var result = await _memberBusiness.AddAsync(member);
-            if (!result.success) return BadRequest(result);
+            if (result.status == ResponseStatus.BadRequest) return BadRequest(result);
             return Ok(result);
         }
 
         [HttpPut]
-        public async Task<ActionResult<Response>> Put([FromBody] MemberDTO dto)
+        public async Task<ActionResult<Response>> Put([FromBody] MemberDTO member)
         {
-            MemberDTO member = await _memberBusiness.FindSync(dto.Id);
-            if (member == null) return NotFound(dto.Id);
-
-            var result = await _memberBusiness.UpdateAsync(dto);
-            if (!result.success) return BadRequest(result);
-            return Ok(result);
+            var response = await _memberBusiness.UpdateAsync(member);
+            if (response.status == ResponseStatus.NotFound) return NotFound(response);
+            if (response.status == Entities.Enums.ResponseStatus.BadRequest) return BadRequest(member);
+            return Ok(response);
         }
 
     }

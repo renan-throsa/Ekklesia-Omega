@@ -1,0 +1,41 @@
+<ul [ngSwitch]="isLoggedIn()" class="navbar-nav">
+  <li *ngSwitchCase="false" class="nav-item">
+    <a
+      class="nav-link"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      [routerLink]="['/account/signin']"
+    >
+      <fa-icon [icon]="['fas', 'arrow-right-to-bracket']"></fa-icon>
+      Entrar
+    </a>
+  </li>
+  <li *ngSwitchCase="true">
+    <ul ngbDropdown>
+      <a
+        ngbDropdownToggle
+        class="nav-link"
+        href="javascript:void(0)"
+        role="button"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+        id="dropdownBasic"
+      >
+        {{ userName }}
+      </a>
+      <ul ngbDropdownMenu aria-labelledby="dropdownBasic">
+        <li>
+          <a ngbDropdownItem [routerLink]="['/account/profile']">Perfil</a>
+        </li>
+        <li><a ngbDropdownItem href="#">Another</a></li>
+        <li><hr class="dropdown-divider" /></li>
+        <li>
+          <a ngbDropdownItem href="javascript:void(0)" (click)="logOut()">
+            <fa-icon [icon]="['fas', 'arrow-right-from-bracket']"></fa-icon>
+            Sair</a
+          >
+        </li>
+      </ul>
+    </ul>
+  </li>
+</ul>

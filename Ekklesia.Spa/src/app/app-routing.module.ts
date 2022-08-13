@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
+import { IdentityGard } from './services/identity.guard'
 
 const routes: Routes = [
   {
@@ -11,6 +12,7 @@ const routes: Routes = [
     path: 'member',
     loadChildren: () =>
       import('./pages/members/members.module').then((m) => m.MembersModule),
+    canLoad: [IdentityGard],
   },
   {
     path: 'transaction',
@@ -18,6 +20,7 @@ const routes: Routes = [
       import('./pages/transactions/transactions.module').then(
         (m) => m.TransactionsModule,
       ),
+      canLoad: [IdentityGard]
   },
   {
     path: 'account',
@@ -27,7 +30,9 @@ const routes: Routes = [
   {
     path: '**',
     loadChildren: () =>
-      import('./pages/error/error.pages.module').then((m) => m.ErrorPagesModule),
+      import('./pages/error/error.pages.module').then(
+        (m) => m.ErrorPagesModule,
+      ),
   },
 ]
 

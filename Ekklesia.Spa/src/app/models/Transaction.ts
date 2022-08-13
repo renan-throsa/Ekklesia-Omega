@@ -1,4 +1,5 @@
-import { BaseConverter } from '../components/shared/base-converter'
+
+import { BaseConverter } from '../utils/base-converter'
 import { Member } from './Member'
 import { TransactionEnum } from './TransactionEnum'
 

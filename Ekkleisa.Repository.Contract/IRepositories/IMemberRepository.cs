@@ -6,6 +6,6 @@ namespace Ekkleisa.Repository.Contract.IRepositories
 {
     public interface IMemberRepository : IRepository<Member>
     {
-        IEnumerable<Member> Browse(MemberFilter filter);        
+        IEnumerable<Member> Browse(MemberFilter filter);          
     }
 }

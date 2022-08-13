@@ -7,8 +7,9 @@ namespace Ekklesia.Entities.Filters
     {
         public DateTime? Before { get; set; }
         public DateTime? After { get; set; }
-        public float DiscountBiggerThan { get; set; }
-        public float DiscountLessThan { get; set; }
+        public TransactionType Type { get; set; }
+        public float BiggerThan { get; set; }
+        public float LessThan { get; set; }
 
     }
 }

@@ -20,6 +20,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
+using System;
 using System.Text;
 
 namespace Ekklesia.DependencyInjection
@@ -55,7 +56,7 @@ namespace Ekklesia.DependencyInjection
                 if (env.IsProduction())
                 {
                     var appSettingsSection = configuration.GetSection("AppSettings");
-                    var appSettings = appSettingsSection.Get<AppSettings>();
+                    var appSettings = appSettingsSection.Get<SecutitySettings>();
                     options.AddPolicy(env.EnvironmentName, builder =>
                     {
                         builder.AllowAnyMethod();
@@ -119,15 +120,21 @@ namespace Ekklesia.DependencyInjection
                     builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
                 });
             });
-           
+
             return services;
         }
 
         public static IServiceCollection AddDependencies(this IServiceCollection services, IConfiguration configuration)
         {
             var DataBaseSettingsSection = configuration.GetSection(nameof(DataBaseSettings));
-            var dataBaseSettings = DataBaseSettingsSection.Get<DataBaseSettings>();
             services.Configure<DataBaseSettings>(DataBaseSettingsSection);
+            var dataBaseSettings = DataBaseSettingsSection.Get<DataBaseSettings>();
+
+
+            var securitySettingsSection = configuration.GetSection(nameof(SecutitySettings));
+            services.Configure<SecutitySettings>(securitySettingsSection);
+            var securitySettings = securitySettingsSection.Get<SecutitySettings>();
+
 
             services.AddSingleton<ApplicationContext>();
             services.AddHealthChecks().AddMongoDb(mongodbConnectionString: dataBaseSettings.ConnectionString, name: dataBaseSettings.NoSqlDataBase);
@@ -158,6 +165,9 @@ namespace Ekklesia.DependencyInjection
             var identitySettingsSection = configuration.GetSection(nameof(IdentitySettings));
             var dataBaseSettings = identitySettingsSection.Get<IdentitySettings>();
 
+            var securitySettingsSection = configuration.GetSection(nameof(SecutitySettings));
+            var securitySettings = securitySettingsSection.Get<SecutitySettings>();
+
             services.AddDbContext<IdentityContext>(options =>
             {
                 options.UseSqlServer(dataBaseSettings.ConnectionString);
@@ -169,17 +179,20 @@ namespace Ekklesia.DependencyInjection
             services.AddDefaultIdentity<IdentityUser>(options =>
                 {
                     //options.SignIn.RequireConfirmedEmail = true;
-                    options.User.AllowedUserNameCharacters = null;
+                    options.User.AllowedUserNameCharacters = "aáâbcdeéêfghiíîjklmnoóôpqrstuúûvwxyzAÁÂBCDEÉÊFGHIÍÎJKLMNOÓÔPQRSTUÚÛVWXYZ/ ";
                     options.User.RequireUniqueEmail = true;
+                    options.Lockout = new LockoutOptions
+                    {
+                        AllowedForNewUsers = true,
+                        DefaultLockoutTimeSpan = TimeSpan.FromMinutes(securitySettings.DefaultLockoutTime),
+                        MaxFailedAccessAttempts = securitySettings.MaxFailedAccessAttempts
+                    };
                 })
                 .AddEntityFrameworkStores<IdentityContext>()
                 .AddDefaultTokenProviders();
 
 
-            var appSettingsSection = configuration.GetSection(nameof(AppSettings));
-            var appSettings = appSettingsSection.Get<AppSettings>();
-
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            var key = Encoding.ASCII.GetBytes(securitySettings.Secret);
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -194,8 +207,8 @@ namespace Ekklesia.DependencyInjection
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = true,
                     ValidateAudience = true,
-                    ValidAudience = appSettings.Audience,
-                    ValidIssuer = appSettings.Issuer
+                    ValidAudience = securitySettings.Audience,
+                    ValidIssuer = securitySettings.Issuer
                 };
             });
 

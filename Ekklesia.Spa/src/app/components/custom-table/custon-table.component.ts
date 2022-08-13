@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core'
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome'
 import { Column } from './Column'
+import { faPen } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
   selector: 'app-custon-table',
@@ -18,14 +20,14 @@ export class CustonTableComponent implements OnInit {
   @Input() customSearch: boolean = true
   @Input() currentPage: number
 
-  constructor() {
+  constructor(private _library: FaIconLibrary) {
     this.currentPage = 1
+    this._library.addIcons(faPen)
   }
 
   ngOnInit(): void {}
 
-  public resolveField(obj: any, field: any): any {   
-    
+  public resolveField(obj: any, field: any): any {
     if (field == null || field.trim() === '') {
       return null
     }
@@ -43,9 +45,7 @@ export class CustonTableComponent implements OnInit {
     if (typeof obj[field] === 'number') {
       return obj[field].toLocaleString()
     }
-    
-    
+
     return obj[field]
   }
- 
 }
