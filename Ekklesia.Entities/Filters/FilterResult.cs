@@ -1,15 +1,16 @@
-﻿namespace Ekklesia.Entities.Filters
+﻿using Ekklesia.Entities.Entities;
+using System.Collections.Generic;
+
+namespace Ekklesia.Entities.Filters
 {
-    public class FilterResult
+    public class FilterResult<TEntity, TObject> where TEntity : IEntity where TObject : IObject<TEntity>
     {
-        public object Data { get; set; }
-        public GridFilter Filter { get; set; }
+        public IEnumerable<TObject> Data { get; set; }
         public PageInfo PageInfo { get; set; }
 
         public FilterResult()
         {
-            Data = new object();
-            Filter = new GridFilter();
+            Data = new List<TObject>();
             PageInfo = new PageInfo();
         }
     }

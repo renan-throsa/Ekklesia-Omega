@@ -1,12 +1,12 @@
 ﻿namespace Ekklesia.Entities.Filters
 {
-    public class FilterGroup
+    public class GroupRule
     {
         public string Property { get; set; }
         public int Position { get; set; }
         public GridFilterType Type { get; set; }
 
-        public FilterGroup()
+        public GroupRule()
         {
             Property = string.Empty;
             Type = new GridFilterType();

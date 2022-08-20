@@ -15,34 +15,11 @@ namespace Ekkleisa.Business.Implementation.Business
     {
         private readonly IMemberRepository _memberRepository;
 
-        public MemberBusiness(IMemberRepository memberRepository, IMapper mapper, MemberValidation validations, ILogger<MemberBusiness> logger) :
-            base(memberRepository, mapper, validations, logger)
+        public MemberBusiness(IMemberRepository memberRepository, IMapper mapper, MemberValidation memberValidations, ILogger<MemberBusiness> logger) :
+            base(memberRepository, mapper, memberValidations, logger)
         {
             this._memberRepository = memberRepository;
-        }
-
-        public IEnumerable<Member> FilterMembers(MemberFilter filter)
-        {
-            return this._memberRepository.Browse(filter);
-        }
-
-        public FilterResult FilterGrid(GridFilter filter)
-        {
-            var memberFilter = new MemberFilter();
-            var members = FilterMembers(memberFilter);
-            var filterResult = new FilterResult();
-            return filterResult;
-        }
-
-        public GridFilter GetFilter()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SaveFilter(GridFilter filter)
-        {
-            throw new NotImplementedException();
-        }
+        }      
 
         public void Dispose()
         {

@@ -1,5 +1,4 @@
-﻿using Ekklesia.Entities.DTOs;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 
 namespace Ekklesia.Entities.Entities
 {

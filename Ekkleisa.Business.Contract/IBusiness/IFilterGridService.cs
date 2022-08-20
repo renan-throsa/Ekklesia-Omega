@@ -1,14 +1,15 @@
-﻿using Ekklesia.Entities.Entities;
+﻿using Ekklesia.Entities.DTOs;
+using Ekklesia.Entities.Entities;
 using Ekklesia.Entities.Filters;
 
 namespace Ekkleisa.Business.Contract.IBusiness
 {
-    public interface IFilterGridService<T> where T : IEntity
+    public interface IFilterBusiness<TEntity, TObject> where TEntity : IEntity where TObject : IObject<TEntity>
     {
-        FilterResult FilterGrid(GridFilter filter);
+        Response Browse(BaseFilter<TEntity, TObject> filter);
 
-        GridFilter GetFilter();
+        BaseFilter<TEntity, TObject> GetFilter();
 
-        void SaveFilter(GridFilter filter);
+        void SaveFilter(BaseFilter<TEntity, TObject> filter);
     }
 }

@@ -139,7 +139,7 @@ namespace Ekklesia.DependencyInjection
             services.AddSingleton<ApplicationContext>();
             services.AddHealthChecks().AddMongoDb(mongodbConnectionString: dataBaseSettings.ConnectionString, name: dataBaseSettings.NoSqlDataBase);
 
-
+                        
             services.AddSingleton<MemberValidation>();
             services.AddSingleton<TransactionValidation>();
             services.AddSingleton<OccasionValidation>();

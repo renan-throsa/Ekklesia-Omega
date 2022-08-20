@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Ekkleisa.Business.Contract.IBusiness
 {
-    public interface IBaseBusiness<TEntity, TObject> where TEntity : class, IEntity where TObject : BaseDto<TEntity>
+    public interface IBaseBusiness<TEntity, TObject> : IFilterBusiness<TEntity, TObject> where TEntity : IEntity where TObject : IObject<TEntity>
     {
         Task<Response> AddAsync(TObject tObject);
         Task AddAsync(IEnumerable<TObject> tObjects);

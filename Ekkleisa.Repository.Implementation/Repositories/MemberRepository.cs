@@ -28,7 +28,7 @@ namespace Ekkleisa.Repository.Implementation.Repositories
             {
                 if (!string.IsNullOrEmpty(filter.Name))
                 {
-                    Expression<Func<Member, bool>> propName = (x) => x.Name.Equals(filter.Name);
+                    Expression<Func<Member, bool>> propName = (x) => x.Name.Contains(filter.Name);
                     query = query.Where(propName);
                 }
                 if (filter.Role != null)
@@ -46,7 +46,6 @@ namespace Ekkleisa.Repository.Implementation.Repositories
                     Expression<Func<Member, bool>> propRole = x => x.BirthDay >= filter.After;
                     query = query.Where(propRole);
                 }
-
             }
 
             return query.AsNoTracking();

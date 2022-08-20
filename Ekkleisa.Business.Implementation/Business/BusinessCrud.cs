@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Ekkleisa.Business.Contract.IBusiness;
+using Ekkleisa.Business.Implementation.Validations;
 using Ekkleisa.Repository.Contract.IRepositories;
 using Ekklesia.Entities.DTOs;
 using Ekklesia.Entities.Entities;
 using Ekklesia.Entities.Enums;
+using Ekklesia.Entities.Filters;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
@@ -18,26 +20,28 @@ using System.Threading.Tasks;
 
 namespace Ekkleisa.Business.Implementation.Business
 {
-    public abstract class BusinessCrud<TEntity, TObject> : IBaseBusiness<TEntity, TObject> where TEntity : class, IEntity where TObject : BaseDto<TEntity>
+    public abstract class BusinessCrud<TEntity, TObject> : IBaseBusiness<TEntity, TObject> where TEntity : IEntity where TObject : IObject<TEntity>
     {
         protected readonly IRepository<TEntity> _repository;
-        protected readonly IValidator<TObject> _validator;
+        protected readonly IValidator<TObject> _entityValidator;
+        protected readonly IValidator<BaseFilter<TEntity, TObject>> _filterValidator;
         protected readonly IMapper _mapper;
         protected readonly ILogger _logger;
 
 
-        public BusinessCrud(IRepository<TEntity> repository, IMapper mapper, AbstractValidator<TObject> validator, ILogger logger)
+        public BusinessCrud(IRepository<TEntity> repository, IMapper mapper, AbstractValidator<TObject> entityValidator, ILogger logger)
         {
             this._repository = repository;
             this._mapper = mapper;
-            this._validator = validator;
+            this._entityValidator = entityValidator;
+            this._filterValidator = new BaseFilterValidator<TEntity, TObject>();
             this._logger = logger;
         }
 
         public async Task<Response> AddAsync(TObject tObject)
         {
             _logger.LogInformation($"Adding object: {tObject.ToJson()}");
-            ValidationResult result = _validator.Validate(tObject, options => options.IncludeRuleSets(OperationType.Insert.ToString()));
+            ValidationResult result = _entityValidator.Validate(tObject, options => options.IncludeRuleSets(OperationType.Insert.ToString()));
 
             if (result.IsValid)
             {
@@ -103,7 +107,7 @@ namespace Ekkleisa.Business.Implementation.Business
         {
             _logger.LogInformation($"Listing {typeof(TEntity).FullName}");
             var entities = await _repository.AllAsync();
-            return entities.Select(x => _mapper.Map<TObject>(x));
+            return _mapper.Map<IEnumerable<TObject>>(entities);
         }
 
         public Task DeleteAsync(TObject tObject)
@@ -129,7 +133,7 @@ namespace Ekkleisa.Business.Implementation.Business
         {
             _logger.LogInformation($"Updating object: {tObject.ToJson()}");
 
-            ValidationResult result = _validator.Validate(tObject, options => options.IncludeRuleSets(OperationType.Update.ToString()));
+            ValidationResult result = _entityValidator.Validate(tObject, options => options.IncludeRuleSets(OperationType.Update.ToString()));
             if (result.IsValid)
             {
                 var entity = await _repository.FindSync(tObject.Id);
@@ -159,6 +163,37 @@ namespace Ekkleisa.Business.Implementation.Business
         }
 
 
+        public Response Browse(BaseFilter<TEntity, TObject> filter)
+        {
+            _logger.LogInformation($"Searching with filter:{filter}");
+
+            Func<IEnumerable<TEntity>, IEnumerable<TObject>> mapTo = (entities) => _mapper.Map<IEnumerable<TObject>>(entities);
+
+            ValidationResult result = _filterValidator.Validate(filter, options => options.IncludeRuleSets(OperationType.Default.ToString()));
+            if (result.IsValid)
+            {
+                IMongoQueryable<TEntity> entities = _repository.GetQueryable();
+                var filterResult = filter.OnQuery(entities).WithFiltering().WithSorting().WithPagination().Build(mapTo);
+                return Response(ResponseStatus.Ok, filterResult);
+            }
+            else
+            {
+                _logger.LogError(result.Errors.Select(x => x.ErrorMessage).ToJson());
+                return Response(ResponseStatus.BadRequest, result.Errors.Select(x => x.ErrorMessage).ToList());
+            }
+
+        }
+
+        public BaseFilter<TEntity, TObject> GetFilter()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SaveFilter(BaseFilter<TEntity, TObject> filter)
+        {
+            throw new NotImplementedException();
+        }
+
         private Response Response(ResponseStatus valide, object result = null)
         {
             return
@@ -168,5 +203,6 @@ namespace Ekkleisa.Business.Implementation.Business
                 payload = result
             };
         }
+
     }
 }
