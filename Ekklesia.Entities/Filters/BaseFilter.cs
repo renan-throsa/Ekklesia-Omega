@@ -1,7 +1,6 @@
 ﻿using Ekklesia.Entities.Entities;
 using MongoDB.Bson;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -58,7 +57,7 @@ namespace Ekklesia.Entities.Filters
                     throw new InvalidOperationException(string.Format("Property {0} not found on object {1}.", filter.Field, typeof(TEntity).Name));
                 }
                 //May throw ArgumentException
-                var predicate = BuildPredicates(filter, property);
+                var predicate = BuildBinaryExpression(filter, property);
                 _query = _query.Where(predicate);
 
             }
@@ -72,11 +71,11 @@ namespace Ekklesia.Entities.Filters
         /// <param name="property"></param>
         /// <returns>Set of conditions that resolve to true or false.</returns>
         /// <exception cref="ArgumentException"></exception>
-        private Expression<Func<TEntity, bool>> BuildPredicates(FilterRule rule, PropertyInfo property)
+        private Expression<Func<TEntity, bool>> BuildBinaryExpression(FilterRule rule, PropertyInfo property)
         {
             ParameterExpression parameter = Expression.Parameter(typeof(TEntity), "x");
             Expression propertyAccess = Expression.MakeMemberAccess(parameter, property);
-            ConstantExpression argument = BuildConstantExpression(rule, property);
+            ConstantExpression argument = BuildConstant(rule, property);
 
             Expression expr = (rule.Type) switch
             {
@@ -93,7 +92,16 @@ namespace Ekklesia.Entities.Filters
             return Expression.Lambda<Func<TEntity, bool>>(expr, parameter);
         }
 
-        private ConstantExpression BuildConstantExpression(FilterRule rule, PropertyInfo property)
+        private Expression<Func<TEntity, object>> BuildUnaryExpression(PropertyInfo property)
+        {
+            ParameterExpression parameter = Expression.Parameter(typeof(TEntity), "x"); // (x) =>
+            Expression propertyAccess = Expression.MakeMemberAccess(parameter, property); // => x.property              
+            UnaryExpression unaryExpression = Expression.Convert(propertyAccess, typeof(object));
+            Expression<Func<TEntity, object>> predicate = Expression.Lambda<Func<TEntity, object>>(unaryExpression, parameter); // (x) => x.property
+            return predicate;
+        }
+
+        private ConstantExpression BuildConstant(FilterRule rule, PropertyInfo property)
         {
             if (property.PropertyType == typeof(String))
             {
@@ -133,7 +141,7 @@ namespace Ekklesia.Entities.Filters
         public BaseFilter<TEntity, TObject> WithSorting()
         {
             if (this._query == null) return this;
-            if (FilterBy.Count == 0)
+            if (OrderBy.Count == 0)
             {
                 this._query.OrderBy(x => x.Id);
                 return this;
@@ -143,18 +151,25 @@ namespace Ekklesia.Entities.Filters
 
             if (!properties.Any()) return this;
 
+           
             foreach (var order in OrderBy)
             {
                 PropertyInfo? property = properties.FirstOrDefault(p => p.Name.ToLower().Equals(order.Field.ToLower()));
                 if (property == null)
                 {
-                    throw new InvalidOperationException(string.Format("Propiedade de nome {0} n?o econtrado no objeto {1}.", order.Field, typeof(TEntity).Name));
+                    throw new InvalidOperationException(string.Format("Property {0} not found on object {1}.", order.Field, typeof(TEntity).Name));
                 }
 
-                ParameterExpression parameter = Expression.Parameter(typeof(TEntity), "x");
-                Expression propertyAccess = Expression.MakeMemberAccess(parameter, property);
-                Expression<Func<TEntity, object>> orderByValue = x => propertyAccess;
-                _query = _query.OrderBy(orderByValue);
+                Expression<Func<TEntity, object>> predicate = BuildUnaryExpression(property);
+
+                if (order.Direction == OrderType.Ascending)
+                {
+                    _query = _query.OrderBy(predicate);
+                }
+                else
+                {
+                    _query = _query.OrderByDescending(predicate);
+                }                
             }
             return this;
         }
