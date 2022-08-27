@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http'
 import { Observable, pluck } from 'rxjs'
+import { Filter } from '../models/Filter'
 import { BaseService } from './base.service'
 
 export abstract class ApplicationService<T> extends BaseService {
@@ -7,8 +8,9 @@ export abstract class ApplicationService<T> extends BaseService {
     super(http, controller)
   }
 
-  public browse(): Observable<any> {
-    return this._http.get(this.baseUrl, { headers: this.getHeader() })
+  public browse(filter: Filter): Observable<any> {
+    const endPoint = this.baseUrl + '/Browse'
+    return this._http.post(endPoint, filter, { headers: this.getHeader() }).pipe(pluck('payload'))
   }
 
   public read(id: string): Observable<any> {

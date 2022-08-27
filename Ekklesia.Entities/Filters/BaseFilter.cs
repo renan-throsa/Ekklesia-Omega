@@ -12,8 +12,6 @@ namespace Ekklesia.Entities.Filters
     public class BaseFilter<TEntity, TObject> where TEntity : IEntity where TObject : IObject<TEntity>
     {
         private const int DEFAULT_ROWS_PER_PAGE = 10;
-        private const string DESC = "DESC";
-        private const string ASC = "ASC";
         private const string PT_BR = "pt-BR";
         private IQueryable<TEntity>? _query;
 
@@ -151,7 +149,7 @@ namespace Ekklesia.Entities.Filters
 
             if (!properties.Any()) return this;
 
-           
+
             foreach (var order in OrderBy)
             {
                 PropertyInfo? property = properties.FirstOrDefault(p => p.Name.ToLower().Equals(order.Field.ToLower()));
@@ -169,18 +167,23 @@ namespace Ekklesia.Entities.Filters
                 else
                 {
                     _query = _query.OrderByDescending(predicate);
-                }                
+                }
             }
             return this;
         }
 
         public FilterResult<TEntity, TObject> Build(Func<IEnumerable<TEntity>, IEnumerable<TObject>> mapper)
         {
-            var filterResult = new FilterResult<TEntity, TObject>();
-            if (this._query == null) return filterResult;
-            var pageInfo = new PageInfo { Page = PageNumber, PerPage = PageSize, Pages = PagesTotal, Total = TotalCount };
-            filterResult.PageInfo = pageInfo;
-            filterResult.Data = mapper(_query.Skip(SkipSize).Take(PageSize));
+            if (this._query == null) new FilterResult<TEntity, TObject>();
+            var filterResult = new FilterResult<TEntity, TObject>()
+            {
+                Data = mapper(_query.Skip(SkipSize).Take(PageSize)),
+                Page = PageNumber,
+                PerPage = PageSize,
+                Pages = PagesTotal,
+                Total = TotalCount
+            };
+
             return filterResult;
         }
 

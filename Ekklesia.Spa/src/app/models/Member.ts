@@ -20,7 +20,7 @@ export class Member {
     this.phone = ''
     this.photo = ''
     this.roleName = ''
-    this.role = RoleEnum.INDEFINIDO
+    this.role = RoleEnum.MEMBRO
     this.birthDay = new Date()
   }
 }

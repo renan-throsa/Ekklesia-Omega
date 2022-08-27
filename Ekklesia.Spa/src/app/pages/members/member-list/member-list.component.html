@@ -1,11 +1,28 @@
 <div class="card">
-  <div class="card-header"><h4>Lista de Membros</h4></div>
-  <div class="card-body">
-    <app-custom-painel [searchBy]="'Nome'" ></app-custom-painel>
-    <app-custon-table
-      [columns]="columns"
-      [elements]="members"
-    ></app-custon-table>
+  <div class="card-header">
+    <h4>Lista de Membros</h4>
   </div>
-  <div class="card-footer text-muted">rodapé</div>
+  <div class="card-body">
+    <app-custom-painel (search)="search()">
+      <app-member-search #memberSearch></app-member-search>
+    </app-custom-painel>
+    <app-custon-table [columns]="columns" [elements]="members"></app-custon-table>
+  </div>
+  <div class="card-footer text-muted">
+    <nav aria-label="...">
+      <ul class="pagination">
+        <li class="page-item disabled">
+          <a class="page-link">Anterior</a>
+        </li>
+        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+        <li class="page-item" aria-current="page">
+          <a class="page-link" href="#">2</a>
+        </li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item">
+          <a class="page-link" href="#">Próxima</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
 </div>

@@ -6,7 +6,7 @@ import { TransactionEditComponent } from './transaction-edit/transaction-edit.co
 import { TransactionSearchComponent } from './transaction-search/transaction-search.component'
 import { TransactionRoutingModule } from './transaction-routing.module'
 import { CustonTableModule } from 'src/app/components/custom-table/custon-table.module'
-import { CustomPainelModule } from 'src/app/components/custom-painel/custom-painel.module'
+import { CustomPainelModule } from 'src/app/components/custom-search/custom-painel.module'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { NgBrazil } from 'ng-brazil'
 import { CustomFormsModule } from 'ng2-validation'

@@ -54,7 +54,7 @@ namespace Ekklesia.Api.Controllers
         {
             var response = await _memberBusiness.UpdateAsync(member);
             if (response.status == ResponseStatus.NotFound) return NotFound(response);
-            if (response.status == Entities.Enums.ResponseStatus.BadRequest) return BadRequest(member);
+            if (response.status == ResponseStatus.BadRequest) return BadRequest(member);
             return Ok(response);
         }
 

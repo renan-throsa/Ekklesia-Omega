@@ -21,6 +21,8 @@ import { NgxSpinnerService } from 'ngx-spinner'
 import { ToastrService } from 'ngx-toastr'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { CustomModalComponent } from 'src/app/components/custom-modal/custom-modal.component'
+import { FilterService } from 'src/app/services/filter.service'
+import { FilterResult } from 'src/app/models/FilterResult'
 
 @Component({
   selector: 'app-transaction-new',
@@ -62,6 +64,7 @@ export class TransactionNewComponent implements OnInit {
     private _transactioService: TransactionService,
     private _formBuilder: FormBuilder,
     private _memberService: MemberService,
+    private _filterService: FilterService,
     private _router: Router,
     private _spinner: NgxSpinnerService,
     private _toasterService: ToastrService,
@@ -104,10 +107,10 @@ export class TransactionNewComponent implements OnInit {
     })
 
     this._memberService
-      .browse()
+      .browse(this._filterService.Filter)
       .pipe(finalize(() => this._spinner.hide()))
-      .subscribe((members: Member[]) => {
-        this.members = members
+      .subscribe((result: FilterResult<Member>) => {
+        this.members = result.data
       })
   }
 
@@ -141,7 +144,7 @@ export class TransactionNewComponent implements OnInit {
           this.form = this._formBuilder.group({})
           this._router.navigate(['transaction'])
         },
-        (dismiss) => {},
+        (dismiss) => { },
       )
     } else {
       this._router.navigate(['transaction'])

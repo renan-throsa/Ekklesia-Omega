@@ -1,0 +1,13 @@
+<nav class="navbar bg-light">
+  <div class="container-fluid">
+    <a class="btn btn-primary" [routerLink]="['new']">
+      <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+      Adicionar
+    </a>
+    <ng-content></ng-content>
+    <button class="btn btn-outline-success" (click)="onSearch()">
+      <fa-icon [icon]="['fas', 'magnifying-glass']"></fa-icon>
+      Buscar
+    </button>
+  </div>
+</nav>

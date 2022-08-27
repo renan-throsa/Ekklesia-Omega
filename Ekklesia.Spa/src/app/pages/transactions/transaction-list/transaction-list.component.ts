@@ -5,6 +5,8 @@ import { Transaction } from 'src/app/models/Transaction'
 import { TransactionService } from 'src/app/services/transaction.service'
 import { finalize } from 'rxjs'
 import { ToastrService } from 'ngx-toastr'
+import { FilterService } from 'src/app/services/filter.service'
+import { FilterResult } from 'src/app/models/FilterResult'
 
 @Component({
   selector: 'app-transaction-list',
@@ -16,6 +18,7 @@ export class TransactionListComponent extends BaseTable<Transaction>
 
   constructor(
     private _transactioService: TransactionService,
+    private _filterService: FilterService,
     private _spinner: NgxSpinnerService,
     private _toasterService: ToastrService,
   ) {
@@ -44,8 +47,8 @@ export class TransactionListComponent extends BaseTable<Transaction>
   ngOnInit(): void {
     this._spinner.show()
     const observer = {
-      next: (result: Transaction[]) => {
-        this.transactions = result.map((x) =>
+      next: (result: FilterResult<Transaction>) => {
+        this.transactions = result.data.map((x) =>
           Object.assign(new Transaction(), x),
         )
       },
@@ -59,7 +62,7 @@ export class TransactionListComponent extends BaseTable<Transaction>
     }
 
     this._transactioService
-      .browse()
+      .browse(this._filterService.Filter)
       .pipe(finalize(() => this._spinner.hide()))
       .subscribe(observer)
   }

@@ -1,1 +1,25 @@
-<p>member-search works!</p>
+<form [formGroup]="form">
+    <div class="row">
+        <div class="col">           
+            <input type="text" class="form-control" formControlName="name" placeholder="Nome"
+                [ngClass]="{ 'is-invalid': isNameInvalid }" />
+
+            <div *ngIf="controls.name?.errors?.maxlength" class="invalid-feedback">
+                O comprimento do nome deve ser de no máximo 50 caracteres.
+            </div>
+            <div *ngIf="controls.name?.errors?.withoutNumbers" class="invalid-feedback">
+                O nome não deve conter múmeros.
+            </div>
+            <div *ngIf="controls.name?.errors?.withoutSpecialCharacter" class="invalid-feedback">
+                O nome não deve conter caracteres especiais.
+            </div>
+        </div>
+        <div class="col">
+            <select class="form-select" formControlName="role">
+                <option *ngFor="let value of roles" [ngValue]="value">
+                    {{ roleapping[value] }}
+                </option>
+            </select>
+        </div>
+    </div>
+</form>

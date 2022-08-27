@@ -14,7 +14,7 @@ export class IdentityService extends BaseService {
   }
 
   signIn(user: SignIn): Observable<any> {
-    return this._http.post(this.baseUrl + '/SignIn', user).pipe(tap(console.log),pluck('payload'))
+    return this._http.post(this.baseUrl + '/SignIn', user).pipe(pluck('payload'))
   }
 
   signUp(user: SignUp): Observable<any> {

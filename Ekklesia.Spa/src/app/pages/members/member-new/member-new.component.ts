@@ -50,10 +50,7 @@ export class MemberNewComponent {
     private _modalService: NgbModal,
     private _spinner: NgxSpinnerService,
   ) {
-    this.roles = Object.values(RoleEnum).filter(
-      (value) => typeof value === 'number',
-    )
-
+    this.roles = Object.values(RoleEnum).filter((value) => typeof value === 'number')
     this.form = this._formBuilder.group({
       name: [
         '',
@@ -116,7 +113,7 @@ export class MemberNewComponent {
           this.form = this._formBuilder.group({})
           this._router.navigate(['member'])
         },
-        (dismiss) => {},
+        (dismiss) => { },
       )
     } else {
       this._router.navigate(['member'])

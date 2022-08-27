@@ -6,79 +6,46 @@
   <div class="card-body">
     <form [formGroup]="form">
       <div class="row">
+
         <div class="col">
           <label for="inputName" class="form-label">Nome</label>
-          <input
-            type="text"
-            class="form-control"
-            id="inputName"
-            formControlName="name"
-            [ngClass]="{ 'is-invalid': isNameInvalid }"
-          />
+          <input type="text" class="form-control" id="inputName" formControlName="name"
+            [ngClass]="{ 'is-invalid': isNameInvalid }" />
 
           <div *ngIf="controls.name?.errors?.required" class="invalid-feedback">
             Nome é necessário
           </div>
 
-          <div
-            *ngIf="controls.name?.errors?.minlength"
-            class="invalid-feedback"
-          >
+          <div *ngIf="controls.name?.errors?.minlength" class="invalid-feedback">
             O comprimento do nome deve ser de pelo menos 5 caracteres.
           </div>
 
-          <div
-            *ngIf="controls.name?.errors?.maxlength"
-            class="invalid-feedback"
-          >
+          <div *ngIf="controls.name?.errors?.maxlength" class="invalid-feedback">
             O comprimento do nome deve ser de no máximo 50 caracteres.
           </div>
 
-          <div
-            *ngIf="controls.name?.errors?.withLowerCase"
-            class="invalid-feedback"
-          >
+          <div *ngIf="controls.name?.errors?.withLowerCase" class="invalid-feedback">
             O nome deve conter pelo menos uma letra minúscula.
           </div>
-          <div
-            *ngIf="controls.name?.errors?.withUpperCase"
-            class="invalid-feedback"
-          >
+          <div *ngIf="controls.name?.errors?.withUpperCase" class="invalid-feedback">
             O nome deve conter pelo menos uma letra maiúscula.
           </div>
-          <div
-            *ngIf="controls.name?.errors?.withoutNumbers"
-            class="invalid-feedback"
-          >
+          <div *ngIf="controls.name?.errors?.withoutNumbers" class="invalid-feedback">
             O nome não deve conter múmeros.
           </div>
-          <div
-            *ngIf="controls.name?.errors?.withoutSpecialCharacter"
-            class="invalid-feedback"
-          >
+          <div *ngIf="controls.name?.errors?.withoutSpecialCharacter" class="invalid-feedback">
             O nome não deve conter caracteres especiais.
           </div>
         </div>
+        
         <div class="col">
           <label for="inputPhone" class="form-label">Telefone</label>
-          <input
-            type="tel"
-            class="form-control"
-            id="inputPhone"
-            formControlName="phone"
-            [textMask]="{ mask: MASKS.telefone.textMask }"
-            [ngClass]="{ 'is-invalid': isPhoneInvalid }"
-          />
-          <div
-            *ngIf="controls.phone?.errors?.required"
-            class="invalid-feedback"
-          >
+          <input type="tel" class="form-control" id="inputPhone" formControlName="phone"
+            [textMask]="{ mask: MASKS.telefone.textMask }" [ngClass]="{ 'is-invalid': isPhoneInvalid }" />
+          <div *ngIf="controls.phone?.errors?.required" class="invalid-feedback">
             Telefone é necessário
           </div>
-          <div
-            *ngIf="controls.phone?.errors?.telefone"
-            class="invalid-feedback"
-          >
+          <div *ngIf="controls.phone?.errors?.telefone" class="invalid-feedback">
             Um telefone precisa ter um padrão
           </div>
         </div>
@@ -87,7 +54,7 @@
       <div class="row">
         <div class="col">
           <label for="roleMember" class="form-label">Posição</label>
-          <select id="roleMember" class="form-select" formControlName="role">
+          <select class="form-select" formControlName="role">
             <option *ngFor="let value of roles" [ngValue]="value">
               {{ roleapping[value] }}
             </option>
@@ -104,12 +71,7 @@
   <div class="card-footer">
     <div class="row">
       <div class="col-1">
-        <button
-          type="button"
-          class="btn btn-primary"
-          [disabled]="form.invalid"
-          (click)="onSave()"
-        >
+        <button type="button" class="btn btn-primary" [disabled]="form.invalid" (click)="onSave()">
           Salvar
         </button>
       </div>

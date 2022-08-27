@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core'
+import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core'
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome'
 import { faPlus, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 
@@ -6,10 +6,14 @@ import { faPlus, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
   selector: 'app-custom-painel',
   templateUrl: './custom-painel.component.html',
 })
-export class CustomPainelComponent {
-  @Input() searchBy: string
+export class CustomPainelComponent {  
+  @Output() search = new EventEmitter();
+
   constructor(private _library: FaIconLibrary) {
-    this.searchBy = ''
     this._library.addIcons(faPlus, faMagnifyingGlass)
+  }
+
+  onSearch() {
+    this.search.emit();
   }
 }
