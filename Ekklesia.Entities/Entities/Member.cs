@@ -1,5 +1,4 @@
-﻿using Ekklesia.Entities.Enums;
-using System;
+﻿using System;
 
 namespace Ekklesia.Entities.Entities
 {

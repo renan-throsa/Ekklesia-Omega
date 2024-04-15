@@ -5,5 +5,6 @@ namespace Ekkleisa.Business.Contract.IBusiness
 {
     public interface IMemberBusiness : IBaseBusiness<Member, MemberDTO>
     {
+        
     }
 }

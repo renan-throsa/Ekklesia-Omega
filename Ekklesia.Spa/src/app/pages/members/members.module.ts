@@ -11,6 +11,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { NgBrazil } from 'ng-brazil'
 import { TextMaskModule } from 'angular2-text-mask'
 import { CustomFormsModule } from 'ng2-validation'
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { CustomFormsModule } from 'ng2-validation'
     CustomPainelModule,
     FormsModule,
     ReactiveFormsModule,
+    NgbModule,
     NgBrazil,
     TextMaskModule,
     CustomFormsModule,

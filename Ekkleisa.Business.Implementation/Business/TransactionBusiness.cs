@@ -11,8 +11,8 @@ namespace Ekkleisa.Business.Implementation.Business
 {
     public sealed class TransactionBusiness : BusinessCrud<Transaction, TransactionDTO>, ITransactionBusiness, IDisposable
     {
-        public TransactionBusiness(ITransactionRepository transactionRepository, IMapper mapper, TransactionValidation validations, ILogger<TransactionBusiness> logger) : 
-            base(transactionRepository, mapper, validations, logger)
+        public TransactionBusiness(ITransactionRepository transactionRepository, IMapper mapper, TransactionValidation transactionValidation, ILogger<TransactionBusiness> logger) :
+            base(transactionRepository, mapper, transactionValidation, logger)
         {
         }
 

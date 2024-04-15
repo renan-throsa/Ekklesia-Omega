@@ -1,10 +1,11 @@
-﻿using Ekkleisa.Business.Contract.IBusiness;
-using Ekkleisa.Business.Implementation.Business;
+﻿using Asp.Versioning;
+using Ekkleisa.Business.Contract.IBusiness;
 using Ekklesia.Entities.DTOs;
-using Humanizer;
+using Ekklesia.Entities.Entities;
+using Ekklesia.Entities.Enums;
+using Ekklesia.Entities.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Ekklesia.Api.Controllers
@@ -24,39 +25,40 @@ namespace Ekklesia.Api.Controllers
         }
 
 
-        [HttpGet]
-        public async Task<IEnumerable<TransactionDTO>> Browse()
+        [HttpPost]
+        [Route(nameof(Browse))]
+        public ActionResult<Response> Browse([FromBody] BaseFilter<Transaction, TransactionDTO> filter)
         {
-            return await _transactionBusiness.AllAsync();
+            return Ok(_transactionBusiness.Browse(filter));
         }
 
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<TransactionDTO>> Get(string id)
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<ActionResult<Response>> Get(string id)
         {
-            TransactionDTO transaction = await _transactionBusiness.FindSync(id);
-            if (transaction != null) return Ok(transaction);
-            return NotFound(id);
+            var response = await _transactionBusiness.FindSync(id);
+            if (response.status == ResponseStatus.NotFound) return NotFound(id);
+            return Ok(response);
         }
 
 
         [HttpPost]
+        [Route(nameof(Post))]
         public async Task<ActionResult<Response>> Post([FromBody] TransactionDTO transaction)
         {
             var result = await _transactionBusiness.AddAsync(transaction);
-            if (!result.success) return BadRequest(result);           
-            return Ok(result);           
+            if (result.status == ResponseStatus.BadRequest) return BadRequest(result);
+            return Ok(result);
         }
 
         [HttpPut]
-        public async Task<ActionResult<Response>> Put([FromBody] TransactionDTO transactionDTO)
+        [Route(nameof(Edit))]
+        public async Task<ActionResult<Response>> Edit([FromBody] TransactionDTO transaction)
         {
-            TransactionDTO transaction = await _transactionBusiness.FindSync(transactionDTO.Id);
-            if (transaction == null) return NotFound(transaction.Id);
-
-            var result = await _transactionBusiness.UpdateAsync(transactionDTO);
-            if (!result.success) return BadRequest(result);
-            return Ok(result);
+            var response = await _transactionBusiness.UpdateAsync(transaction);
+            if (response.status == ResponseStatus.NotFound) return NotFound(transaction.Id);
+            if (response.status == ResponseStatus.BadRequest) return BadRequest(transaction);
+            return Ok(response);
         }
 
     }

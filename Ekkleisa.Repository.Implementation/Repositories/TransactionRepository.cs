@@ -21,14 +21,14 @@ namespace Ekkleisa.Repository.Implementation.Repositories
 
             if (filter != null)
             {
-                if (filter.DiscountBiggerThan != 0)
+                if (filter.BiggerThan != 0)
                 {
-                    query = query.Where(p => filter.DiscountBiggerThan > p.Amount);
+                    query = query.Where(p => filter.BiggerThan > p.Amount);
                 }
 
-                if (filter.DiscountLessThan != 0)
+                if (filter.LessThan != 0)
                 {
-                    query = query.Where(p => filter.DiscountLessThan < p.Amount);
+                    query = query.Where(p => filter.LessThan < p.Amount);
                 }
 
                 if (filter.Before != null)

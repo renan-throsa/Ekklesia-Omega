@@ -1,6 +1,7 @@
 ﻿using Ekkleisa.Business.Contract.IBusiness;
 using Ekkleisa.Business.Implementation.Validations;
 using Ekklesia.Entities.DTOs;
+using Ekklesia.Entities.Enums;
 using Ekklesia.Entities.Settings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -9,7 +10,6 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,13 +21,13 @@ namespace Ekkleisa.Business.Implementation.Business
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInValidation _signInValidation;
         private readonly SignUpValidation _signUpValidation;
-        private readonly AppSettings _appSettings;
+        private readonly SecutitySettings _appSettings;
         protected readonly ILogger<IAccountBusiness> _logger;
 
         public AccountBusiness(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager,
             SignUpValidation signUpValidation,
             SignInValidation signInValidation,
-            IOptions<AppSettings> appSettings,
+            IOptions<SecutitySettings> appSettings,
             ILogger<IAccountBusiness> logger)
         {
             this._signInManager = signInManager;
@@ -42,23 +42,24 @@ namespace Ekkleisa.Business.Implementation.Business
         {
             _logger.LogInformation($"Logging sign in for: {Dto.Email}");
             var modelState = _signInValidation.Validate(Dto);
-            if (!modelState.IsValid) return Response(modelState.IsValid, modelState.Errors.Select(x => x.ErrorMessage));
+            if (!modelState.IsValid) return Response(ResponseStatus.BadRequest, modelState.Errors.Select(x => x.ErrorMessage));
 
             var user = await _userManager.FindByEmailAsync(Dto.Email);
             var result = await _signInManager.PasswordSignInAsync(user, Dto.Password, isPersistent: false, lockoutOnFailure: true);
-            if (!result.Succeeded) return Response(result.Succeeded, "Usuário ou senha incorreto.");
-            if (result.IsLockedOut) return Response(result.Succeeded, "Usuário bloquado por tentativas inválidas.");
+            if (result.IsLockedOut) return Response(ResponseStatus.BadRequest, $"Usuário bloquado por tentativas inválidas. Bloqueio temina às {user.LockoutEnd}");
+            if (!result.Succeeded) return Response(ResponseStatus.BadRequest, $"Usuário ou senha incorreto. Tentativas Restantes: {_appSettings.MaxFailedAccessAttempts - user.AccessFailedCount}");
+
 
             await _signInManager.SignInAsync(user, isPersistent: Dto.RememberMe);
             var token = GetToken(user);
-            return Response(true, token);
+            return Response(ResponseStatus.Ok, token);
         }
 
         public async Task<Response> SignUp(SignUpDTO Dto)
         {
             _logger.LogInformation($"Logging sign up for: {Dto.Email}");
             var modelState = _signUpValidation.Validate(Dto);
-            if (!modelState.IsValid) return Response(modelState.IsValid, modelState.Errors.Select(x => x.ErrorMessage));
+            if (!modelState.IsValid) return Response(ResponseStatus.BadRequest, modelState.Errors.Select(x => x.ErrorMessage));
 
             var user = new IdentityUser
             {
@@ -68,19 +69,19 @@ namespace Ekkleisa.Business.Implementation.Business
             };
 
             var result = await _userManager.CreateAsync(user, Dto.Password);
-            if (!result.Succeeded) return Response(result.Succeeded, result.Errors.Select(x => x.Description));
+            if (!result.Succeeded) return Response(ResponseStatus.Ok, result.Errors.Select(x => x.Description));
 
             await _signInManager.SignInAsync(user, isPersistent: false);
             var token = GetToken(user);
-            return Response(true, token);
+            return Response(ResponseStatus.Ok, token);
         }
 
-        private Response Response(bool valide, object result = null)
+        private Response Response(ResponseStatus status, object result = null)
         {
             return
             new Response
             {
-                success = valide,
+                status = status,
                 payload = result
             };
         }
@@ -94,6 +95,7 @@ namespace Ekkleisa.Business.Implementation.Business
                 Issuer = _appSettings.Issuer,
                 Audience = _appSettings.Audience,
                 Expires = DateTime.UtcNow.AddHours(_appSettings.ExpirationInHours),
+                IssuedAt = DateTime.UtcNow,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             });
 
@@ -101,8 +103,8 @@ namespace Ekkleisa.Business.Implementation.Business
             return new TokenDTO
             {
                 User = new UserDTO(user.UserName, user.Email, user.PhoneNumber),
-                AccessToken = encodedToken,
-                ExpiresIn = TimeSpan.FromHours(_appSettings.ExpirationInHours).TotalSeconds
+                Token = encodedToken,
+                ExpiresAt = DateTime.UtcNow.AddHours(_appSettings.ExpirationInHours)
             };
 
         }

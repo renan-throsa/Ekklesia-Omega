@@ -6,10 +6,19 @@ import {
   Validators,
 } from '@angular/forms'
 import { Router } from '@angular/router'
+
 import { MASKS, NgBrazilValidators } from 'ng-brazil'
+
+import { UtilsValidators } from 'src/app/utils/utils-validators'
+
 import { Member } from 'src/app/models/Member'
 import { RoleEnum, RoleMapping } from 'src/app/models/RoleEnum'
 import { MemberService } from 'src/app/services/member.service'
+import { ToastrService } from 'ngx-toastr'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { CustomModalComponent } from 'src/app/components/custom-modal/custom-modal.component'
+import { NgxSpinnerService } from 'ngx-spinner'
+import { finalize } from 'rxjs'
 
 @Component({
   selector: 'app-member-new',
@@ -37,6 +46,9 @@ export class MemberNewComponent {
     private _formBuilder: FormBuilder,
     private _memberService: MemberService,
     private _router: Router,
+    private _toasterService: ToastrService,
+    private _modalService: NgbModal,
+    private _spinner: NgxSpinnerService,
   ) {
     this.roles = Object.values(RoleEnum).filter(
       (value) => typeof value === 'number',
@@ -47,9 +59,12 @@ export class MemberNewComponent {
         '',
         [
           Validators.required,
-          Validators.pattern(
-            /^[A-ZÀ-Ÿ][A-zÀ-ÿ']+\s([A-zÀ-ÿ']\s?)*[A-ZÀ-Ÿ][A-zÀ-ÿ']+$/,
-          ),
+          Validators.minLength(5),
+          Validators.maxLength(50),
+          UtilsValidators.withLowerCase,
+          UtilsValidators.withUpperCase,
+          UtilsValidators.withoutNumbers,
+          UtilsValidators.withoutSpecialCharacter,
         ],
       ],
       phone: ['', [Validators.required, NgBrazilValidators.telefone]],
@@ -64,17 +79,47 @@ export class MemberNewComponent {
     return Boolean(hasErros)
   }
 
-  onSave() {
+  public onSave(): void {
+    this._spinner.show()
     const member: Member = Object.assign(new Member(), this.form.value)
     member.phone = member.phone.replace(/\D/g, '')
     const observer = {
-      next: (x: Response) => this._router.navigate(['member']),
-      error: (err: any) => console.error('Observer got an error: ' + err),
+      next: (x: Member) => {
+        this._toasterService.success(
+          `Membro ${x.name} adicionado!`,
+          'Sucesso ✌️',
+        )
+        this._router.navigate(['member'])
+      },
+      error: (error: any) => {
+        this._toasterService.error(
+          'Algo deu errado 😵. Tente novamente mais tarde.',
+          'Erro',
+        )
+        console.error('Erro:' + error.statusText)
+      },
     }
-    this._memberService.add(member).subscribe(observer)
+    this._memberService
+      .add(member)
+      .pipe(finalize(() => this._spinner.hide()))
+      .subscribe(observer)
   }
 
-  onCancel() {
-    this._router.navigate(['/member'])
+  public onCancel(): void {
+    if (this.form.dirty) {
+      const modalRef = this._modalService.open(CustomModalComponent)
+      modalRef.componentInstance.title = 'Deseja sair?'
+      modalRef.componentInstance.message =
+        'As alterações não salvas em membros serão perdidas'
+      modalRef.result.then(
+        (res) => {
+          this.form = this._formBuilder.group({})
+          this._router.navigate(['member'])
+        },
+        (dismiss) => {},
+      )
+    } else {
+      this._router.navigate(['member'])
+    }
   }
 }

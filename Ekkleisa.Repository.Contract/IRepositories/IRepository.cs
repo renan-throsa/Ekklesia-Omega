@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Ekkleisa.Repository.Contract.IRepositories
 {
-    public interface IRepository<TEntity> where TEntity : class, IEntity
+    public interface IRepository<TEntity> where TEntity : IEntity
     {
         Task AddAsync(TEntity entity);
         Task AddAsync(IEnumerable<TEntity> entities);

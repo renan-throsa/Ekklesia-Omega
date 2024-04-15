@@ -2,8 +2,7 @@
 using Ekkleisa.Repository.Implementation.Context;
 using Ekklesia.Entities.Entities;
 using Ekklesia.Entities.Filters;
-using MongoDB.Bson;
-using MongoDB.Driver;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,11 +23,12 @@ namespace Ekkleisa.Repository.Implementation.Repositories
         {
             IQueryable<Member> query = GetQueryable();
 
+
             if (filter != null)
-            {   
+            {
                 if (!string.IsNullOrEmpty(filter.Name))
                 {
-                    Expression<Func<Member, bool>> propName = x => x.Name.Equals(filter.Name);
+                    Expression<Func<Member, bool>> propName = (x) => x.Name.Contains(filter.Name);
                     query = query.Where(propName);
                 }
                 if (filter.Role != null)
@@ -36,10 +36,19 @@ namespace Ekkleisa.Repository.Implementation.Repositories
                     Expression<Func<Member, bool>> propRole = x => x.Role == filter.Role;
                     query = query.Where(propRole);
                 }
-
+                if (filter.Before != null)
+                {
+                    Expression<Func<Member, bool>> propRole = x => x.BirthDay <= filter.Before;
+                    query = query.Where(propRole);
+                }
+                if (filter.After != null)
+                {
+                    Expression<Func<Member, bool>> propRole = x => x.BirthDay >= filter.After;
+                    query = query.Where(propRole);
+                }
             }
 
-            return query.AsEnumerable();
+            return query.AsNoTracking();
         }
 
     }

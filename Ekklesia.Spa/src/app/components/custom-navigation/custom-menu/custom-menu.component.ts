@@ -1,32 +1,47 @@
 import { Component } from '@angular/core'
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome'
-import { faDove } from '@fortawesome/free-solid-svg-icons'
+import {
+  faDove,
+  faPeopleGroup,
+  faMoneyBillTransfer,
+  faCalendar,
+} from '@fortawesome/free-solid-svg-icons'
 
 @Component({
   selector: 'app-custom-menu',
   templateUrl: './custom-menu.component.html',
 })
 export class CustomMenuComponent {
-  isCollapsed: boolean
+  toggleNavbar = true
   nav: Nav[]
-  constructor(library: FaIconLibrary) {
-    library.addIcons(faDove)
-    this.isCollapsed = true
+  constructor(private _library: FaIconLibrary) {
+    _library.addIcons(faDove, faPeopleGroup, faMoneyBillTransfer, faCalendar)
     this.nav = [
-      { link: '/member', name: 'Membros', exact: true },
-      { link: '/transaction', name: 'Transações', exact: true },
-      { link: '/account', name: 'Perfil', exact: true },
+      {
+        link: '/member',
+        name: 'Membros',
+        icon: {iconName: 'people-group', prefix: 'fas'},
+        exact: true,
+      },
+      {
+        link: '/transaction',
+        name: 'Transações',
+        icon: {iconName: 'money-bill-transfer', prefix: 'fas'},
+        exact: true,
+      },
+      {
+        link: '/occasion',
+        name: 'Eventos',
+        icon: {iconName: 'calendar', prefix: 'fas'},
+        exact: true,
+      },
     ]
-  }
-
-  collapse() {
-    this.isCollapsed = !this.isCollapsed
-    console.log(this.isCollapsed)
   }
 }
 
 interface Nav {
   link: string
   name: string
+  icon: any
   exact: true
 }

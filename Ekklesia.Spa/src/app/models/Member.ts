@@ -1,6 +1,5 @@
-import { BaseConverter } from "../components/shared/base-converter"
-import { RoleEnum } from "./RoleEnum"
-
+import { BaseConverter } from '../utils/base-converter'
+import { RoleEnum } from './RoleEnum'
 
 export class Member {
   id: string
@@ -8,11 +7,11 @@ export class Member {
   phone: string
   photo: string
   role: RoleEnum
-  roleName:string
-  birthDay:Date
+  roleName: string
+  birthDay: Date
 
-  get dateStr(): string {    
-    return BaseConverter.DateToStringOnlyDate(this.birthDay)    
+  get dateStr(): string {
+    return BaseConverter.DateToStringOnlyDate(this.birthDay)
   }
 
   constructor() {
@@ -20,8 +19,8 @@ export class Member {
     this.name = ''
     this.phone = ''
     this.photo = ''
-    this.roleName = '' 
+    this.roleName = ''
     this.role = RoleEnum.INDEFINIDO
-    this.birthDay = new Date
+    this.birthDay = new Date()
   }
 }

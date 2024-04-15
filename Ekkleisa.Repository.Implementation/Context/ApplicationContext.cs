@@ -2,7 +2,6 @@
 using Ekklesia.Entities.Entities;
 using Ekklesia.Entities.Exceptions;
 using Ekklesia.Entities.Settings;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;

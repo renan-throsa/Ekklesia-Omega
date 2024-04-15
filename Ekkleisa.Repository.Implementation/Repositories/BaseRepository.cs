@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Ekkleisa.Repository.Implementation.Repositories
 {
-    public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : class, IEntity
+    public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : IEntity
     {
         private ApplicationContext Context { get; }
         private readonly string Entity = $"c_{typeof(TEntity).Name.ToLower()}";

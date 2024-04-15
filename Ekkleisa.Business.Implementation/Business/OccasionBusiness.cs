@@ -11,8 +11,8 @@ namespace Ekkleisa.Business.Implementation.Business
 {
     public sealed class OccasionBusiness : BusinessCrud<Occasion, OccasionDTO>, IOccasionBusiness, IDisposable
     {
-        public OccasionBusiness(IOccasionRepository repository, IMapper mapper, OccasionValidation validations, ILogger<OccasionBusiness> logger) :
-            base(repository, mapper, validations, logger)
+        public OccasionBusiness(IOccasionRepository repository, IMapper mapper, OccasionValidation occasionValidation, ILogger<OccasionBusiness> logger) :
+            base(repository, mapper, occasionValidation, logger)
         {
         }
 

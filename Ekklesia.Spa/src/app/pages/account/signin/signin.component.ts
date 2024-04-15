@@ -5,7 +5,12 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms'
-import { NgBrazilValidators } from 'ng-brazil'
+import { Router } from '@angular/router'
+
+import { ToastrService } from 'ngx-toastr'
+
+import { SignIn } from 'src/app/models/SignIn'
+import { IdentityService } from 'src/app/services/identity.service'
 
 @Component({
   selector: 'app-signin',
@@ -14,40 +19,25 @@ import { NgBrazilValidators } from 'ng-brazil'
 export class SigninComponent {
   form: FormGroup
 
-  get isNameInvalid(): boolean {
-    return this.hasErros('name')
-  }
-
-  get isPhoneInvalid(): boolean {
-    return this.hasErros('phone')
-  }
-
   get isEmailInvalid(): boolean {
-    return this.hasErros('email')
+    return this._hasErros('email')
   }
 
   get isPasswordInvalid(): boolean {
-    return this.hasErros('password')
-  }
-
-  get isformInvalid(): boolean {
-    return !this.form.dirty && !this.form.valid
+    return this._hasErros('password')
   }
 
   get controls(): { [key: string]: AbstractControl } {
     return this.form.controls
   }
 
-  constructor(private _formBuilder: FormBuilder) {
+  constructor(
+    private _formBuilder: FormBuilder,
+    private _accountService: IdentityService,
+    private _router: Router,
+    private _toasterService: ToastrService,
+  ) {
     this.form = this._formBuilder.group({
-      name: [
-        '',
-        Validators.required,
-        Validators.pattern(
-          /^[A-ZÀ-Ÿ][A-zÀ-ÿ']+\s([A-zÀ-ÿ']\s?)*[A-ZÀ-Ÿ][A-zÀ-ÿ']+$/g,
-        ),
-      ],
-      phone: ['', Validators.required, NgBrazilValidators.telefone],
       email: ['', [Validators.email, Validators.required]],
       password: [
         '',
@@ -58,15 +48,30 @@ export class SigninComponent {
           ),
         ],
       ],
-      remember: ['', Validators.required],
+      remember: [''],
     })
   }
 
   signin() {
-    console.log('Teste de sign in.')
+    let account = Object.assign(new SignIn(), this.form.value)
+    const observer = {
+      next: (x: any) => {
+        this._accountService.saveUserData(x)
+        this._toasterService.success(
+          `Seja bem bindo, ${this._accountService.getUser()?.name}!`,
+          'Sucesso ✌️',
+        )
+        this._router.navigate(['member'])
+      },
+      error: (err: any) => {
+        this._toasterService.error(err.error.payload, 'Algo deu errado 😵')
+        console.log(err.error)
+      },
+    }
+    this._accountService.signIn(account).subscribe(observer)
   }
 
-  private hasErros(field: string): boolean {
+  private _hasErros(field: string): boolean {
     const hasErros =
       this.form.get(field)?.errors &&
       (this.form.get(field)?.dirty || this.form.get(field)?.touched)

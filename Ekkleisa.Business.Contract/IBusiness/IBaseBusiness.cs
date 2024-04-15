@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace Ekkleisa.Business.Contract.IBusiness
 {
-    public interface IBaseBusiness<TEntity, TObject> where TEntity : class, IEntity where TObject : BaseDto<TEntity>
+    public interface IBaseBusiness<TEntity, TObject> : IFilterBusiness<TEntity, TObject> where TEntity : IEntity where TObject : IObject<TEntity>
     {
         Task<Response> AddAsync(TObject tObject);
         Task AddAsync(IEnumerable<TObject> tObjects);
-        Task<TObject> FindSync(ObjectId key);
-        Task<TObject> FindSync(string Id);
+        Task<Response> FindSync(ObjectId key);
+        Task<Response> FindSync(string Id);
         Task<IEnumerable<TObject>> FindAsync(Expression<Func<TObject, bool>> filter);
         Task<IEnumerable<TObject>> AllAsync();
         Task DeleteAsync(TObject tObject);
