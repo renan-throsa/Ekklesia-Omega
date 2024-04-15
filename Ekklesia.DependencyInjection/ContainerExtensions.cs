@@ -1,4 +1,6 @@
-﻿using Ekkleisa.Business.Contract.IBusiness;
+﻿using Asp.Versioning;
+using Asp.Versioning.ApiExplorer;
+using Ekkleisa.Business.Contract.IBusiness;
 using Ekkleisa.Business.Implementation.Business;
 using Ekkleisa.Business.Implementation.Validations;
 using Ekkleisa.Repository.Contract.IRepositories;
@@ -11,8 +13,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,15 +29,14 @@ namespace Ekklesia.DependencyInjection
     {
         public static IServiceCollection AddWebApiConfig(this IServiceCollection services, IWebHostEnvironment env, IConfiguration configuration)
         {
-            services.AddApiVersioning(options =>
-            {
-                options.AssumeDefaultVersionWhenUnspecified = true;
+            services.AddApiVersioning(options =>            {
+               
                 options.DefaultApiVersion = new ApiVersion(majorVersion: 1, minorVersion: 0);
                 options.ReportApiVersions = true;
-            });
-
-            services.AddVersionedApiExplorer(options =>
+                options.ApiVersionReader = new UrlSegmentApiVersionReader();
+            }).AddApiExplorer(options =>
             {
+                options.AssumeDefaultVersionWhenUnspecified = true;
                 options.GroupNameFormat = "'v'VVV";
                 options.SubstituteApiVersionInUrl = true;
             });
@@ -220,14 +219,16 @@ namespace Ekklesia.DependencyInjection
         {
             app.UseSwagger();
             app.UseSwaggerUI(options =>
-            {
+            {                
                 options.DefaultModelsExpandDepth(-1);
                 foreach (var description in provider.ApiVersionDescriptions)
                 {
                     options.SwaggerEndpoint(url: $"/swagger/{description.GroupName}/swagger.json", name: "Ekklésia Api v1");
                 }
 
-            });
+            });           
+
+
             return app;
         }
 
