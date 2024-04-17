@@ -1,0 +1,64 @@
+version: '3.9'
+services:
+  sql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: docker-sql
+    restart: unless-stopped
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Express
+      - SA_PASSWORD=MyPass@word
+    ports:
+      - "4001:1433"
+    volumes:
+      - sql-data:/var/opt/mssql
+    networks:
+      - app-net
+
+  nosql:
+    image: mongodb/mongodb-community-server
+    container_name: docker-nosql  
+    restart: unless-stopped  
+    ports:
+      - "4002:27017"
+    volumes:
+      - nosql-data:/data/db
+    networks:
+      - app-net    
+
+  api:
+    image: ekklesia-api-service
+    container_name: ekklesia-omega-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Test
+    restart: unless-stopped    
+    build:      
+      dockerfile: ./Ekklesia.Api/Dockerfile      
+    ports:
+      - "4003:80"
+    depends_on: 
+      - sql
+      - nosql
+    networks:
+      - app-net
+  
+  spa:
+    image: ekklesia-spa-service
+    container_name: ekklesia-omega-spa    
+    restart: unless-stopped    
+    build:      
+      dockerfile: ./Ekklesia.Spa/Dockerfile      
+    ports:
+      - "4004:4200"
+    depends_on: 
+      - api
+    networks:
+      - app-net       
+
+volumes:
+  sql-data:
+  nosql-data:
+
+networks:
+  app-net:
+

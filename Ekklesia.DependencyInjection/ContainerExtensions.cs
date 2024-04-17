@@ -22,6 +22,7 @@ using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Ekklesia.DependencyInjection
 {
@@ -213,6 +214,18 @@ namespace Ekklesia.DependencyInjection
 
             return services;
 
+        }
+
+        public static async Task AddMigrationsAsync(this IHost webHost)
+        {
+            using (var scope = webHost.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                using (var context = services.GetRequiredService<IdentityContext>())
+                {
+                    await context.Database.MigrateAsync();
+                }
+            }
         }
 
         public static IApplicationBuilder UseSuaggerConfig(this IApplicationBuilder app, IApiVersionDescriptionProvider provider)

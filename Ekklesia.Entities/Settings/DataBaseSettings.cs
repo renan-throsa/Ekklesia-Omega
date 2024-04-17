@@ -2,13 +2,14 @@
 {
     public class DataBaseSettings
     {
-        public string ConnectionString { get; set; }
+        public string Host { get; set; }
         public string Database { get; set; }
         public string NoSqlDataBase { get; set; }
 
+        public string ConnectionString { get { return $"{Host + "/" + Database}"; } }
         public DataBaseSettings()
         {
-            ConnectionString = string.Empty;
+            Host = string.Empty;
             Database = string.Empty;
             NoSqlDataBase = string.Empty;
         }
