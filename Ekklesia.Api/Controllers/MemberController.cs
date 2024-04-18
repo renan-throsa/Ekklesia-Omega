@@ -14,7 +14,7 @@ namespace Ekklesia.Api.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [Authorize]
-    public class MemberController : ControllerBase
+    public class MemberController : ApiController
     {
         private readonly IMemberBusiness _memberBusiness;
 
@@ -27,7 +27,9 @@ namespace Ekklesia.Api.Controllers
         [Route(nameof(Browse))]
         public ActionResult<Response> Browse([FromBody] BaseFilter<Member, MemberDTO> filter)
         {
-            return Ok(_memberBusiness.Browse(filter));
+            var response = _memberBusiness.Browse(filter);
+            if (response.Status == ResponseStatus.Ok) return Ok(response);
+            return ErrorResponse(response);
         }
 
 
@@ -36,17 +38,17 @@ namespace Ekklesia.Api.Controllers
         public async Task<ActionResult<Response>> Read([FromRoute] string id)
         {
             var response = await _memberBusiness.FindSync(id);
-            if (response.status == ResponseStatus.NotFound) return NotFound(response);
-            return Ok(response);
+            if (response.Status == ResponseStatus.Ok) return Ok(response);
+            return ErrorResponse(response);
         }
 
         [HttpPost]
         [Route(nameof(Add))]
         public async Task<ActionResult<Response>> Add([FromBody] MemberDTO member)
         {
-            var result = await _memberBusiness.AddAsync(member);
-            if (result.status == ResponseStatus.BadRequest) return BadRequest(result);
-            return Ok(result);
+            var response = await _memberBusiness.AddAsync(member);
+            if (response.Status == ResponseStatus.Ok) return Ok(response);
+            return ErrorResponse(response);
         }
 
         [HttpPut]
@@ -54,9 +56,8 @@ namespace Ekklesia.Api.Controllers
         public async Task<ActionResult<Response>> Edit([FromBody] MemberDTO member)
         {
             var response = await _memberBusiness.UpdateAsync(member);
-            if (response.status == ResponseStatus.NotFound) return NotFound(response);
-            if (response.status == Entities.Enums.ResponseStatus.BadRequest) return BadRequest(member);
-            return Ok(response);
+            if (response.Status == ResponseStatus.Ok) return Ok(response);
+            return ErrorResponse(response);
         }
 
     }

@@ -4,7 +4,6 @@ using Ekklesia.Entities.DTOs;
 using Ekklesia.Entities.Entities;
 using Ekklesia.Entities.Enums;
 using Ekklesia.Entities.Filters;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -15,7 +14,7 @@ namespace Ekklesia.Api.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     //[Authorize]
-    public class TransactionController : ControllerBase
+    public class TransactionController : ApiController
     {
         private readonly ITransactionBusiness _transactionBusiness;
 
@@ -37,8 +36,8 @@ namespace Ekklesia.Api.Controllers
         public async Task<ActionResult<Response>> Get(string id)
         {
             var response = await _transactionBusiness.FindSync(id);
-            if (response.status == ResponseStatus.NotFound) return NotFound(id);
-            return Ok(response);
+            if (response.Status == ResponseStatus.Ok) return Ok(response);
+            return ErrorResponse(response);
         }
 
 
@@ -46,9 +45,9 @@ namespace Ekklesia.Api.Controllers
         [Route(nameof(Post))]
         public async Task<ActionResult<Response>> Post([FromBody] TransactionDTO transaction)
         {
-            var result = await _transactionBusiness.AddAsync(transaction);
-            if (result.status == ResponseStatus.BadRequest) return BadRequest(result);
-            return Ok(result);
+            var response = await _transactionBusiness.AddAsync(transaction);
+            if (response.Status == ResponseStatus.Ok) return Ok(response);
+            return ErrorResponse(response);
         }
 
         [HttpPut]
@@ -56,9 +55,8 @@ namespace Ekklesia.Api.Controllers
         public async Task<ActionResult<Response>> Edit([FromBody] TransactionDTO transaction)
         {
             var response = await _transactionBusiness.UpdateAsync(transaction);
-            if (response.status == ResponseStatus.NotFound) return NotFound(transaction.Id);
-            if (response.status == ResponseStatus.BadRequest) return BadRequest(transaction);
-            return Ok(response);
+            if (response.Status == ResponseStatus.Ok) return Ok(response);
+            return ErrorResponse(response);
         }
 
     }
