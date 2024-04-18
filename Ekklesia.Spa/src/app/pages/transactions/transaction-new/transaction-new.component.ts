@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core'
 import {
   AbstractControl,
-  FormBuilder,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms'
 import { Router } from '@angular/router'
@@ -27,7 +27,7 @@ import { CustomModalComponent } from 'src/app/components/custom-modal/custom-mod
   templateUrl: './transaction-new.component.html',
 })
 export class TransactionNewComponent implements OnInit {
-  form: FormGroup
+  form: UntypedFormGroup
   types: (string | TransactionEnum)[]
   transactionMapping = TransactionMapping
   members: Member[]
@@ -60,7 +60,7 @@ export class TransactionNewComponent implements OnInit {
 
   constructor(
     private _transactioService: TransactionService,
-    private _formBuilder: FormBuilder,
+    private _formBuilder: UntypedFormBuilder,
     private _memberService: MemberService,
     private _router: Router,
     private _spinner: NgxSpinnerService,

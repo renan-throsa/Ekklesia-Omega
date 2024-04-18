@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms'
+import { AbstractControl, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgxSpinnerService } from 'ngx-spinner'
@@ -19,7 +19,7 @@ import { TransactionService } from 'src/app/services/transaction.service'
   templateUrl: './transaction-edit.component.html',
 })
 export class TransactionEditComponent implements OnInit {
-  form: FormGroup
+  form: UntypedFormGroup
   types: (string | TransactionEnum)[]
   transactionMapping = TransactionMapping
   members: Member[]
@@ -35,7 +35,7 @@ export class TransactionEditComponent implements OnInit {
 
   constructor(
     private _transactioService: TransactionService,
-    private _formBuilder: FormBuilder,
+    private _formBuilder: UntypedFormBuilder,
     private _router: Router,
     private _route: ActivatedRoute,
     private _spinner: NgxSpinnerService,

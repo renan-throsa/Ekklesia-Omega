@@ -1,8 +1,8 @@
 import { Component } from '@angular/core'
 import {
   AbstractControl,
-  FormBuilder,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms'
 import { Router } from '@angular/router'
@@ -17,7 +17,7 @@ import { IdentityService } from 'src/app/services/identity.service'
   templateUrl: './signin.component.html',
 })
 export class SigninComponent {
-  form: FormGroup
+  form: UntypedFormGroup
 
   get isEmailInvalid(): boolean {
     return this._hasErros('email')
@@ -32,7 +32,7 @@ export class SigninComponent {
   }
 
   constructor(
-    private _formBuilder: FormBuilder,
+    private _formBuilder: UntypedFormBuilder,
     private _accountService: IdentityService,
     private _router: Router,
     private _toasterService: ToastrService,

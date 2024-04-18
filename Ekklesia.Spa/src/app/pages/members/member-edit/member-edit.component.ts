@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import {
   AbstractControl,
-  FormBuilder,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms'
 
@@ -24,7 +24,7 @@ import { finalize } from 'rxjs'
   templateUrl: './member-edit.component.html',
 })
 export class MemberEditComponent implements OnInit {
-  form: FormGroup
+  form: UntypedFormGroup
   roles: (string | RoleEnum)[]
   roleapping = RoleMapping
   MASKS = MASKS
@@ -48,7 +48,7 @@ export class MemberEditComponent implements OnInit {
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
-    private _formBuilder: FormBuilder,
+    private _formBuilder: UntypedFormBuilder,
     private _memberService: MemberService,
     private _toasterService: ToastrService,
     private _modalService: NgbModal,

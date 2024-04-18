@@ -94,5 +94,7 @@
       }
     }
   },
-  "defaultProject": "Ekklesia"
+  "cli": {
+    "analytics": "61822c73-a312-4872-8e53-44a5aea52eba"
+  }
 }
