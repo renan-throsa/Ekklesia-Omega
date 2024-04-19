@@ -55,8 +55,8 @@ namespace Ekklesia.DependencyInjection
                 }
                 if (env.IsProduction())
                 {
-                    var appSettingsSection = configuration.GetSection("AppSettings");
-                    var appSettings = appSettingsSection.Get<SecutitySettings>();
+                    var securitySettingsSection = configuration.GetSection(nameof(SecutitySettings));
+                    var appSettings = securitySettingsSection.Get<SecutitySettings>();
                     options.AddPolicy(env.EnvironmentName, builder =>
                     {
                         builder.AllowAnyMethod();
@@ -127,14 +127,14 @@ namespace Ekklesia.DependencyInjection
         public static IServiceCollection AddDependencies(this IServiceCollection services, IConfiguration configuration)
         {
             var DataBaseSettingsSection = configuration.GetSection(nameof(DataBaseSettings));
-            services.Configure<DataBaseSettings>(DataBaseSettingsSection);
             var dataBaseSettings = DataBaseSettingsSection.Get<DataBaseSettings>();
-
+            services.Configure<DataBaseSettings>(DataBaseSettingsSection);
+            
 
             var securitySettingsSection = configuration.GetSection(nameof(SecutitySettings));
-            services.Configure<SecutitySettings>(securitySettingsSection);
             var securitySettings = securitySettingsSection.Get<SecutitySettings>();
-
+            services.Configure<SecutitySettings>(securitySettingsSection);
+            
 
             services.AddSingleton<ApplicationContext>();
             services.AddHealthChecks().AddMongoDb(mongodbConnectionString: dataBaseSettings.ConnectionString, name: dataBaseSettings.NoSqlDataBase);
@@ -250,15 +250,15 @@ namespace Ekklesia.DependencyInjection
             app.UseCors();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHealthChecks("/api/hc", new HealthCheckOptions()
+                endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
                 {
                     Predicate = _ => true,
                     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                 });
                 endpoints.MapHealthChecksUI(options =>
                 {
-                    options.UIPath = "/api/hc-ui";
-                    options.ResourcesPath = "/api/hc-ui-resources";
+                    options.UIPath = "/hc-ui";
+                    options.ResourcesPath = "/hc-ui-resources";
 
                     options.UseRelativeApiPath = false;
                     options.UseRelativeResourcesPath = false;

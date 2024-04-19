@@ -4,6 +4,7 @@ using Ekklesia.Entities.DTOs;
 using Ekklesia.Entities.Entities;
 using Ekklesia.Entities.Enums;
 using Ekklesia.Entities.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -11,9 +12,9 @@ namespace Ekklesia.Api.Controllers
 {
 
     [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [Route("v{version:apiVersion}/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class TransactionController : ApiController
     {
         private readonly ITransactionBusiness _transactionBusiness;

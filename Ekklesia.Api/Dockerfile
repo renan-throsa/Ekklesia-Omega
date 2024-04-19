@@ -15,4 +15,4 @@ WORKDIR /app
 COPY --from=build /app/build/ .
 
 ENTRYPOINT ["dotnet", "Ekklesia.Api.dll"]
-HEALTHCHECK CMD curl --fail http://localhost:80/api/hc
+HEALTHCHECK CMD curl --fail http://localhost:80/hc

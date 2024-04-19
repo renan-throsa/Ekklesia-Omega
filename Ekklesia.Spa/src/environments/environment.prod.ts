@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  urlAPI: 'http://localhost:5000/api/v1/'
+  urlAPI: 'http://ekklesia-omega-api:80/v1/'
 };

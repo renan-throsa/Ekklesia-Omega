@@ -30,7 +30,7 @@ services:
     image: ekklesia-api-service
     container_name: ekklesia-omega-api
     environment:
-      ASPNETCORE_ENVIRONMENT: Test
+      ASPNETCORE_ENVIRONMENT: Production
     restart: unless-stopped    
     build:      
       dockerfile: ./Ekklesia.Api/Dockerfile      
@@ -46,8 +46,9 @@ services:
     image: ekklesia-spa-service
     container_name: ekklesia-omega-spa    
     restart: unless-stopped    
-    build:      
-      dockerfile: ./Ekklesia.Spa/Dockerfile      
+    build:
+      context:    ./Ekklesia.Spa   
+      dockerfile: /Dockerfile      
     ports:
       - "4004:4200"
     depends_on: 
