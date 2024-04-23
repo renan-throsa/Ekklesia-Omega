@@ -13,13 +13,18 @@ COPY . .
 
 RUN npm run build --prod
 
-FROM nginx:1.19.0-alpine AS serve
+FROM node:14 AS serve
 
-COPY --from=build /app/dist/ekklesia /usr/share/nginx/html
+WORKDIR /app
 
-COPY ./nginx-custom.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/dist/ekklesia ./dist
 
-EXPOSE 4200
+COPY server.js ./
 
-CMD ["nginx", "-g", "daemon off;"]
+RUN npm install express
+
+EXPOSE 3000
+
+CMD ["node", "server.js"]
+
 

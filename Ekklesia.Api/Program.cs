@@ -20,7 +20,7 @@ namespace Ekklesia.Api
                 .ConfigureAppConfiguration((builderContext, config) =>
                 {
                     config.AddJsonFile("config/appsettings.Production.json", optional: true);
-                })
+                })                
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

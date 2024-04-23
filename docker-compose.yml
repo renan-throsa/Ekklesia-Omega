@@ -30,11 +30,12 @@ services:
     image: ekklesia-api-service
     container_name: ekklesia-omega-api
     environment:
-      ASPNETCORE_ENVIRONMENT: Test
-    restart: unless-stopped    
-    secrets:
-      - source: api-config
-        target: /app/config/appsettings.Production.json
+      ASPNETCORE_ENVIRONMENT: Testing    
+    restart: unless-stopped 
+    volumes:
+      - type: bind
+        source: ./config
+        target: /app/config
     build:      
       dockerfile: ./Ekklesia.Api/Dockerfile      
     ports:
@@ -53,7 +54,7 @@ services:
       context:    ./Ekklesia.Spa   
       dockerfile: /Dockerfile      
     ports:
-      - "4004:4200"
+      - "4004:3000"
     depends_on: 
       - api
     networks:
@@ -66,8 +67,4 @@ volumes:
 networks:
   app-net:
 
-
-secrets:
-  api-config:
-    file: ./config/appsettings.Production.json
   

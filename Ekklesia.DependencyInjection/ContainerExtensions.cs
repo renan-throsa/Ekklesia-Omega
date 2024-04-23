@@ -43,7 +43,8 @@ namespace Ekklesia.DependencyInjection
             });
 
             services.AddCors(options =>
-            {                
+            {    
+                /*            
                 if (env.IsProduction())
                 {
                     var securitySettingsSection = configuration.GetSection(nameof(SecutitySettings));
@@ -56,7 +57,7 @@ namespace Ekklesia.DependencyInjection
                         builder.AllowCredentials();
                     });
                 }
-
+*/
                 options.AddPolicy(env.EnvironmentName, builder =>
                 {
                     builder.AllowAnyMethod();
