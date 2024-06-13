@@ -2,17 +2,13 @@ import { Injectable } from '@angular/core'
 import { CanDeactivate } from '@angular/router'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { CustomModalComponent } from '../components/custom-modal/custom-modal.component'
-import { MemberEditComponent } from '../pages/members/member-edit/member-edit.component'
-import { MemberNewComponent } from '../pages/members/member-new/member-new.component'
 
 @Injectable()
 export class InputGuard
-  implements CanDeactivate<MemberNewComponent | MemberEditComponent> {
-  constructor(private _modalService: NgbModal) {}
+  implements CanDeactivate<any> {
+  constructor(private _modalService: NgbModal) { }
 
-  canDeactivate(
-    component: MemberNewComponent | MemberEditComponent,
-  ): Promise<boolean> {
+  canDeactivate(component: any,): Promise<boolean> {
     if (component.form.dirty) {
       const modalRef = this._modalService.open(CustomModalComponent)
       modalRef.componentInstance.title = 'Deseja sair?'

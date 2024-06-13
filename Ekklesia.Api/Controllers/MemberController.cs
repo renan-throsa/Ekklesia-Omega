@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 namespace Ekklesia.Api.Controllers
 {
     [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [Route("v{version:apiVersion}/[controller]")]
     [ApiController]
     [Authorize]
-    public class MemberController : ControllerBase
+    public class MemberController : ApiController
     {
         private readonly IMemberBusiness _memberBusiness;
 
@@ -23,40 +23,44 @@ namespace Ekklesia.Api.Controllers
             this._memberBusiness = memberBusiness;
         }
 
-        [HttpPost]
-        [Route(nameof(Browse))]
+        [HttpPost($"{nameof(Browse)}")]
         public ActionResult<Response> Browse([FromBody] BaseFilter<Member, MemberDTO> filter)
         {
-            return Ok(_memberBusiness.Browse(filter));
+            var response = _memberBusiness.Browse(filter);
+            if (response.Status == ResponseStatus.Ok) return Ok(response);
+            return ErrorResponse(response);
         }
 
+        [HttpGet($"{nameof(All)}")]
+        public async Task<ActionResult<Response>> All()
+        {
+            var response = await _memberBusiness.AllAsync();
+            return Ok(response);
+        }
 
-        [HttpGet]
-        [Route("{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<Response>> Read([FromRoute] string id)
         {
             var response = await _memberBusiness.FindSync(id);
-            if (response.status == ResponseStatus.NotFound) return NotFound(response);
-            return Ok(response);
+            if (response.Status == ResponseStatus.Found) return Ok(response);
+            return ErrorResponse(response);
         }
 
-        [HttpPost]
-        [Route(nameof(Add))]
+
+        [HttpPost($"{nameof(Add)}")]
         public async Task<ActionResult<Response>> Add([FromBody] MemberDTO member)
         {
-            var result = await _memberBusiness.AddAsync(member);
-            if (result.status == ResponseStatus.BadRequest) return BadRequest(result);
-            return Ok(result);
+            var response = await _memberBusiness.AddAsync(member);
+            if (response.Status == ResponseStatus.Created) return Ok(response);
+            return ErrorResponse(response);
         }
 
-        [HttpPut]
-        [Route(nameof(Edit))]
+        [HttpPut($"{nameof(Edit)}")]
         public async Task<ActionResult<Response>> Edit([FromBody] MemberDTO member)
         {
             var response = await _memberBusiness.UpdateAsync(member);
-            if (response.status == ResponseStatus.NotFound) return NotFound(response);
-            if (response.status == Entities.Enums.ResponseStatus.BadRequest) return BadRequest(member);
-            return Ok(response);
+            if (response.Status == ResponseStatus.Ok) return Ok(response);
+            return ErrorResponse(response);
         }
 
     }

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core'
 import {
   AbstractControl,
-  FormBuilder,
-  FormControl,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms'
 import { Router } from '@angular/router'
@@ -19,7 +19,7 @@ import { UtilsValidators } from 'src/app/utils/utils-validators'
   templateUrl: './signup.component.html',
 })
 export class SignupComponent implements OnInit {
-  form: FormGroup
+  form: UntypedFormGroup
   MASKS = MASKS
 
   get isNameInvalid(): boolean {
@@ -43,11 +43,11 @@ export class SignupComponent implements OnInit {
   }
 
   constructor(
-    private _formBuilder: FormBuilder,
+    private _formBuilder: UntypedFormBuilder,
     private _accountService: IdentityService,
     private _router: Router,
   ) {
-    const password = new FormControl('', [
+    const password = new UntypedFormControl('', [
       Validators.required,
       Validators.minLength(8),
       Validators.maxLength(16),
@@ -57,7 +57,7 @@ export class SignupComponent implements OnInit {
       UtilsValidators.withSpecialCharacter,
     ])
 
-    const passwordConfirmation = new FormControl('', [
+    const passwordConfirmation = new UntypedFormControl('', [
       Validators.required,
       CustomValidators.equalTo(password),
     ])

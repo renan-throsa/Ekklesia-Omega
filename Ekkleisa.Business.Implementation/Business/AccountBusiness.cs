@@ -42,9 +42,13 @@ namespace Ekkleisa.Business.Implementation.Business
         {
             _logger.LogInformation($"Logging sign in for: {Dto.Email}");
             var modelState = _signInValidation.Validate(Dto);
+            
             if (!modelState.IsValid) return Response(ResponseStatus.BadRequest, modelState.Errors.Select(x => x.ErrorMessage));
 
             var user = await _userManager.FindByEmailAsync(Dto.Email);
+
+            if (user is null) return Response(ResponseStatus.NotFound, $"Usuário {Dto.Email} não encontrado");
+
             var result = await _signInManager.PasswordSignInAsync(user, Dto.Password, isPersistent: false, lockoutOnFailure: true);
             if (result.IsLockedOut) return Response(ResponseStatus.BadRequest, $"Usuário bloquado por tentativas inválidas. Bloqueio temina às {user.LockoutEnd}");
             if (!result.Succeeded) return Response(ResponseStatus.BadRequest, $"Usuário ou senha incorreto. Tentativas Restantes: {_appSettings.MaxFailedAccessAttempts - user.AccessFailedCount}");
@@ -81,8 +85,8 @@ namespace Ekkleisa.Business.Implementation.Business
             return
             new Response
             {
-                status = status,
-                payload = result
+                Status = status,
+                Payload = result
             };
         }
 

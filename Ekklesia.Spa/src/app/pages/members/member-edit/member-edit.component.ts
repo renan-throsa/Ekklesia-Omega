@@ -2,15 +2,15 @@ import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import {
   AbstractControl,
-  FormBuilder,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms'
 
 import { MASKS, NgBrazilValidators } from 'ng-brazil'
 import { UtilsValidators } from 'src/app/utils/utils-validators'
 import { ToastrService } from 'ngx-toastr'
-import { NgbModal, NgbModalConfig } from '@ng-bootstrap/ng-bootstrap'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 
 import { Member } from 'src/app/models/Member'
 import { MemberService } from 'src/app/services/member.service'
@@ -24,7 +24,7 @@ import { finalize } from 'rxjs'
   templateUrl: './member-edit.component.html',
 })
 export class MemberEditComponent implements OnInit {
-  form: FormGroup
+  form: UntypedFormGroup
   roles: (string | RoleEnum)[]
   roleapping = RoleMapping
   MASKS = MASKS
@@ -48,7 +48,7 @@ export class MemberEditComponent implements OnInit {
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
-    private _formBuilder: FormBuilder,
+    private _formBuilder: UntypedFormBuilder,
     private _memberService: MemberService,
     private _toasterService: ToastrService,
     private _modalService: NgbModal,
@@ -114,10 +114,12 @@ export class MemberEditComponent implements OnInit {
   public onSave(): void {
     const member: Member = Object.assign(new Member(), this.form.value)
     member.phone = member.phone.replace(/\D/g, '')
+
     const observer = {
       next: (x: Member) => {
-        this._toasterService.success(`Membro ${x.name} editado!`, 'Sucesso ✌️')
-        this._router.navigate(['member'])
+        this._toasterService.success(`Membro ${x.name} editado!`, 'Sucesso ✌️');
+        this.form.markAsPristine();
+        this._router.navigate(['member']);
       },
       error: (error: any) => {
         this._toasterService.error(
@@ -127,24 +129,11 @@ export class MemberEditComponent implements OnInit {
         console.error('Erro:' + error.statusText)
       },
     }
+
     this._memberService.edit(member).subscribe(observer)
   }
 
   public onCancel(): void {
-    if (this.form.dirty) {
-      const modalRef = this._modalService.open(CustomModalComponent)
-      modalRef.componentInstance.title = 'Deseja sair?'
-      modalRef.componentInstance.message =
-        'As alterações não salvas serão perdidas'
-      modalRef.result.then(
-        (res) => {
-          this.form = this._formBuilder.group({})
-          this._router.navigate(['member'])
-        },
-        (dismiss) => {},
-      )
-    } else {
-      this._router.navigate(['member'])
-    }
+    this._router.navigate(['member']);
   }
 }

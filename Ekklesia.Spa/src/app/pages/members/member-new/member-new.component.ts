@@ -1,8 +1,8 @@
 import { Component } from '@angular/core'
 import {
   AbstractControl,
-  FormBuilder,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms'
 import { Router } from '@angular/router'
@@ -25,7 +25,7 @@ import { finalize } from 'rxjs'
   templateUrl: './member-new.component.html',
 })
 export class MemberNewComponent {
-  form: FormGroup
+  form: UntypedFormGroup
   roles: (string | RoleEnum)[]
   roleapping = RoleMapping
   MASKS = MASKS
@@ -43,7 +43,7 @@ export class MemberNewComponent {
   }
 
   constructor(
-    private _formBuilder: FormBuilder,
+    private _formBuilder: UntypedFormBuilder,
     private _memberService: MemberService,
     private _router: Router,
     private _toasterService: ToastrService,
@@ -89,7 +89,8 @@ export class MemberNewComponent {
           `Membro ${x.name} adicionado!`,
           'Sucesso ✌️',
         )
-        this._router.navigate(['member'])
+        this.form.markAsPristine();
+        this._router.navigate(['member']);
       },
       error: (error: any) => {
         this._toasterService.error(
@@ -106,20 +107,6 @@ export class MemberNewComponent {
   }
 
   public onCancel(): void {
-    if (this.form.dirty) {
-      const modalRef = this._modalService.open(CustomModalComponent)
-      modalRef.componentInstance.title = 'Deseja sair?'
-      modalRef.componentInstance.message =
-        'As alterações não salvas em membros serão perdidas'
-      modalRef.result.then(
-        (res) => {
-          this.form = this._formBuilder.group({})
-          this._router.navigate(['member'])
-        },
-        (dismiss) => {},
-      )
-    } else {
-      this._router.navigate(['member'])
-    }
+    this._router.navigate(['member'])
   }
 }

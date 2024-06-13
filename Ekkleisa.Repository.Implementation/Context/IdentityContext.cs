@@ -5,6 +5,8 @@ namespace Ekkleisa.Repository.Implementation.Context
 {
     public class IdentityContext : IdentityDbContext
     {
-        public IdentityContext(DbContextOptions<IdentityContext> options) : base(options){}
+        public IdentityContext(DbContextOptions<IdentityContext> options) : base(options)
+        {
+        }
     }
 }
