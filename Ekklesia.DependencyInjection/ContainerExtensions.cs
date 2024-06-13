@@ -22,6 +22,7 @@ using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Ekklesia.DependencyInjection
 {
@@ -42,20 +43,12 @@ namespace Ekklesia.DependencyInjection
             });
 
             services.AddCors(options =>
-            {
-                if (env.IsDevelopment())
-                {
-                    options.AddPolicy(env.EnvironmentName, builder =>
-                    {
-                        builder.AllowAnyMethod();
-                        builder.AllowAnyHeader();
-                        builder.AllowAnyOrigin();
-                    });
-                }
+            {    
+                            
                 if (env.IsProduction())
                 {
-                    var appSettingsSection = configuration.GetSection("AppSettings");
-                    var appSettings = appSettingsSection.Get<SecutitySettings>();
+                    var securitySettingsSection = configuration.GetSection(nameof(SecutitySettings));
+                    var appSettings = securitySettingsSection.Get<SecutitySettings>();
                     options.AddPolicy(env.EnvironmentName, builder =>
                     {
                         builder.AllowAnyMethod();
@@ -64,6 +57,14 @@ namespace Ekklesia.DependencyInjection
                         builder.AllowCredentials();
                     });
                 }
+
+                options.AddPolicy(env.EnvironmentName, builder =>
+                {
+                    builder.AllowAnyMethod();
+                    builder.AllowAnyHeader();
+                    builder.AllowAnyOrigin();
+                });
+
             });
             return services;
         }
@@ -126,14 +127,14 @@ namespace Ekklesia.DependencyInjection
         public static IServiceCollection AddDependencies(this IServiceCollection services, IConfiguration configuration)
         {
             var DataBaseSettingsSection = configuration.GetSection(nameof(DataBaseSettings));
-            services.Configure<DataBaseSettings>(DataBaseSettingsSection);
             var dataBaseSettings = DataBaseSettingsSection.Get<DataBaseSettings>();
-
+            services.Configure<DataBaseSettings>(DataBaseSettingsSection);
+            
 
             var securitySettingsSection = configuration.GetSection(nameof(SecutitySettings));
-            services.Configure<SecutitySettings>(securitySettingsSection);
             var securitySettings = securitySettingsSection.Get<SecutitySettings>();
-
+            services.Configure<SecutitySettings>(securitySettingsSection);
+            
 
             services.AddSingleton<ApplicationContext>();
             services.AddHealthChecks().AddMongoDb(mongodbConnectionString: dataBaseSettings.ConnectionString, name: dataBaseSettings.NoSqlDataBase);
@@ -215,6 +216,18 @@ namespace Ekklesia.DependencyInjection
 
         }
 
+        public static async Task AddMigrationsAsync(this IHost webHost)
+        {
+            using (var scope = webHost.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                using (var context = services.GetRequiredService<IdentityContext>())
+                {
+                    await context.Database.MigrateAsync();
+                }
+            }
+        }
+
         public static IApplicationBuilder UseSuaggerConfig(this IApplicationBuilder app, IApiVersionDescriptionProvider provider)
         {
             app.UseSwagger();
@@ -237,15 +250,15 @@ namespace Ekklesia.DependencyInjection
             app.UseCors();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHealthChecks("/api/hc", new HealthCheckOptions()
+                endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
                 {
                     Predicate = _ => true,
                     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                 });
                 endpoints.MapHealthChecksUI(options =>
                 {
-                    options.UIPath = "/api/hc-ui";
-                    options.ResourcesPath = "/api/hc-ui-resources";
+                    options.UIPath = "/hc-ui";
+                    options.ResourcesPath = "/hc-ui-resources";
 
                     options.UseRelativeApiPath = false;
                     options.UseRelativeResourcesPath = false;

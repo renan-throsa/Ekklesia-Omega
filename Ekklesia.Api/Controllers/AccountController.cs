@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Ekklesia.Api.Controllers
 {
     [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [Route("v{version:apiVersion}/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -23,7 +23,7 @@ namespace Ekklesia.Api.Controllers
         public async Task<ActionResult<Response>> SignUp(SignUpDTO Dto)
         {
             var response = await _accountBusiness.SignUp(Dto);
-            if (response.status == ResponseStatus.Ok) return Ok(response);
+            if (response.Status == ResponseStatus.Ok) return Ok(response);
             return BadRequest(response);
         }
 
@@ -31,8 +31,11 @@ namespace Ekklesia.Api.Controllers
         public async Task<ActionResult<Response>> SignIn(SignInDTO Dto)
         {
             var response = await _accountBusiness.SignIn(Dto);
-            if (response.status == ResponseStatus.Ok) return Ok(response);
+            if (response.Status == ResponseStatus.Ok) return Ok(response);            
+            if (response.Status == ResponseStatus.NotFound) return NotFound(response);
+
             return BadRequest(response);
+
         }
     }
 }

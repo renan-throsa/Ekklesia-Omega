@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ekkleisa.Business.Contract"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ekkleisa.Business.Implementation", "Ekkleisa.Business.Implementation\Ekkleisa.Business.Implementation.csproj", "{41110F6F-31FA-4700-BA8F-BD8A9C21DACF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ekklesia.IntegrationTesting", "Ekklesia.BusinessTests\Ekklesia.IntegrationTesting.csproj", "{C28B60FF-3DFA-414C-912E-C77043775D08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ekklesia.IntegrationTesting", "Ekklesia.BusinessTests\Ekklesia.IntegrationTesting.csproj", "{C28B60FF-3DFA-414C-912E-C77043775D08}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

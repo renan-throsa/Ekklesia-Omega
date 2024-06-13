@@ -4,49 +4,35 @@ using Ekklesia.Entities.Exceptions;
 using Ekklesia.Entities.Settings;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson.Serialization;
-using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 
 namespace Ekkleisa.Repository.Implementation.Context
 {
     public class ApplicationContext
     {
-        private readonly DataBaseSettings _baseSettings;
         private static bool _MongoMapped = false;
+
+        private readonly DataBaseSettings _baseSettings;
 
         private IMongoDatabase _dataBase;
         public IMongoDatabase DataBase
         {
-            get { return _dataBase ?? (_dataBase = Cliente.GetDatabase(_baseSettings.Database)); }
+            get { return _dataBase ?? (_dataBase = Client.GetDatabase(_baseSettings.Database)); }
         }
 
-        private IMongoClient _cliente;
+        private IMongoClient _client;
 
-        public IMongoClient Cliente
+        public IMongoClient Client
         {
-            get { return _cliente ??= new MongoClient(MongoClientSettings.FromUrl(new MongoUrl(_baseSettings.ConnectionString))); }
+            get { return _client ??= new MongoClient(MongoClientSettings.FromUrl(new MongoUrl(_baseSettings.ConnectionString))); }
         }
 
         public ApplicationContext(IOptions<DataBaseSettings> dataBaseSettings)
         {
             _baseSettings = dataBaseSettings.Value;
-            RegisterMongoMap();
-            Conectar();
-        }
-
-        private void Conectar()
-        {
             if (DataBase == null)
                 throw new MongoConnectionFailedException("Não foi possível conectar ao banco de dados.");
-            ConventionPack pack = new ConventionPack
-            {
-                new CamelCaseElementNameConvention()
-            };
-            ConventionRegistry.Register("camelCase", pack, _ => true);
-        }
 
-        private void RegisterMongoMap()
-        {
             if (!_MongoMapped)
             {
                 BsonClassMap.RegisterClassMap<BaseEntity>(cm => MongoMapping.BaseEntity(cm));
@@ -61,5 +47,6 @@ namespace Ekkleisa.Repository.Implementation.Context
             }
 
         }
+        
     }
 }

@@ -11,8 +11,7 @@ const routes: Routes = [
   {
     path: 'member',
     loadChildren: () =>
-      import('./pages/members/members.module').then((m) => m.MembersModule),
-    canLoad: [IdentityGard],
+      import('./pages/members/members.module').then((m) => m.MembersModule), canLoad: [IdentityGard],
   },
   {
     path: 'transaction',
@@ -20,7 +19,7 @@ const routes: Routes = [
       import('./pages/transactions/transactions.module').then(
         (m) => m.TransactionsModule,
       ),
-      canLoad: [IdentityGard]
+    canLoad: [IdentityGard]
   },
   {
     path: 'account',
@@ -40,4 +39,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

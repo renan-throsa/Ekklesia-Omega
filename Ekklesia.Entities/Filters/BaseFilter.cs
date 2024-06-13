@@ -1,16 +1,17 @@
 ﻿using Ekklesia.Entities.Entities;
 using MongoDB.Bson;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Ekklesia.Entities.Filters
 {
-    public class BaseFilter<TEntity, TObject> where TEntity : IEntity where TObject : IObject<TEntity>
+    public sealed class BaseFilter<TEntity, TObject> where TEntity : IEntity where TObject : IObject<TEntity>
     {
         private const int DEFAULT_ROWS_PER_PAGE = 10;
         private const string DESC = "DESC";
@@ -22,6 +23,7 @@ namespace Ekklesia.Entities.Filters
         public List<FilterRule> FilterBy { get; set; }
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
+
         private int TotalCount { get; set; }
         private int PagesTotal { get; set; }
         private int SkipSize { get; set; }
@@ -55,7 +57,7 @@ namespace Ekklesia.Entities.Filters
                 var property = properties.FirstOrDefault(p => p.Name.ToLower().Equals(filter.Field.ToLower()));
                 if (property == null)
                 {
-                    throw new InvalidOperationException(string.Format("Property {0} not found on object {1}.", filter.Field, typeof(TEntity).Name));
+                    throw new ArgumentNullException(string.Format("Property {0} not found on object {1}.", filter.Field, typeof(TEntity).Name));
                 }
                 //May throw ArgumentException
                 var predicate = BuildPredicates(filter, property);
@@ -169,12 +171,11 @@ namespace Ekklesia.Entities.Filters
             return filterResult;
         }
 
-        public virtual object Clone()
+
+        public override string ToString()
         {
-            return MemberwiseClone();
+            return JsonSerializer.Serialize(this);
         }
-
-
 
     }
 }

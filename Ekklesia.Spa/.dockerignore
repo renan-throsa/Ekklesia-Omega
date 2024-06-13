@@ -1,0 +1,14 @@
+node_modules
+dist
+
+# Ignore Angular build artifacts
+**/aot
+**/.idea
+**/.sass-cache
+**/.git
+**/.gitignore
+**/npm-debug.log
+**/yarn-error.log
+
+LICENSE
+README.md

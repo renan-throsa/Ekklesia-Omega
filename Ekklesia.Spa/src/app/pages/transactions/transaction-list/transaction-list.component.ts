@@ -3,8 +3,9 @@ import { NgxSpinnerService } from 'ngx-spinner'
 import { BaseTable } from 'src/app/components/shared/base-table'
 import { Transaction } from 'src/app/models/Transaction'
 import { TransactionService } from 'src/app/services/transaction.service'
-import { finalize } from 'rxjs'
+import { finalize, pluck } from 'rxjs'
 import { ToastrService } from 'ngx-toastr'
+import { Filtering } from 'src/app/models/Filtering'
 
 @Component({
   selector: 'app-transaction-list',
@@ -59,8 +60,8 @@ export class TransactionListComponent extends BaseTable<Transaction>
     }
 
     this._transactioService
-      .browse()
-      .pipe(finalize(() => this._spinner.hide()))
+      .browse(new Filtering())
+      .pipe(pluck('payload', 'data'),finalize(() => this._spinner.hide()))
       .subscribe(observer)
   }
 }

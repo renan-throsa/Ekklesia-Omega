@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 namespace Ekklesia.Api.Controllers
 {
     [ApiVersion("1.0")]
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [Route("v{version:apiVersion}/[controller]")]
     [ApiController]
     [Authorize]
-    public class OccasionController : ControllerBase
+    public class OccasionController : ApiController
     {
         private readonly IOccasionBusiness _occasionBusiness;
 
@@ -33,28 +33,26 @@ namespace Ekklesia.Api.Controllers
         public async Task<ActionResult<Response>> Get(string id)
         {
             var response = await _occasionBusiness.FindSync(id);
-            if (response.status == ResponseStatus.NotFound) return NotFound(response);
-            return Ok(response);
+            if (response.Status == ResponseStatus.Found) return Ok(response);
+            return ErrorResponse(response);
         }
 
 
-        [HttpPost]
-        public async Task<ActionResult<Response>> Post([FromBody] OccasionDTO occasion)
+        [HttpPost($"{nameof(Add)}")]
+        public async Task<ActionResult<Response>> Add([FromBody] OccasionDTO occasion)
         {
-            var result = await _occasionBusiness.AddAsync(occasion);
-            if (result.status == ResponseStatus.BadRequest) return BadRequest(result);
-            return Ok(result);
+            var response = await _occasionBusiness.AddAsync(occasion);
+            if (response.Status == ResponseStatus.Created) return Ok(response);
+            return ErrorResponse(response);
         }
 
 
-        [HttpPut]
-        public async Task<ActionResult<Response>> Put([FromBody] OccasionDTO occasion)
-        {          
-
+        [HttpPut($"{nameof(Edit)}")]
+        public async Task<ActionResult<Response>> Edit([FromBody] OccasionDTO occasion)
+        {
             var response = await _occasionBusiness.UpdateAsync(occasion);
-            if (response.status == ResponseStatus.NotFound) return NotFound(occasion.Id);
-            if (response.status == ResponseStatus.BadRequest) return BadRequest(occasion);
-            return Ok(response);
+            if (response.Status == ResponseStatus.Ok) return Ok(response);
+            return ErrorResponse(response);
         }
     }
 }

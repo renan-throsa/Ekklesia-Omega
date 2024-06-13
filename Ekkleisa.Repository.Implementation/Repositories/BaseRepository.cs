@@ -16,6 +16,7 @@ namespace Ekkleisa.Repository.Implementation.Repositories
     public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : IEntity
     {
         private ApplicationContext Context { get; }
+
         private readonly string Entity = $"c_{typeof(TEntity).Name.ToLower()}";
 
         private IMongoCollection<TEntity> _entities;
