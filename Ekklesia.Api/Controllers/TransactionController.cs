@@ -25,8 +25,7 @@ namespace Ekklesia.Api.Controllers
         }
 
 
-        [HttpPost]
-        [Route(nameof(Browse))]
+        [HttpPost($"{nameof(Browse)}")]
         public ActionResult<Response> Browse([FromBody] BaseFilter<Transaction, TransactionDTO> filter)
         {
             return Ok(_transactionBusiness.Browse(filter));
@@ -37,22 +36,20 @@ namespace Ekklesia.Api.Controllers
         public async Task<ActionResult<Response>> Get(string id)
         {
             var response = await _transactionBusiness.FindSync(id);
-            if (response.Status == ResponseStatus.Ok) return Ok(response);
+            if (response.Status == ResponseStatus.Found) return Ok(response);
             return ErrorResponse(response);
         }
 
 
-        [HttpPost]
-        [Route(nameof(Post))]
-        public async Task<ActionResult<Response>> Post([FromBody] TransactionDTO transaction)
+        [HttpPost($"{nameof(Add)}")]
+        public async Task<ActionResult<Response>> Add([FromBody] TransactionDTO transaction)
         {
             var response = await _transactionBusiness.AddAsync(transaction);
-            if (response.Status == ResponseStatus.Ok) return Ok(response);
+            if (response.Status == ResponseStatus.Created) return Ok(response);
             return ErrorResponse(response);
         }
 
-        [HttpPut]
-        [Route(nameof(Edit))]
+        [HttpPut($"{nameof(Edit)}")]
         public async Task<ActionResult<Response>> Edit([FromBody] TransactionDTO transaction)
         {
             var response = await _transactionBusiness.UpdateAsync(transaction);

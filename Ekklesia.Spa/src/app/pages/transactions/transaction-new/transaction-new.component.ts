@@ -16,11 +16,10 @@ import {
 import { MemberService } from 'src/app/services/member.service'
 import { TransactionService } from 'src/app/services/transaction.service'
 import { BaseConverter } from 'src/app/utils/base-converter'
-import { finalize } from 'rxjs'
+import { finalize, pluck, tap } from 'rxjs'
 import { NgxSpinnerService } from 'ngx-spinner'
 import { ToastrService } from 'ngx-toastr'
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { CustomModalComponent } from 'src/app/components/custom-modal/custom-modal.component'
+import { Filtering } from 'src/app/models/Filtering'
 
 @Component({
   selector: 'app-transaction-new',
@@ -64,8 +63,7 @@ export class TransactionNewComponent implements OnInit {
     private _memberService: MemberService,
     private _router: Router,
     private _spinner: NgxSpinnerService,
-    private _toasterService: ToastrService,
-    private _modalService: NgbModal,
+    private _toasterService: ToastrService
   ) {
     this.members = []
     this.types = Object.values(TransactionEnum).filter(
@@ -103,10 +101,11 @@ export class TransactionNewComponent implements OnInit {
       this.controls.description.updateValueAndValidity()
     })
 
+    
     this._memberService
-      .browse()
+      .all()
       .pipe(finalize(() => this._spinner.hide()))
-      .subscribe((members: Member[]) => {
+      .subscribe((members: Member[]) => {        
         this.members = members
       })
   }
@@ -117,7 +116,7 @@ export class TransactionNewComponent implements OnInit {
       this.form.value,
     )
     const observer = {
-      next: (x: Response) => this._router.navigate(['transaction']),
+      next: (x: Response) => { this.form.markAsPristine(); this._router.navigate(['transaction']); },
       error: (error: any) => {
         this._toasterService.error(
           'Algo deu errado 😵. Tente novamente mais tarde.',
@@ -134,18 +133,7 @@ export class TransactionNewComponent implements OnInit {
   }
 
   onCancel() {
-    if (this.form.dirty) {
-      const modalRef = this._modalService.open(CustomModalComponent)
-      modalRef.result.then(
-        (res) => {
-          this.form = this._formBuilder.group({})
-          this._router.navigate(['transaction'])
-        },
-        (dismiss) => {},
-      )
-    } else {
-      this._router.navigate(['transaction'])
-    }
+    this._router.navigate(['transaction'])
   }
 
   private hasErros(field: string): boolean {

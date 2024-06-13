@@ -1,4 +1,4 @@
-version: '3.9'
+version: '3.8'
 services:
   sql:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -9,7 +9,7 @@ services:
       - MSSQL_PID=Express
       - SA_PASSWORD=MyPass@word
     ports:
-      - "4001:1433"
+      - "4000:1433"
     volumes:
       - sql-data:/var/opt/mssql
     networks:
@@ -20,7 +20,7 @@ services:
     container_name: docker-nosql  
     restart: unless-stopped  
     ports:
-      - "4002:27017"
+      - "4001:27017"
     volumes:
       - nosql-data:/data/db
     networks:
@@ -39,7 +39,7 @@ services:
     build:      
       dockerfile: ./Ekklesia.Api/Dockerfile      
     ports:
-      - "4003:80"
+      - "4002:8080"
     depends_on: 
       - sql
       - nosql
@@ -54,11 +54,11 @@ services:
       context:    ./Ekklesia.Spa   
       dockerfile: /Dockerfile      
     ports:
-      - "4004:3000"
+      - "4003:3000"
     depends_on: 
       - api
     networks:
-      - app-net       
+      - app-net  
 
 volumes:
   sql-data:
@@ -66,5 +66,6 @@ volumes:
 
 networks:
   app-net:
+    driver: bridge
 
   

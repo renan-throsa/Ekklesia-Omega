@@ -23,8 +23,7 @@ namespace Ekklesia.Api.Controllers
             this._memberBusiness = memberBusiness;
         }
 
-        [HttpPost]
-        [Route(nameof(Browse))]
+        [HttpPost($"{nameof(Browse)}")]
         public ActionResult<Response> Browse([FromBody] BaseFilter<Member, MemberDTO> filter)
         {
             var response = _memberBusiness.Browse(filter);
@@ -32,27 +31,31 @@ namespace Ekklesia.Api.Controllers
             return ErrorResponse(response);
         }
 
+        [HttpGet($"{nameof(All)}")]
+        public async Task<ActionResult<Response>> All()
+        {
+            var response = await _memberBusiness.AllAsync();
+            return Ok(response);
+        }
 
-        [HttpGet]
-        [Route("{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<Response>> Read([FromRoute] string id)
         {
             var response = await _memberBusiness.FindSync(id);
-            if (response.Status == ResponseStatus.Ok) return Ok(response);
+            if (response.Status == ResponseStatus.Found) return Ok(response);
             return ErrorResponse(response);
         }
 
-        [HttpPost]
-        [Route(nameof(Add))]
+
+        [HttpPost($"{nameof(Add)}")]
         public async Task<ActionResult<Response>> Add([FromBody] MemberDTO member)
         {
             var response = await _memberBusiness.AddAsync(member);
-            if (response.Status == ResponseStatus.Ok) return Ok(response);
+            if (response.Status == ResponseStatus.Created) return Ok(response);
             return ErrorResponse(response);
         }
 
-        [HttpPut]
-        [Route(nameof(Edit))]
+        [HttpPut($"{nameof(Edit)}")]
         public async Task<ActionResult<Response>> Edit([FromBody] MemberDTO member)
         {
             var response = await _memberBusiness.UpdateAsync(member);

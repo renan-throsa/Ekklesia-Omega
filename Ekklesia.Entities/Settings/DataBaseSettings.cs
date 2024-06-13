@@ -1,6 +1,6 @@
 ﻿namespace Ekklesia.Entities.Settings
 {
-    public class DataBaseSettings
+    public sealed class DataBaseSettings
     {
         public string Host { get; set; }
         public string Database { get; set; }

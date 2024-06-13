@@ -33,22 +33,22 @@ namespace Ekklesia.Api.Controllers
         public async Task<ActionResult<Response>> Get(string id)
         {
             var response = await _occasionBusiness.FindSync(id);
-            if (response.Status == ResponseStatus.Ok) return Ok(response);
+            if (response.Status == ResponseStatus.Found) return Ok(response);
             return ErrorResponse(response);
         }
 
 
-        [HttpPost]
-        public async Task<ActionResult<Response>> Post([FromBody] OccasionDTO occasion)
+        [HttpPost($"{nameof(Add)}")]
+        public async Task<ActionResult<Response>> Add([FromBody] OccasionDTO occasion)
         {
             var response = await _occasionBusiness.AddAsync(occasion);
-            if (response.Status == ResponseStatus.Ok) return Ok(response);
+            if (response.Status == ResponseStatus.Created) return Ok(response);
             return ErrorResponse(response);
         }
 
 
-        [HttpPut]
-        public async Task<ActionResult<Response>> Put([FromBody] OccasionDTO occasion)
+        [HttpPut($"{nameof(Edit)}")]
+        public async Task<ActionResult<Response>> Edit([FromBody] OccasionDTO occasion)
         {
             var response = await _occasionBusiness.UpdateAsync(occasion);
             if (response.Status == ResponseStatus.Ok) return Ok(response);
