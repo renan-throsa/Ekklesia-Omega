@@ -1,19 +1,14 @@
-﻿using Asp.Versioning;
-using Ekkleisa.Business.Contract.IBusiness;
+﻿using Ekkleisa.Business.Contract.IBusiness;
 using Ekklesia.Entities.DTOs;
 using Ekklesia.Entities.Entities;
 using Ekklesia.Entities.Enums;
 using Ekklesia.Entities.Filters;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace Ekklesia.Api.Controllers
 {
-    [ApiVersion("1.0")]
-    [Route("v{version:apiVersion}/[controller]")]
-    [ApiController]
-    [Authorize]
+    
     public class MemberController : ApiController
     {
         private readonly IMemberBusiness _memberBusiness;
@@ -32,9 +27,9 @@ namespace Ekklesia.Api.Controllers
         }
 
         [HttpGet($"{nameof(All)}")]
-        public async Task<ActionResult<Response>> All()
+        public ActionResult<Response> All()
         {
-            var response = await _memberBusiness.AllAsync();
+            var response = _memberBusiness.All();
             return Ok(response);
         }
 
@@ -48,7 +43,7 @@ namespace Ekklesia.Api.Controllers
 
 
         [HttpPost($"{nameof(Add)}")]
-        public async Task<ActionResult<Response>> Add([FromBody] MemberDTO member)
+        public async Task<ActionResult<Response>> Add([FromForm] MemberDTO member)
         {
             var response = await _memberBusiness.AddAsync(member);
             if (response.Status == ResponseStatus.Created) return Ok(response);
@@ -56,7 +51,7 @@ namespace Ekklesia.Api.Controllers
         }
 
         [HttpPut($"{nameof(Edit)}")]
-        public async Task<ActionResult<Response>> Edit([FromBody] MemberDTO member)
+        public async Task<ActionResult<Response>> Edit([FromForm] MemberDTO member)
         {
             var response = await _memberBusiness.UpdateAsync(member);
             if (response.Status == ResponseStatus.Ok) return Ok(response);

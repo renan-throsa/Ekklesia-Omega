@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core'
-import { AbstractControl, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms'
+import { AbstractControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgxSpinnerService } from 'ngx-spinner'
 import { ToastrService } from 'ngx-toastr'
-import { finalize } from 'rxjs'
-import { CustomModalComponent } from 'src/app/components/custom-modal/custom-modal.component'
+import { finalize, map } from 'rxjs'
 import { Member } from 'src/app/models/Member'
 import { Transaction } from 'src/app/models/Transaction'
 import {
@@ -19,11 +17,12 @@ import { TransactionService } from 'src/app/services/transaction.service'
   templateUrl: './transaction-edit.component.html',
 })
 export class TransactionEditComponent implements OnInit {
-  form: UntypedFormGroup
-  types: (string | TransactionEnum)[]
-  transactionMapping = TransactionMapping
-  members: Member[]
-  transaction: Transaction
+  form: UntypedFormGroup;
+  types: (string | TransactionEnum)[];
+  transactionMapping = TransactionMapping;
+  members: Member[];
+  imageBase64!: string;
+  private readonly _reader: FileReader;
 
   get isDescriptionInvalid(): boolean {
     return this.hasErros('description')
@@ -40,46 +39,55 @@ export class TransactionEditComponent implements OnInit {
     private _route: ActivatedRoute,
     private _spinner: NgxSpinnerService,
     private _toasterService: ToastrService,
-    private _modalService: NgbModal,
   ) {
+    this._reader = new FileReader();
+    this._reader.onload = (e: any) => {
+      this.imageBase64 = `data:image/png;base64,${e.target.result.split(',')[1]}`;
+    };
+
     this.members = []
     this.types = Object.values(TransactionEnum).filter(
       (value) => typeof value === 'number',
     )
-    this.transaction = new Transaction()
+
     this.form = this._formBuilder.group({
-      date: [''],
-      amount: [''],
-      type: [''],
-      description: [''],
-      responsable: [''],
-    })
-    this.controls.date.disable()
-    this.controls.amount.disable()
-    this.controls.type.disable()
-    this.controls.responsable.disable()
+      id: ['', [Validators.required]],
+      date: [{ value: '', disabled: true }],
+      amount: [{ value: '', disabled: true }],
+      type: [{ value: '', disabled: true }],
+      responsable: [{ value: '', disabled: true }],
+      description: [{ value: '', }],
+      formFile: [null]
+    });
+
   }
 
   ngOnInit(): void {
     this._spinner.show()
     let observer = {
-      next: (response: Transaction) => {
-        this.transaction = Object.assign(new Transaction(), response)
-        this.form.patchValue({ id: this.transaction.id })
-        this.form.patchValue({ date: this.transaction.dateStr })
-        this.form.patchValue({ amount: this.transaction.amountStr })
-        this.form.patchValue({ type: this.transaction.type })
-        this.form.patchValue({ description: this.transaction.description })
+      next: (transaction: Transaction) => {
+        this.form.patchValue({ id: transaction.id })
+        this.form.patchValue({ date: transaction.dateStr })
+        this.form.patchValue({ amount: transaction.amount })
+        this.form.patchValue({ type: transaction.type })
+        this.form.patchValue({ description: transaction.description })
         this.form.patchValue({
-          responsable: this.transaction.responsable?.name,
-        })
+          responsable: transaction.responsable,
+        });
+
+        this.imageBase64 = transaction.receipt;
+
+        if (transaction.responsable) {
+          this.members.push(transaction.responsable);
+        }
       },
+
       error: (error: any) => {
         this._toasterService.error(
           'Algo deu errado 😵. Tente novamente mais tarde.',
           'Erro',
         )
-        console.error('Erro:' + error.statusText)
+        console.error('Erro:' + error.statusText);
       },
     }
 
@@ -87,14 +95,15 @@ export class TransactionEditComponent implements OnInit {
       let id = params['id']
       this._transactioService
         .read(id)
-        .pipe(finalize(() => this._spinner.hide()))
+        .pipe(map(response => Object.assign(new Transaction(), response)), finalize(() => this._spinner.hide()))
         .subscribe(observer)
-    })
+    });
   }
 
   onSave() {
-    this._spinner.show()
-    this.transaction.description = this.controls.description.value
+    this._spinner.show();
+    const transaction: Transaction = Object.assign(new Transaction(), this.form.getRawValue());
+
     const observer = {
       next: (x: Response) => { this.form.markAsPristine(); this._router.navigate(['transaction']); },
       error: (error: any) => {
@@ -106,12 +115,12 @@ export class TransactionEditComponent implements OnInit {
       },
     }
     this._transactioService
-      .edit(this.transaction)
+      .edit(transaction)
       .pipe(finalize(() => this._spinner.hide()))
       .subscribe(observer)
   }
 
-  onCancel() {
+  public onCancel(): void {
     this._router.navigate(['transaction']);
   }
 
@@ -120,5 +129,21 @@ export class TransactionEditComponent implements OnInit {
       this.form.get(field)?.errors &&
       (this.form.get(field)?.dirty || this.form.get(field)?.touched)
     return Boolean(hasErros)
+  }
+
+  public imagePicked(event: any): void {
+    const file: File = event.target.files[0];
+    const muiltiplier = 2;
+    const oneMegaByte = 1048576;
+    const allowedSize = muiltiplier * oneMegaByte;
+
+    if (file.size > allowedSize) {
+      this._toasterService.warning(`O tamanho máximo do arquivo permitido é de ${muiltiplier}MB`, 'Tamanho máximo excedido');
+      return;
+    }
+
+    this._reader.readAsDataURL(file);
+    this.form.patchValue({ formFile: file });
+    this.form.markAsDirty();
   }
 }

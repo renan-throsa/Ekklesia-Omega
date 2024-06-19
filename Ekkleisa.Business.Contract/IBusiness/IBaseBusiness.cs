@@ -15,13 +15,13 @@ namespace Ekkleisa.Business.Contract.IBusiness
         Task AddAsync(IEnumerable<TObject> tObjects);
         Task<Response> FindSync(ObjectId key);
         Task<Response> FindSync(string Id);
-        Task<IEnumerable<TObject>> FindAsync(Expression<Func<TObject, bool>> filter);
-        Task<IEnumerable<TObject>> AllAsync();
+        Task<IEnumerable<TObject>> FindAsync(Expression<Func<TObject, bool>> filter);        
         Task DeleteAsync(TObject tObject);
         Task DeleteAsync(string Id);
         Task<DeleteResult> DeleteAsync(ObjectId Id);
         Task<Response> UpdateAsync(TObject tObject);
         Task<IEnumerable<TObject>> UpdateAsync(IEnumerable<TObject> tObjects);
+        IEnumerable<TObject> All();
 
     }
 }

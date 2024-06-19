@@ -6,6 +6,8 @@ using Ekklesia.Entities.DTOs;
 using Ekklesia.Entities.Entities;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Ekkleisa.Business.Implementation.Business
 {
@@ -14,6 +16,11 @@ namespace Ekkleisa.Business.Implementation.Business
         public OccasionBusiness(IOccasionRepository repository, IMapper mapper, OccasionValidation occasionValidation, ILogger<OccasionBusiness> logger) :
             base(repository, mapper, occasionValidation, logger)
         {
+        }
+
+        public override IEnumerable<OccasionDTO> All()
+        {
+            throw new NotImplementedException();
         }
 
         public void Dispose()

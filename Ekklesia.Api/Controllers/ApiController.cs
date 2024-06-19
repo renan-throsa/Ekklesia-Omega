@@ -1,9 +1,15 @@
-﻿using Ekklesia.Entities.DTOs;
+﻿using Asp.Versioning;
+using Ekklesia.Entities.DTOs;
 using Ekklesia.Entities.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ekklesia.Api.Controllers
 {
+    [ApiController]
+    [ApiVersion("1.0")]
+    [Route("v{version:apiVersion}/[controller]")]
+    [Authorize]
     public class ApiController : ControllerBase
     {
         protected ActionResult<Response> ErrorResponse(Response result)

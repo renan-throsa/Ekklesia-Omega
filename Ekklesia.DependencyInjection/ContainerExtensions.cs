@@ -107,7 +107,7 @@ namespace Ekklesia.DependencyInjection
                                 Id = "Bearer"
                             }
                         },
-                        System.Array.Empty<string>()
+                        Array.Empty<string>()
                     }
                 });
 

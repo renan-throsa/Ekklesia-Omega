@@ -4,22 +4,103 @@ using Ekkleisa.Business.Implementation.Validations;
 using Ekkleisa.Repository.Contract.IRepositories;
 using Ekklesia.Entities.DTOs;
 using Ekklesia.Entities.Entities;
-using Ekklesia.Entities.Filters;
+using Ekklesia.Entities.Enums;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Ekkleisa.Business.Implementation.Business
 {
     public class MemberBusiness : BusinessCrud<Member, MemberDTO>, IMemberBusiness, IDisposable
     {
-        private readonly IMemberRepository _memberRepository;
 
         public MemberBusiness(IMemberRepository memberRepository, IMapper mapper, MemberValidation memberValidations, ILogger<MemberBusiness> logger) :
-            base(memberRepository, mapper, memberValidations, logger)
+     base(memberRepository, mapper, memberValidations, logger)
         {
-            this._memberRepository = memberRepository;
-        }      
+
+        }
+
+        public override IEnumerable<MemberDTO> All()
+        {
+
+            _logger.LogInformation($"Listing {typeof(MemberDTO).FullName}");
+            var entities = _repository.All(m => new Member() { Id = m.Id, Name = m.Name, Phone = m.Phone });
+            return _mapper.Map<IEnumerable<MemberDTO>>(entities);
+        }
+
+        public override async Task<Response> AddAsync(MemberDTO tObject)
+        {
+            _logger.LogInformation($"Adding {nameof(Member)}: {tObject.ToJson()}");
+            ValidationResult result = _entityValidator.Validate(tObject, options => options.IncludeRuleSets(OperationType.Insert.ToString()));
+
+            if (!result.IsValid)
+            {
+                _logger.LogError(result.Errors.Select(x => x.ErrorMessage).ToJson());
+                return Response(ResponseStatus.BadRequest, result.Errors.Select(x => x.ErrorMessage).ToList());
+
+            }
+
+            if (tObject.FormFile.Length > 0)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await tObject.FormFile.CopyToAsync(memoryStream);
+                    tObject.Photo = Convert.ToBase64String(memoryStream.ToArray());
+                }
+
+            }
+
+            var entity = tObject.ToEntity();
+            await _repository.AddAsync(entity);
+            return Response(ResponseStatus.Created);
+        }
+
+
+        public override async Task<Response> UpdateAsync(MemberDTO tObject)
+        {
+            _logger.LogInformation($"Updating {nameof(Member)}: {tObject.ToJson()}");
+            ValidationResult result = _entityValidator.Validate(tObject, options => options.IncludeRuleSets(OperationType.Update.ToString()));
+
+            var entity = await _repository.FindSync(tObject.Id);
+            if (entity == null)
+            {
+                var message = $"Key:{tObject.Id} was not found.";
+                _logger.LogWarning(message);
+                return Response(ResponseStatus.NotFound, message);
+            }
+
+            if (!result.IsValid)
+            {
+                _logger.LogError(result.Errors.Select(x => x.ErrorMessage).ToJson());
+                return Response(ResponseStatus.BadRequest, result.Errors.Select(x => x.ErrorMessage).ToList());
+            }
+
+            if (tObject.FormFile?.Length > 0)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await tObject.FormFile.CopyToAsync(memoryStream);
+
+                    entity.Photo = $"data:image/png;base64,{Convert.ToBase64String(memoryStream.ToArray())}";
+                }
+
+            }
+
+            entity.Name = tObject.Name;
+            entity.Phone = tObject.Phone;
+            entity.Role = tObject.Role;
+            entity.BirthDay = tObject.BirthDay;
+
+            await _repository.UpdateAsync(entity);
+            return Response(ResponseStatus.Ok);
+        }
 
         public void Dispose()
         {

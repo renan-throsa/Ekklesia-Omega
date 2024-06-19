@@ -15,5 +15,6 @@ export class MemberService extends ApplicationService<Member> {
   public all(): Observable<any> {
     return this._http
       .get(`${this.baseUrl}/all`, { headers: this.getHeader() });
-  }
+  }  
+    
 }

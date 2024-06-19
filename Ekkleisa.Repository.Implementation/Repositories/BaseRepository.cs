@@ -41,11 +41,9 @@ namespace Ekkleisa.Repository.Implementation.Repositories
             return Entities.InsertManyAsync(entities);
         }
 
-        public async Task<IEnumerable<TEntity>> AllAsync()
+        public IEnumerable<TEntity> All(Expression<Func<TEntity, TEntity>> projection)
         {
-            var filter = Builders<TEntity>.Filter.Empty;
-            var query = await Entities.FindAsync(filter);
-            return query.ToEnumerable();
+            return Entities.AsQueryable().Select(projection).AsEnumerable();
         }
 
         public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> filter)

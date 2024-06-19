@@ -1,6 +1,8 @@
 ﻿using Ekklesia.Entities.Entities;
 using Ekklesia.Entities.Enums;
+using Microsoft.AspNetCore.Http;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using System;
 
 namespace Ekklesia.Entities.DTOs
@@ -10,25 +12,25 @@ namespace Ekklesia.Entities.DTOs
         public DateTime Date { get; set; }
         public float Amount { get; set; }
         public string Description { get; set; }
+
+        [BsonIgnore]
         public string Receipt { get; set; }
+
+        [BsonIgnore]
+        public IFormFile? FormFile { get; set; }
         public MemberDTO Responsable { get; set; }
 
         public string TypeName
         {
-            get { return this.Type.GetDescription(); }
-
-        }
-        public TransactionType Type { get; set; }        
-
-        public TransactionDTO()
-        {
-            Description = string.Empty;
-            this.Receipt = string.Empty;
-            this.Responsable = new MemberDTO();
+            get { return Type.GetDescription() ; }
         }
 
+        public TransactionType Type { get; set; }
+
+        
         public override Transaction ToEntity(params string[] props)
         {
+            
             return new Transaction()
             {
                 Id = string.IsNullOrEmpty(this.Id) ? ObjectId.Empty : ObjectId.Parse(this.Id),

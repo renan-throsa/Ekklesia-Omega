@@ -3,7 +3,7 @@ import { Observable, pluck } from 'rxjs'
 import { BaseService } from './base.service'
 import { Filtering } from '../models/Filtering'
 
-export abstract class ApplicationService<T> extends BaseService {
+export abstract class ApplicationService<T extends object> extends BaseService {
   constructor(http: HttpClient, controller: string) {
     super(http, controller)
   }
@@ -18,15 +18,31 @@ export abstract class ApplicationService<T> extends BaseService {
       .pipe(pluck('payload'))
   }
 
-  public add(entidade: T): Observable<any> {
+  public add(entity: T): Observable<any> {
     return this._http
-      .post(`${this.baseUrl}/Add`, entidade, { headers: this.getHeader() })
+      .post(`${this.baseUrl}/Add`, this._toFormData(entity), { headers: this.getHeader() })
       .pipe(pluck('payload'))
   }
 
-  public edit(entidade: T): Observable<any> {
+  public edit(entity: T): Observable<any> {
     return this._http
-      .put(`${this.baseUrl}/Edit/`, entidade, { headers: this.getHeader() })
+      .put(`${this.baseUrl}/Edit/`, this._toFormData(entity), {
+        headers: {
+          Authorization: `Bearer ${this.getToken()}`,
+        }
+      })
       .pipe(pluck('payload'))
+  }
+
+  private _toFormData(entity: T): FormData {
+
+    const formData = new FormData();
+
+    for (const [key, value] of Object.entries(entity)) {
+      formData.append(key, value);
+    }
+console.log(formData);
+
+    return formData
   }
 }
