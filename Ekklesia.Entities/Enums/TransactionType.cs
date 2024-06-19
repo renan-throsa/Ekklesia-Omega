@@ -4,6 +4,6 @@
     {
         DIZIMO = 1,
         OFERTA = 2,
-        DESPESA = 3,
+        DESPESA = 3,       
     }
 }

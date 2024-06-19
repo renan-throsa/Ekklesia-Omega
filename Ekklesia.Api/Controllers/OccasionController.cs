@@ -1,18 +1,13 @@
-﻿using Asp.Versioning;
-using Ekkleisa.Business.Contract.IBusiness;
+﻿using Ekkleisa.Business.Contract.IBusiness;
 using Ekklesia.Entities.DTOs;
 using Ekklesia.Entities.Enums;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Ekklesia.Api.Controllers
 {
-    [ApiVersion("1.0")]
-    [Route("v{version:apiVersion}/[controller]")]
-    [ApiController]
-    [Authorize]
+    
     public class OccasionController : ApiController
     {
         private readonly IOccasionBusiness _occasionBusiness;
@@ -23,9 +18,9 @@ namespace Ekklesia.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<OccasionDTO>> Get()
+        public IEnumerable<OccasionDTO> All()
         {
-            return await _occasionBusiness.AllAsync();
+            return   _occasionBusiness.All();
         }
 
 

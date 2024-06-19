@@ -28,12 +28,19 @@
         </div>
 
         <div class="col">
-          <label for="inputResponsable" class="form-label">Responsável</label>
-          <input class="form-control" id="inputResponsable" formControlName="responsable" type="text" />
+          <div class="col">
+            <label for="accountableMember" class="form-label">Responsável</label>
+            <select id="accountableMember" class="form-select" formControlName="responsable">
+              <option *ngFor="let responsable of members" [ngValue]="responsable">
+                {{ responsable.name }}
+              </option>
+            </select>
+          </div>
         </div>
       </div>
 
       <div class="row">
+
         <div class="col">
           <label for="inputDescription" class="form-label">Observação</label>
           <textarea class="form-control" id="inputDescription" formControlName="description"
@@ -50,8 +57,13 @@
 
         <div class="col">
           <label for="formFile" class="form-label">Imagem do recibo</label>
-          <input class="form-control" type="file" id="formFile" />
+          <input class="form-control" type="file" id="formFile" accept="image/jpeg" (change)="imagePicked($event)"/>
+        </div> 
+        
+        <div class="col">                  
+          <img [src]="imageBase64 || 'assets/receipt_placeholder.png'" style="width: 200px; height: auto;" class="img-thumbnail">
         </div>
+
       </div>
     </form>
   </div>

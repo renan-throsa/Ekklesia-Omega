@@ -47,9 +47,6 @@
             Um telefone precisa ter um padrão
           </div>
         </div>
-      </div>
-
-      <div class="row">
         <div class="col">
           <label for="roleMember" class="form-label">Posição</label>
           <select id="roleMember" class="form-select" formControlName="role">
@@ -58,9 +55,32 @@
             </option>
           </select>
         </div>
+      </div>
+
+      <div class="row">
+
+        <div class="col">
+          <label for="inputDate" class="form-label">Data</label>
+          <input class="form-control" id="inputDate" formControlName="birthDay" type="date" [ngClass]="{ 'is-invalid': isDateInvalid }" />
+
+          <div *ngIf="controls.birthDay?.errors?.required" class="invalid-feedback">
+            Data é necessária
+          </div>          
+
+          <div *ngIf="controls.birthDay?.errors?.maxDate" class="invalid-feedback">
+            A data máxima de nascimento é: {{ maxDate | date: 'EEEE, \'dia\' d \'de\' MMMM' }}
+          </div>
+          
+        </div>
+
         <div class="col">
           <label for="formFile" class="form-label">Escolha uma foto</label>
-          <input class="form-control" type="file" id="formFile" />
+          <input class="form-control" type="file" accept="image/jpeg" id="formFile"
+            (change)="imagePicked($event)" />
+        </div>
+
+        <div class="col">                  
+          <img [src]="imageBase64 || 'assets/portrait_placeholder.png'" style="width: 200px; height: auto;" class="img-thumbnail">
         </div>
       </div>
     </form>

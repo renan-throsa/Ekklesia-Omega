@@ -15,13 +15,13 @@ namespace Ekkleisa.Repository.Contract.IRepositories
         Task AddAsync(IEnumerable<TEntity> entities);
         Task<TEntity> FindSync(ObjectId key);
         Task<TEntity> FindSync(string Id);
-        Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> filter);
-        Task<IEnumerable<TEntity>> AllAsync();
+        Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> filter);        
         Task DeleteAsync(TEntity entity);
         Task DeleteAsync(string Id);
         Task<DeleteResult> DeleteAsync(ObjectId Id);
         Task<TEntity> UpdateAsync(TEntity entity);
         Task<IEnumerable<TEntity>> UpdateAsync(IEnumerable<TEntity> entities);
+        IEnumerable<TEntity> All(Expression<Func<TEntity, TEntity>> projection);
         IMongoQueryable<TEntity> GetQueryable();
 
     }

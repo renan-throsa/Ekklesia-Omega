@@ -8,16 +8,16 @@
       <div class="row">
         <div class="col">
           <label for="inputDate" class="form-label">Data</label>
-          <input class="form-control" id="inputDate" type="datetime-local" formControlName="date"
-            [ngClass]="{ 'is-invalid': isDateInvalid }" />
+          <input class="form-control" id="inputDate" type="date" formControlName="date"  [ngClass]="{ 'is-invalid': isDateInvalid }" />
+          
           <div *ngIf="controls.date?.errors?.required" class="invalid-feedback">
             Data é necessária
           </div>
           <div *ngIf="controls.date?.errors?.maxDate" class="invalid-feedback">
-            A maior data para uma transação é: {{ maxDateStr }}
+            A data máxima para uma transação é: {{ maxDate | date: 'EEEE, \'dia\' d \'de\' MMMM' }}
           </div>
           <div *ngIf="controls.date?.errors?.minDate" class="invalid-feedback">
-            A menor data para uma transação é: {{ minDateStr }}
+            A data mínima para uma transação é: {{ minDate | date: 'EEEE, \'dia\' d \'de\' MMMM' }}
           </div>
         </div>
 

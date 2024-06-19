@@ -8,19 +8,18 @@ export class Member {
   photo: string
   role: RoleEnum
   roleName: string
-  birthDay: Date
-
-  get dateStr(): string {
-    return BaseConverter.DateToStringOnlyDate(this.birthDay)
-  }
+  birthDay: string
+  formFile?: File  
+  BaseConverter: any
 
   constructor() {
-    this.id = ''
-    this.name = ''
-    this.phone = ''
-    this.photo = ''
-    this.roleName = ''
-    this.role = RoleEnum.INDEFINIDO
-    this.birthDay = new Date()
+    this.id = '';
+    this.name = '';
+    this.phone = '';
+    this.photo = '';
+    this.roleName = '';
+    this.birthDay = '';
+    this.role = RoleEnum.INDEFINIDO;
   }
+  
 }

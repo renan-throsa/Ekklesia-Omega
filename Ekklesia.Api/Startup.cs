@@ -20,12 +20,11 @@ namespace Ekklesia.Api
             _environment = environment;
         }
 
-
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDependencies(_configuration);
             services.AddIdentityConficuration(_configuration);
-            services.AddControllers();
+            services.AddControllers(opt=> opt.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
             services.AddWebApiConfig(_environment, _configuration);
             services.AddWebApiDoc();
             services.AddAutoMapper(typeof(AutomapperConfig));

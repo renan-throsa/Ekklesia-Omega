@@ -1,6 +1,7 @@
 import { AbstractControl, ValidatorFn } from '@angular/forms'
 
 export abstract class UtilsValidators {
+  
   static maxDate(maxDate: Date): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       let currentDate = new Date(control.value)

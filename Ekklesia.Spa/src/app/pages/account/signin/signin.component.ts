@@ -58,7 +58,7 @@ export class SigninComponent {
       next: (x: any) => {
         this._accountService.saveUserData(x)
         this._toasterService.success(
-          `Seja bem bindo, ${this._accountService.getUser()?.name}!`,
+          `Seja bem vindo, ${this._accountService.getUser()?.name}!`,
           'Sucesso ✌️',
         )
         this._router.navigate(['member'])

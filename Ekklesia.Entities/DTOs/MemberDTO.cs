@@ -1,6 +1,8 @@
 ﻿using Ekklesia.Entities.Entities;
 using Ekklesia.Entities.Enums;
+using Microsoft.AspNetCore.Http;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using System;
 
 namespace Ekklesia.Entities.DTOs
@@ -14,9 +16,18 @@ namespace Ekklesia.Entities.DTOs
         }
         public Role Role { get; set; }
 
+        
         public string Name { get; set; }
+
+        
         public string Phone { get; set; }
+
+        [BsonIgnore]
         public string Photo { get; set; }
+
+        [BsonIgnore]
+        public IFormFile? FormFile { get; set; }
+
         public DateTime BirthDay { get; set; }
 
 
@@ -26,6 +37,7 @@ namespace Ekklesia.Entities.DTOs
             this.Phone = string.Empty;
             this.Photo = string.Empty;
             this.Role = Role.INDEFINIDO;
+            this.BirthDay = new DateTime();
         }
 
         public override Member ToEntity(params string[] props)
@@ -34,7 +46,7 @@ namespace Ekklesia.Entities.DTOs
             {
                 return new Member()
                 {
-                    Id = string.IsNullOrEmpty(this.Id) ? ObjectId.Empty : ObjectId.Parse(this.Id),
+                    Id = string.IsNullOrEmpty(Id) ? ObjectId.Empty : ObjectId.Parse(this.Id),
                     Name = this.Name,
                     Phone = this.Phone,
                     Photo = this.Photo,
@@ -80,6 +92,6 @@ namespace Ekklesia.Entities.DTOs
             }
             return member;
 
-        }
+        }        
     }
 }

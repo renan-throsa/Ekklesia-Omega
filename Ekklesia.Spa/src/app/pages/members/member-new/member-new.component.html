@@ -1,4 +1,5 @@
 <div class="card">
+
   <div class="card-header">
     <h3>Novo Membro</h3>
   </div>
@@ -36,6 +37,7 @@
             O nome não deve conter caracteres especiais.
           </div>
         </div>
+
         <div class="col">
           <label for="inputPhone" class="form-label">Telefone</label>
           <input type="tel" class="form-control" id="inputPhone" formControlName="phone"
@@ -47,9 +49,7 @@
             Um telefone precisa ter um padrão
           </div>
         </div>
-      </div>
 
-      <div class="row">
         <div class="col">
           <label for="roleMember" class="form-label">Posição</label>
           <select id="roleMember" class="form-select" formControlName="role">
@@ -58,12 +58,40 @@
             </option>
           </select>
         </div>
+      </div>
+
+      <div class="row">
+
+        <div class="col">
+          <label for="inputDate" class="form-label">Data</label>
+          <input class="form-control" id="inputDate" formControlName="birthDay" type="datetime" [ngClass]="{ 'is-invalid': isDateInvalid }" />
+
+          <div *ngIf="controls.birthDay?.errors?.required" class="invalid-feedback">
+            Data é necessária
+          </div>          
+
+          <div *ngIf="controls.birthDay?.errors?.maxDate" class="invalid-feedback">
+            A data máxima de nascimento é: {{ maxDate | date: 'EEEE, \'dia\' d \'de\' MMMM' }}
+          </div>
+          
+        </div>
+
         <div class="col">
           <label for="formFile" class="form-label">Escolha uma foto</label>
-          <input class="form-control" type="file" id="formFile" />
+          <input class="form-control" type="file" accept="image/jpeg, image/png" id="formFile"
+            (change)="imagePicked($event)" />
         </div>
+        
+        <div class="col">
+          <img *ngIf="!imageUrl" style="width: 200px; height: auto;" src="assets/portrait_placeholder.png" class="img-thumbnail">
+          <img *ngIf="imageUrl" [src]="imageUrl" style="width: 200px; height: auto;" class="img-thumbnail">
+        </div>
+       
       </div>
+
+
     </form>
+
   </div>
 
   <div class="card-footer">
