@@ -12,6 +12,12 @@ import { IdentityGard } from './services/identity.guard'
 import { InputGuard } from './services/input.guard'
 import { NgxSpinnerModule } from 'ngx-spinner'
 
+import { LOCALE_ID } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localePt from '@angular/common/locales/pt';
+
+registerLocaleData(localePt);
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -28,7 +34,7 @@ import { NgxSpinnerModule } from 'ngx-spinner'
       progressBar: true,
     }),
   ],
-  providers: [IdentityGard, InputGuard],
+  providers: [IdentityGard, InputGuard,{ provide: LOCALE_ID, useValue: 'pt-BR' }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,18 +1,13 @@
 export class BaseConverter {
+
   public static DateToString(data: Date) {
     if (data == null) {
       return ''
     }
-    return `${this.prependZero(data.getDate())}/${this.prependZero(
-      data.getMonth() + 1,
-    )}/${data.getFullYear()} ${this.prependZero(
-      data.getHours(),
-    )}:${this.prependZero(data.getMinutes())}:${this.prependZero(
-      data.getSeconds(),
-    )}`
+    return `${this.prependZero(data.getDate())}/${this.prependZero(data.getMonth() + 1,)}/${data.getFullYear()} ${this.prependZero(data.getHours(),)}:${this.prependZero(data.getMinutes())}:${this.prependZero(data.getSeconds(),)}`
   }
 
-  public static DateToStringOnlyDate(data: Date) {
+  public static DateToStringOnlyDate(data: Date): string {
     return `${this.prependZero(data.getDate())}/${this.prependZero(
       data.getMonth() + 1,
     )}/${data.getFullYear()}`
@@ -25,18 +20,18 @@ export class BaseConverter {
     return valor + ''
   }
 
-  public static StringToDate(value: string) {   
+  public static StringToDate(value: string): Date {
     let date, time, dia, mes, ano, hora, minuto, segundo
-    ;[date, time] = value.split('T')
-    ;[ano, mes, dia] = date.split('-')
-    ;[hora, minuto, segundo] = time.split(':')
+      ;[date, time] = value.split('T')
+      ;[ano, mes, dia] = date.split('-')
+      ;[hora, minuto, segundo] = time.split(':')
 
-    return new Date(Number(ano), Number(mes) - 1, Number(dia), Number(hora),Number(minuto), Number(segundo.substring(0, 2)))
+    return new Date(Number(ano), Number(mes) - 1, Number(dia), Number(hora), Number(minuto), Number(segundo.substring(0, 2)))
   }
 
-  public static StringToDateOnlyDate(value: string) {
+  public static StringToDateOnlyDate(value: string): Date {
     let dia: string, mes: string, ano: string
-    ;[dia, mes, ano] = value.split('/')
+      ;[dia, mes, ano] = value.split('/')
     return new Date(Number(ano), Number(mes) - 1, Number(dia))
   }
 

@@ -7,6 +7,11 @@ namespace Ekkleisa.Business.Implementation.Validations
 {
     public class TransactionValidation : AbstractValidator<TransactionDTO>
     {
+
+        const int muiltiplier = 2;
+        const int oneMegaByte = 1048576;
+        const int allowedSize = muiltiplier * oneMegaByte;
+
         public TransactionValidation()
         {
             #region Insertion
@@ -46,6 +51,15 @@ namespace Ekkleisa.Business.Implementation.Validations
                 .When(r => r.Responsable != null)
                 .WithMessage("Uma despesa precisa ter um reponsável válido.");
 
+
+                RuleFor(m => m.FormFile.Length)
+                    .LessThanOrEqualTo(allowedSize)
+                    .WithMessage($"O tamanho máximo do arquivo permitido é de {muiltiplier}MB")
+                    .When(m => m.FormFile != null);
+
+
+                RuleFor(m => m.FormFile.ContentType).Must(m => m == "image/jpeg").When(m => m.FormFile != null).WithMessage("Somente imagens .jpg são aceitas");
+
             });
             #endregion
 
@@ -54,19 +68,29 @@ namespace Ekkleisa.Business.Implementation.Validations
             {
                 RuleFor(m => m.Id).NotEmpty().WithMessage("Não é possível atualizar uma trassação que não possua um id.");
 
-                RuleFor(x => x.Date)
+                RuleFor(e => e.Description).MaximumLength(250).WithMessage("Descrição não pode exceder 250 caracteres")
+                   .NotEmpty().WithMessage("A descrição de uma despesa não pode ser vazia.");
+
+
+                RuleFor(m => m.FormFile.Length)
+                    .LessThanOrEqualTo(allowedSize)
+                    .WithMessage($"O tamanho máximo do arquivo permitido é de {muiltiplier}MB")
+                    .When(m => m.FormFile != null);
+
+
+                RuleFor(m => m.FormFile.ContentType).Must(m => m == "image/jpeg").When(m => m.FormFile != null).WithMessage("Somente imagens .jpg são aceitas");
+
+                /*
+                  RuleFor(x => x.Date)
                .ExclusiveBetween(DateTime.Now.AddMonths(-1), DateTime.Now.AddDays(1))
                .WithMessage($"Uma despesa prescisa estar entre hoje e menos um mês atrás.");
 
                 RuleFor(x => x.Amount)
                    .GreaterThan(0).WithMessage("Uma despesa prescisa um valor maior que zero");
 
-
                 RuleFor(x => x.Type)
                     .IsInEnum().WithMessage("Um transação precisa obrigatoriamente ter um tipo.");
-
-                RuleFor(e => e.Description).MaximumLength(250).WithMessage("Descrição não pode exceder 250 caracteres")
-                   .NotEmpty().WithMessage("A descrição de uma despesa não pode ser vazia.");
+                
 
 
                 RuleFor(e => e.Responsable)
@@ -85,6 +109,8 @@ namespace Ekkleisa.Business.Implementation.Validations
                 .When(x => x.Type == TransactionType.DESPESA)
                 .When(r => r.Responsable != null)
                 .WithMessage("Uma despesa precisa ter um id de reponsável válido.");
+                 */
+
 
             });
             #endregion

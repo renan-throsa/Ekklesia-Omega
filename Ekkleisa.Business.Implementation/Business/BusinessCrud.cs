@@ -38,7 +38,9 @@ namespace Ekkleisa.Business.Implementation.Business
             this._logger = logger;
         }
 
-        public async Task<Response> AddAsync(TObject tObject)
+        public abstract IEnumerable<TObject> All();
+
+        public virtual async Task<Response> AddAsync(TObject tObject)
         {
             _logger.LogInformation($"Adding object: {tObject.ToJson()}");
             ValidationResult result = _entityValidator.Validate(tObject, options => options.IncludeRuleSets(OperationType.Insert.ToString()));
@@ -56,13 +58,13 @@ namespace Ekkleisa.Business.Implementation.Business
             }
         }
 
-        public async Task AddAsync(IEnumerable<TObject> dtos)
+        public virtual async Task AddAsync(IEnumerable<TObject> dtos)
         {
             var entities = dtos.Select(x => x.ToEntity());
             await _repository.AddAsync(entities);
         }
 
-        public async Task<Response> FindSync(ObjectId key)
+        public virtual async Task<Response> FindSync(ObjectId key)
         {
             _logger.LogInformation($"Searching by key:{key}");
             var entity = await _repository.FindSync(key);
@@ -76,7 +78,7 @@ namespace Ekkleisa.Business.Implementation.Business
             return Response(ResponseStatus.Found, _mapper.Map<TObject>(entity));
         }
 
-        public async Task<Response> FindSync(string id)
+        public virtual async Task<Response> FindSync(string id)
         {
             _logger.LogInformation($"Searching by key:{id}");
             if (ObjectId.TryParse(id, out var _))
@@ -103,33 +105,26 @@ namespace Ekkleisa.Business.Implementation.Business
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<TObject>> AllAsync()
-        {
-            _logger.LogInformation($"Listing {typeof(TEntity).FullName}");
-            var entities = await _repository.AllAsync();
-            return _mapper.Map<IEnumerable<TObject>>(entities);
-        }
-
-        public Task DeleteAsync(TObject tObject)
+        public virtual Task DeleteAsync(TObject tObject)
         {
             _logger.LogInformation($"Deleting by key:{tObject.Id}");
             var entity = tObject.ToEntity();
             return _repository.DeleteAsync(entity);
         }
 
-        public Task DeleteAsync(string id)
+        public virtual Task DeleteAsync(string id)
         {
             _logger.LogInformation($"Deleting by key:{id}");
             return _repository.DeleteAsync(id);
         }
 
-        public Task<DeleteResult> DeleteAsync(ObjectId id)
+        public virtual Task<DeleteResult> DeleteAsync(ObjectId id)
         {
             _logger.LogInformation($"Deleting by key:{id}");
             return _repository.DeleteAsync(id);
         }
 
-        public async Task<Response> UpdateAsync(TObject tObject)
+        public virtual async Task<Response> UpdateAsync(TObject tObject)
         {
             _logger.LogInformation($"Updating object: {tObject.ToJson()}");
 
@@ -144,7 +139,7 @@ namespace Ekkleisa.Business.Implementation.Business
                     return Response(ResponseStatus.NotFound);
                 }
                 entity = tObject.ToEntity();
-                await _repository.UpdateAsync(entity); ;
+                await _repository.UpdateAsync(entity);
                 return Response(ResponseStatus.Ok, _mapper.Map<TObject>(entity));
             }
             else
@@ -155,7 +150,7 @@ namespace Ekkleisa.Business.Implementation.Business
 
         }
 
-        public async Task<IEnumerable<TObject>> UpdateAsync(IEnumerable<TObject> tObjects)
+        public virtual async Task<IEnumerable<TObject>> UpdateAsync(IEnumerable<TObject> tObjects)
         {
             var entities = tObjects.Select(x => x.ToEntity());
             entities = await _repository.UpdateAsync(entities);
@@ -194,7 +189,7 @@ namespace Ekkleisa.Business.Implementation.Business
             throw new NotImplementedException();
         }
 
-        private Response Response(ResponseStatus valide, object result = null)
+        protected Response Response(ResponseStatus valide, object result = null)
         {
             return
             new Response

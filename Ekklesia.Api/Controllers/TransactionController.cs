@@ -1,20 +1,14 @@
-﻿using Asp.Versioning;
-using Ekkleisa.Business.Contract.IBusiness;
+﻿using Ekkleisa.Business.Contract.IBusiness;
 using Ekklesia.Entities.DTOs;
 using Ekklesia.Entities.Entities;
 using Ekklesia.Entities.Enums;
 using Ekklesia.Entities.Filters;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace Ekklesia.Api.Controllers
 {
-
-    [ApiVersion("1.0")]
-    [Route("v{version:apiVersion}/[controller]")]
-    [ApiController]
-    [Authorize]
+    
     public class TransactionController : ApiController
     {
         private readonly ITransactionBusiness _transactionBusiness;
@@ -42,7 +36,7 @@ namespace Ekklesia.Api.Controllers
 
 
         [HttpPost($"{nameof(Add)}")]
-        public async Task<ActionResult<Response>> Add([FromBody] TransactionDTO transaction)
+        public async Task<ActionResult<Response>> Add([FromForm] TransactionDTO transaction)
         {
             var response = await _transactionBusiness.AddAsync(transaction);
             if (response.Status == ResponseStatus.Created) return Ok(response);
@@ -50,7 +44,7 @@ namespace Ekklesia.Api.Controllers
         }
 
         [HttpPut($"{nameof(Edit)}")]
-        public async Task<ActionResult<Response>> Edit([FromBody] TransactionDTO transaction)
+        public async Task<ActionResult<Response>> Edit([FromForm] TransactionDTO transaction)
         {
             var response = await _transactionBusiness.UpdateAsync(transaction);
             if (response.Status == ResponseStatus.Ok) return Ok(response);

@@ -32,14 +32,7 @@ export class TransactionNewComponent implements OnInit {
   members: Member[]
   maxDate: Date
   minDate: Date
-
-  public get maxDateStr() {
-    return BaseConverter.DateToStringOnlyDate(new Date(this.maxDate))
-  }
-
-  public get minDateStr() {
-    return BaseConverter.DateToStringOnlyDate(new Date(this.minDate))
-  }
+  
 
   get isDateInvalid(): boolean {
     return this.hasErros('date')

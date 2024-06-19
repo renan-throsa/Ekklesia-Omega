@@ -1,8 +1,8 @@
 import { Component } from '@angular/core'
 import {
   AbstractControl,
+  FormGroup,
   UntypedFormBuilder,
-  UntypedFormGroup,
   Validators,
 } from '@angular/forms'
 import { Router } from '@angular/router'
@@ -15,8 +15,6 @@ import { Member } from 'src/app/models/Member'
 import { RoleEnum, RoleMapping } from 'src/app/models/RoleEnum'
 import { MemberService } from 'src/app/services/member.service'
 import { ToastrService } from 'ngx-toastr'
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { CustomModalComponent } from 'src/app/components/custom-modal/custom-modal.component'
 import { NgxSpinnerService } from 'ngx-spinner'
 import { finalize } from 'rxjs'
 
@@ -25,31 +23,48 @@ import { finalize } from 'rxjs'
   templateUrl: './member-new.component.html',
 })
 export class MemberNewComponent {
-  form: UntypedFormGroup
+  form: FormGroup
   roles: (string | RoleEnum)[]
   roleapping = RoleMapping
   MASKS = MASKS
+  imageUrl!: string | ArrayBuffer;
+
+  maxDate: Date
+
+  private readonly _reader: FileReader;
 
   get isNameInvalid(): boolean {
-    return this.hasErros('name')
+    return this._hasErros('name')
   }
 
   get isPhoneInvalid(): boolean {
-    return this.hasErros('phone')
+    return this._hasErros('phone')
+  }
+
+  get isDateInvalid(): boolean {
+    return this._hasErros('birthDay')
   }
 
   get controls(): { [key: string]: AbstractControl } {
     return this.form.controls
   }
 
+
+
+
   constructor(
     private _formBuilder: UntypedFormBuilder,
     private _memberService: MemberService,
     private _router: Router,
     private _toasterService: ToastrService,
-    private _modalService: NgbModal,
     private _spinner: NgxSpinnerService,
   ) {
+
+    this.maxDate = new Date();
+
+    this._reader = new FileReader();
+    this._reader.onload = (e: any) => { this.imageUrl = e.target.result; };
+
     this.roles = Object.values(RoleEnum).filter(
       (value) => typeof value === 'number',
     )
@@ -69,10 +84,12 @@ export class MemberNewComponent {
       ],
       phone: ['', [Validators.required, NgBrazilValidators.telefone]],
       role: ['', [Validators.required]],
+      birthDay: ['', [Validators.required, UtilsValidators.maxDate(this.maxDate)]],
+      formFile: [null]
     })
   }
 
-  private hasErros(field: string): boolean {
+  private _hasErros(field: string): boolean {
     const hasErros =
       this.form.get(field)?.errors &&
       (this.form.get(field)?.dirty || this.form.get(field)?.touched)
@@ -82,7 +99,8 @@ export class MemberNewComponent {
   public onSave(): void {
     this._spinner.show()
     const member: Member = Object.assign(new Member(), this.form.value)
-    member.phone = member.phone.replace(/\D/g, '')
+    member.phone = member.phone.replace(/\D/g, '');
+
     const observer = {
       next: (x: Member) => {
         this._toasterService.success(
@@ -108,5 +126,22 @@ export class MemberNewComponent {
 
   public onCancel(): void {
     this._router.navigate(['member'])
+  }
+
+  public imagePicked(event: any): void {
+    const file: File = event.target.files[0];
+    const muiltiplier = 2;
+    const oneMegaByte = 1048576;
+    const allowedSize = muiltiplier * oneMegaByte;
+
+    if (file.size > allowedSize) {
+      this._toasterService.warning(`O tamanho máximo do arquivo permitido é de ${muiltiplier}MB`, 'Tamanho máximo excedido');
+      return;
+    }
+
+    this._reader.readAsDataURL(file);
+    this.form.patchValue({ formFile: file });
+    this.form.markAsDirty();
+
   }
 }

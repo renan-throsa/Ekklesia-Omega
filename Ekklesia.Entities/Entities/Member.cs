@@ -15,8 +15,8 @@ namespace Ekklesia.Entities.Entities
             this.Name = string.Empty;
             this.Phone = string.Empty;
             this.Photo = string.Empty;
-            this.Role = Role.INDEFINIDO;
         }
+
         public override bool Equals(object? obj)
         {
             Member? member = obj as Member;
