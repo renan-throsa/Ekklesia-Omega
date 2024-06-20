@@ -26,11 +26,7 @@ export abstract class ApplicationService<T extends object> extends BaseService {
 
   public edit(entity: T): Observable<any> {
     return this._http
-      .put(`${this.baseUrl}/Edit/`, this._toFormData(entity), {
-        headers: {
-          Authorization: `Bearer ${this.getToken()}`,
-        }
-      })
+      .put(`${this.baseUrl}/Edit/`, this._toFormData(entity), { headers: this.getHeader() })
       .pipe(pluck('payload'))
   }
 
@@ -41,7 +37,6 @@ export abstract class ApplicationService<T extends object> extends BaseService {
     for (const [key, value] of Object.entries(entity)) {
       formData.append(key, value);
     }
-console.log(formData);
 
     return formData
   }

@@ -30,7 +30,7 @@ services:
     image: ekklesia-api-service
     container_name: ekklesia-omega-api
     environment:
-      ASPNETCORE_ENVIRONMENT: Testing    
+      ASPNETCORE_ENVIRONMENT: Production    
     restart: unless-stopped 
     volumes:
       - type: bind

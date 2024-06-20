@@ -64,7 +64,7 @@
 
         <div class="col">
           <label for="inputDate" class="form-label">Data</label>
-          <input class="form-control" id="inputDate" formControlName="birthDay" type="datetime" [ngClass]="{ 'is-invalid': isDateInvalid }" />
+          <input class="form-control" id="inputDate" formControlName="birthDay" type="date" [ngClass]="{ 'is-invalid': isDateInvalid }" />
 
           <div *ngIf="controls.birthDay?.errors?.required" class="invalid-feedback">
             Data é necessária

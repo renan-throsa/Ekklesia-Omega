@@ -16,11 +16,10 @@ export abstract class BaseService {
   }
 
   protected getHeader(): HttpHeaders {
-    return new HttpHeaders({
-      'Content-Type': 'application/json',
+    return new HttpHeaders({      
       Authorization: `Bearer ${this.getToken()}`,
     })
-  }
+  }  
 
   public isAuthenticated(): boolean {
     return localStorage.getItem('ekklesia.token') ? true : false
