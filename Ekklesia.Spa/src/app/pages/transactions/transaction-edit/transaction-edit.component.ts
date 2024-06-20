@@ -105,7 +105,12 @@ export class TransactionEditComponent implements OnInit {
     const transaction: Transaction = Object.assign(new Transaction(), this.form.getRawValue());
 
     const observer = {
-      next: (x: Response) => { this.form.markAsPristine(); this._router.navigate(['transaction']); },
+      next: (x: Response) => { 
+        this._toasterService.success(
+          `Transação editada!`,
+          'Sucesso ✌️',
+        )
+        this.form.markAsPristine(); this._router.navigate(['transaction']); },
       error: (error: any) => {
         this._toasterService.error(
           'Algo deu errado 😵. Tente novamente mais tarde.',

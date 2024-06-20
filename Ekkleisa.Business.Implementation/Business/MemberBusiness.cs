@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Ekkleisa.Business.Implementation.Business
 {
@@ -59,7 +60,8 @@ namespace Ekkleisa.Business.Implementation.Business
 
             var entity = tObject.ToEntity();
             await _repository.AddAsync(entity);
-            return Response(ResponseStatus.Created);
+            tObject = _mapper.Map<MemberDTO>(entity);
+            return Response(ResponseStatus.Created, new { tObject.Name, tObject.Id });
         }
 
 
@@ -99,7 +101,8 @@ namespace Ekkleisa.Business.Implementation.Business
             entity.BirthDay = tObject.BirthDay;
 
             await _repository.UpdateAsync(entity);
-            return Response(ResponseStatus.Ok);
+            tObject = _mapper.Map<MemberDTO>(entity);
+            return Response(ResponseStatus.Ok, new { tObject.Name, tObject.Id });
         }
 
         public void Dispose()
