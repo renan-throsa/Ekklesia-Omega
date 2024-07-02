@@ -158,13 +158,14 @@ namespace Ekkleisa.Business.Implementation.Business
         }
 
 
-        public Response Browse(BaseFilter<TEntity, TObject> filter)
+        public virtual Response Browse(BaseFilter<TEntity, TObject> filter)
         {
             _logger.LogInformation($"Searching with filter:{filter}");
 
             Func<IEnumerable<TEntity>, IEnumerable<TObject>> mapTo = (entities) => _mapper.Map<IEnumerable<TObject>>(entities);
 
             ValidationResult result = _filterValidator.Validate(filter, options => options.IncludeRuleSets(OperationType.Default.ToString()));
+
             if (result.IsValid)
             {
                 IMongoQueryable<TEntity> entities = _repository.GetQueryable();

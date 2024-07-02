@@ -5,11 +5,13 @@ using Ekkleisa.Repository.Contract.IRepositories;
 using Ekklesia.Entities.DTOs;
 using Ekklesia.Entities.Entities;
 using Ekklesia.Entities.Enums;
+using Ekklesia.Entities.Filters;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -34,6 +36,27 @@ namespace Ekkleisa.Business.Implementation.Business
             _logger.LogInformation($"Listing {typeof(MemberDTO).FullName}");
             var entities = _repository.All(m => new Member() { Id = m.Id, Name = m.Name, Phone = m.Phone });
             return _mapper.Map<IEnumerable<MemberDTO>>(entities);
+        }
+
+
+        public override Response Browse(BaseFilter<Member, MemberDTO> filter)
+        {
+            _logger.LogInformation($"Searching with filter:{filter}");
+            Func<IEnumerable<Member>, IEnumerable<MemberDTO>> mapTo = (entities) => _mapper.Map<IEnumerable<MemberDTO>>(entities);
+
+            ValidationResult result = _filterValidator.Validate(filter, options => options.IncludeRuleSets(OperationType.Default.ToString()));
+
+            if (result.IsValid)
+            {
+                IMongoQueryable<Member> entities = _repository.GetQueryable();
+                var filterResult = filter.OnQuery(entities).WithFiltering().WithSorting().WithPagination().WithFields(m => new Member() { Id = m.Id, Name = m.Name, Phone = m.Phone }).Build(mapTo);
+                return Response(ResponseStatus.Ok, filterResult);
+            }
+            else
+            {
+                _logger.LogError(result.Errors.Select(x => x.ErrorMessage).ToJson());
+                return Response(ResponseStatus.BadRequest, result.Errors.Select(x => x.ErrorMessage).ToList());
+            }
         }
 
         public override async Task<Response> AddAsync(MemberDTO tObject)

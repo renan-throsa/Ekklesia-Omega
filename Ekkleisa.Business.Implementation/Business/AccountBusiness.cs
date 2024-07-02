@@ -1,6 +1,7 @@
 ﻿using Ekkleisa.Business.Contract.IBusiness;
 using Ekkleisa.Business.Implementation.Validations;
 using Ekklesia.Entities.DTOs;
+using Ekklesia.Entities.Entities;
 using Ekklesia.Entities.Enums;
 using Ekklesia.Entities.Settings;
 using Microsoft.AspNetCore.Identity;
@@ -8,8 +9,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -42,7 +45,7 @@ namespace Ekkleisa.Business.Implementation.Business
         {
             _logger.LogInformation($"Logging sign in for: {Dto.Email}");
             var modelState = _signInValidation.Validate(Dto);
-            
+
             if (!modelState.IsValid) return Response(ResponseStatus.BadRequest, modelState.Errors.Select(x => x.ErrorMessage));
 
             var user = await _userManager.FindByEmailAsync(Dto.Email);
@@ -55,7 +58,8 @@ namespace Ekkleisa.Business.Implementation.Business
 
 
             await _signInManager.SignInAsync(user, isPersistent: Dto.RememberMe);
-            var token = GetToken(user);
+            var claims = await _userManager.GetClaimsAsync(user);
+            var token = GetToken(user, claims);
             return Response(ResponseStatus.Ok, token);
         }
 
@@ -76,7 +80,8 @@ namespace Ekkleisa.Business.Implementation.Business
             if (!result.Succeeded) return Response(ResponseStatus.Ok, result.Errors.Select(x => x.Description));
 
             await _signInManager.SignInAsync(user, isPersistent: false);
-            var token = GetToken(user);
+            var claims = await _userManager.GetClaimsAsync(user);
+            var token = GetToken(user, claims);
             return Response(ResponseStatus.Ok, token);
         }
 
@@ -90,20 +95,21 @@ namespace Ekkleisa.Business.Implementation.Business
             };
         }
 
-        private TokenDTO GetToken(IdentityUser user)
+        private TokenDTO GetToken(IdentityUser user, IList<Claim> claims)
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-            var token = tokenHandler.CreateToken(new SecurityTokenDescriptor
-            {
-                Issuer = _appSettings.Issuer,
-                Audience = _appSettings.Audience,
-                Expires = DateTime.UtcNow.AddHours(_appSettings.ExpirationInHours),
-                IssuedAt = DateTime.UtcNow,
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            });
 
-            var encodedToken = tokenHandler.WriteToken(token);
+            var token = new JwtSecurityToken(
+                issuer: _appSettings.Issuer,
+                audience: _appSettings.Audience,
+                claims: this.GetClaims(user, claims),
+                notBefore: DateTime.Now,
+                expires: DateTime.Now.AddHours(_appSettings.ExpirationInHours),
+                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
+                );
+
+            var encodedToken = (new JwtSecurityTokenHandler()).WriteToken(token);
+
             return new TokenDTO
             {
                 User = new UserDTO(user.UserName, user.Email, user.PhoneNumber),
@@ -111,6 +117,18 @@ namespace Ekkleisa.Business.Implementation.Business
                 ExpiresAt = DateTime.UtcNow.AddHours(_appSettings.ExpirationInHours)
             };
 
+        }
+
+        private IList<Claim> GetClaims(IdentityUser user, IList<Claim> claims)
+        {
+
+            claims.Add(new Claim(JwtRegisteredClaimNames.Sub, user.Id));
+            claims.Add(new Claim(JwtRegisteredClaimNames.Email, user.Email));
+            claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+            claims.Add(new Claim(JwtRegisteredClaimNames.Nbf, DateTime.Now.ToString()));
+            claims.Add(new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToString()));
+
+            return claims;
         }
     }
 }

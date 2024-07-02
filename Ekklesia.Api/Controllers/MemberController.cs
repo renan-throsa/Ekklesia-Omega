@@ -18,7 +18,7 @@ namespace Ekklesia.Api.Controllers
             this._memberBusiness = memberBusiness;
         }
 
-        [HttpPost($"{nameof(Browse)}")]
+        [HttpPost($"{nameof(Browse)}")]        
         public ActionResult<Response> Browse([FromBody] BaseFilter<Member, MemberDTO> filter)
         {
             var response = _memberBusiness.Browse(filter);
