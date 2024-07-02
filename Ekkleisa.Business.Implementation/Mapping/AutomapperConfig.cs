@@ -23,7 +23,6 @@ namespace Ekkleisa.Business.Implementation.Mapping
             CreateMap<ExpenseDTO, Expense>().ReverseMap();
 
 
-
             CreateMap<OccasionDTO, Occasion>()
                 .ForMember(transaction => transaction.Id, x => x.MapFrom(y => y.Id == null ? ObjectId.Empty : new ObjectId(y.Id)))
                 .ReverseMap();

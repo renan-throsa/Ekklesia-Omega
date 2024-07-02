@@ -16,7 +16,6 @@ import { MemberService } from 'src/app/services/member.service'
 import { RoleEnum, RoleMapping } from 'src/app/models/RoleEnum'
 import { NgxSpinnerService } from 'ngx-spinner'
 import { finalize, map, tap } from 'rxjs'
-import { BaseConverter } from 'src/app/utils/base-converter'
 
 @Component({
   selector: 'app-member-edit',

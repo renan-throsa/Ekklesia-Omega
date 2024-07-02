@@ -112,14 +112,7 @@ namespace Ekklesia.DependencyInjection
                 });
 
             });
-
-            services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(builder =>
-                {
-                    builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
-                });
-            });
+            
 
             return services;
         }

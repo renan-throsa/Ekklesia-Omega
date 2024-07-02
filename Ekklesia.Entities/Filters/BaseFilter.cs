@@ -67,6 +67,14 @@ namespace Ekklesia.Entities.Filters
             return this;
         }
 
+
+        public BaseFilter<TEntity, TObject> WithFields(Expression<Func<TEntity, TEntity>> projection)
+        {
+            _query = _query.Select(projection);
+            return this;
+        }
+
+
         /// <summary>
         /// 
         /// </summary>
