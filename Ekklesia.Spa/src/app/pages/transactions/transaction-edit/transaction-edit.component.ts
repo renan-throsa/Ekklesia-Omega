@@ -15,6 +15,11 @@ import { TransactionService } from 'src/app/services/transaction.service'
 @Component({
   selector: 'app-transaction-edit',
   templateUrl: './transaction-edit.component.html',
+  styles: [`
+    .card-footer > button + button {
+      margin-left: 1%;
+    }
+  `]
 })
 export class TransactionEditComponent implements OnInit {
   form: UntypedFormGroup;

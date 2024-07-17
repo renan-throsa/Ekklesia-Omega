@@ -15,15 +15,18 @@ import {
 } from 'src/app/models/TransactionEnum'
 import { MemberService } from 'src/app/services/member.service'
 import { TransactionService } from 'src/app/services/transaction.service'
-import { BaseConverter } from 'src/app/utils/base-converter'
 import { finalize, pluck, tap } from 'rxjs'
 import { NgxSpinnerService } from 'ngx-spinner'
 import { ToastrService } from 'ngx-toastr'
-import { Filtering } from 'src/app/models/Filtering'
 
 @Component({
   selector: 'app-transaction-new',
   templateUrl: './transaction-new.component.html',
+  styles: [`
+    .card-footer > button + button {
+      margin-left: 1%;
+    }
+  `]
 })
 export class TransactionNewComponent implements OnInit {
   form: UntypedFormGroup
