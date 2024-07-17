@@ -1,9 +1,12 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
   <div class="container-fluid">
+
     <a class="navbar-brand" [routerLink]="['/member']">
       <fa-icon [icon]="['fas', 'dove']"></fa-icon>
       Ekklésia
     </a>
+
     <button
       class="navbar-toggler"
       type="button"
@@ -15,13 +18,11 @@
       aria-label="Toggle navigation"
     >
       <span class="navbar-toggler-icon"></span>
-    </button>
-    <div
-      class="collapse navbar-collapse"
-      id="navbarSupportedContent"
-      [ngbCollapse]="toggleNavbar"
-    >
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    </button>    
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent" [ngbCollapse]="toggleNavbar">
+      <ul class="navbar-nav mr-auto">
+
         <li class="nav-item" *ngFor="let item of nav">
           <a
             class="nav-link"
@@ -30,11 +31,11 @@
             [routerLink]="item.link"
           >
             <fa-icon [icon]="item.icon"></fa-icon>
-            {{ item.name }}            
+            {{ item.name }}
           </a>
-        </li>
-      </ul>
+        </li>        
+        <app-custom-profile></app-custom-profile>
+      </ul>      
     </div>
-    <app-custom-profile></app-custom-profile>
   </div>
 </nav>
