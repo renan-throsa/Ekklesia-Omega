@@ -20,6 +20,11 @@ import { finalize, map, tap } from 'rxjs'
 @Component({
   selector: 'app-member-edit',
   templateUrl: './member-edit.component.html',
+  styles: [`
+    .card-footer > button + button {
+      margin-left: 1%;
+    }
+  `]
 })
 export class MemberEditComponent implements OnInit {
   form: UntypedFormGroup

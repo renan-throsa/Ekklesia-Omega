@@ -19,8 +19,14 @@ import { NgxSpinnerService } from 'ngx-spinner'
 import { finalize } from 'rxjs'
 
 @Component({
-  selector: 'app-member-new',
+  selector: 'app-member-new',  
   templateUrl: './member-new.component.html',
+  styles: [`
+    .card-footer > button + button {
+      margin-left: 1%;
+    }
+  `]
+  
 })
 export class MemberNewComponent {
   form: FormGroup

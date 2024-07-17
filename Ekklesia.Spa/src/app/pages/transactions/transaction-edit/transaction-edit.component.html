@@ -8,19 +8,33 @@
       <div class="row">
         <div class="col">
           <label for="inputDate" class="form-label">Data</label>
-          <input class="form-control" id="inputDate" formControlName="date" type="datetime" />
+          <input
+            class="form-control"
+            id="inputDate"
+            formControlName="date"
+            type="datetime"
+          />
         </div>
 
         <div class="col">
           <label for="inputAmount" class="form-label">Valor</label>
-          <input type="text" class="form-control" id="inputAmount" formControlName="amount" />
+          <input
+            type="text"
+            class="form-control"
+            id="inputAmount"
+            formControlName="amount"
+          />
         </div>
       </div>
 
       <div class="row">
         <div class="col">
           <label for="transactionType" class="form-label">Tipo</label>
-          <select id="transactionType" class="form-select" formControlName="type">
+          <select
+            id="transactionType"
+            class="form-select"
+            formControlName="type"
+          >
             <option *ngFor="let value of types" [ngValue]="value">
               {{ transactionMapping[value] }}
             </option>
@@ -29,9 +43,18 @@
 
         <div class="col">
           <div class="col">
-            <label for="accountableMember" class="form-label">Responsável</label>
-            <select id="accountableMember" class="form-select" formControlName="responsable">
-              <option *ngFor="let responsable of members" [ngValue]="responsable">
+            <label for="accountableMember" class="form-label"
+              >Responsável</label
+            >
+            <select
+              id="accountableMember"
+              class="form-select"
+              formControlName="responsable"
+            >
+              <option
+                *ngFor="let responsable of members"
+                [ngValue]="responsable"
+              >
                 {{ responsable.name }}
               </option>
             </select>
@@ -40,47 +63,64 @@
       </div>
 
       <div class="row">
-
         <div class="col">
           <label for="inputDescription" class="form-label">Observação</label>
-          <textarea class="form-control" id="inputDescription" formControlName="description"
-            [ngClass]="{ 'is-invalid': isDescriptionInvalid }" rows="5"
-            placeholder="Opcional para receita. Obrigatório para despesa"></textarea>
-          <div *ngIf="controls.description?.errors?.required" class="invalid-feedback">
+          <textarea
+            class="form-control"
+            id="inputDescription"
+            formControlName="description"
+            [ngClass]="{ 'is-invalid': isDescriptionInvalid }"
+            rows="5"
+            placeholder="Opcional para receita. Obrigatório para despesa"
+          ></textarea>
+          <div
+            *ngIf="controls.description?.errors?.required"
+            class="invalid-feedback"
+          >
             Observação é necessária para despesa.
           </div>
 
-          <div *ngIf="controls.description?.errors?.maxLength" class="invalid-feedback">
+          <div
+            *ngIf="controls.description?.errors?.maxLength"
+            class="invalid-feedback"
+          >
             O tamanho máximo da observação deve ser 250 caracteres.
           </div>
         </div>
 
         <div class="col">
           <label for="formFile" class="form-label">Imagem do recibo</label>
-          <input class="form-control" type="file" id="formFile" accept="image/jpeg" (change)="imagePicked($event)"/>
-        </div> 
-        
-        <div class="col">                  
-          <img [src]="imageBase64 || 'assets/receipt_placeholder.png'" style="width: 200px; height: auto;" class="img-thumbnail">
+          <input
+            class="form-control"
+            type="file"
+            id="formFile"
+            accept="image/jpeg"
+            (change)="imagePicked($event)"
+          />
         </div>
 
+        <div class="col">
+          <img
+            [src]="imageBase64 || 'assets/receipt_placeholder.png'"
+            style="width: 200px; height: auto"
+            class="img-thumbnail"
+          />
+        </div>
       </div>
     </form>
   </div>
 
   <div class="card-footer">
-    <div class="row">
-      <div class="col-1">
-        <button type="button" class="btn btn-danger" (click)="onCancel()">
-          Cancelar
-        </button>
-      </div>
-      <div class="col-1">
-        <button type="button" class="btn btn-primary" [disabled]="form.invalid" (click)="onSave()">
-          Salvar
-        </button>
-      </div>
-
-    </div>
+    <button type="button" class="btn btn-danger" (click)="onCancel()">
+      Cancelar
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      [disabled]="form.invalid"
+      (click)="onSave()"
+    >
+      Salvar
+    </button>
   </div>
 </div>
