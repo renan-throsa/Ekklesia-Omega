@@ -1,5 +1,6 @@
-﻿using Ekklesia.Entities.DTOs;
+﻿using Ekkleisa.Business.Models;
 using Ekklesia.Entities.Entities;
+using System;
 
 namespace Ekklesia.IntegrationTesting.Builders
 {
@@ -10,6 +11,7 @@ namespace Ekklesia.IntegrationTesting.Builders
         private string Phone { get; set; }
         private string Photo { get; set; }
         private Role Role { get; set; }
+        private DateTime BirthDay { get; set; }        
 
         public MemberBuilder()
         {
@@ -18,38 +20,51 @@ namespace Ekklesia.IntegrationTesting.Builders
             Photo = string.Empty;
         }
 
-        public MemberBuilder WithRole(Role role = Entities.Entities.Role.MEMBRO)
+        public MemberBuilder WithRole(Role role = Role.MEMBRO)
         {
-            this.Role = role;
+            Role = role;
             return this;
         }
 
         public MemberBuilder WithPhoto(string photo = "FBQUFBQYGBQgIBwgICwoJCQoLEQwNDA0MERoQExAQExAaFxsWFRYbFykgHBwgKS8nJScvOTMzOUdER11dff/CABEIAeoCvAMBIQACEQEDEQH")
         {
-            this.Photo = photo;
+            Photo = photo;
             return this;
         }
 
         public MemberBuilder WithPhone(string phone = "67983468003")
         {
-            this.Phone = phone;
+            Phone = phone;
             return this;
         }
 
         public MemberBuilder WithName(string name = "Julius Asiagenus")
         {
-            this.Name = name;
+            Name = name;
+            return this;
+        }       
+
+        public MemberBuilder WithBirthDay(DateTime birthDay)
+        {
+            BirthDay = birthDay;
             return this;
         }
 
-        public MemberDTO Build()
+        public MemberBuilder WithBirthDay()
         {
-            return new MemberDTO
+            BirthDay = DateTime.Today.AddDays(-1);
+            return this;
+        }
+
+        public SaveMemberModel Build()
+        {
+            return new SaveMemberModel
             {
                 Name = Name,
                 Phone = Phone,
                 Photo = Photo,
-                Role = Role
+                Role = Role,
+                BirthDay = BirthDay,
             };
         }
     }

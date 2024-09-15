@@ -103,9 +103,8 @@ export class MemberNewComponent {
   }
 
   public onSave(): void {
-    this._spinner.show()
-    const member: Member = Object.assign(new Member(), this.form.value)
-    member.phone = member.phone.replace(/\D/g, '');
+    this._spinner.show();
+    const member: Member = Object.assign(new Member(), this.form.value);
 
     const observer = {
       next: (x: Member) => {

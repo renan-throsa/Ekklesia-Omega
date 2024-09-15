@@ -1,8 +1,8 @@
 ﻿using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
-using Ekkleisa.Business.Contract.IBusiness;
+using Ekkleisa.Business.Abstractions;
 using Ekkleisa.Business.Implementation.Business;
-using Ekkleisa.Business.Implementation.Validations;
+using Ekkleisa.Business.Implementations;
 using Ekkleisa.Repository.Contract.IRepositories;
 using Ekkleisa.Repository.Implementation.Context;
 using Ekkleisa.Repository.Implementation.Repositories;
@@ -130,14 +130,8 @@ namespace Ekklesia.DependencyInjection
             
 
             services.AddSingleton<ApplicationContext>();
-            services.AddHealthChecks().AddMongoDb(mongodbConnectionString: dataBaseSettings.ConnectionString, name: dataBaseSettings.NoSqlDataBase);
-
-                        
-            services.AddSingleton<MemberValidation>();
-            services.AddSingleton<TransactionValidation>();
-            services.AddSingleton<OccasionValidation>();
-            services.AddSingleton<SignInValidation>();
-            services.AddSingleton<SignUpValidation>();
+            services.AddHealthChecks().AddMongoDb(mongodbConnectionString: dataBaseSettings.ConnectionString, name: dataBaseSettings.NoSqlDataBase);                        
+           
 
             services.AddScoped<IMemberRepository, MemberRepository>();
             services.AddScoped<IMemberBusiness, MemberBusiness>();

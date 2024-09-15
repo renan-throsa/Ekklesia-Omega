@@ -13,8 +13,8 @@ namespace Ekkleisa.Repository.Contract.IRepositories
     {
         Task AddAsync(TEntity entity);
         Task AddAsync(IEnumerable<TEntity> entities);
-        Task<TEntity> FindSync(ObjectId key);
-        Task<TEntity> FindSync(string Id);
+        Task<TEntity> FindAsync(ObjectId key);
+        Task<TEntity> FindAsync(string Id);
         Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> filter);        
         Task DeleteAsync(TEntity entity);
         Task DeleteAsync(string Id);

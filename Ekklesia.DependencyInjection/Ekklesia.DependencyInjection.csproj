@@ -20,7 +20,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Ekkleisa.Business.Implementation\Ekkleisa.Business.Implementation.csproj" />
+		<ProjectReference Include="..\Ekkleisa.Business\Ekkleisa.Business.csproj" />
 		<ProjectReference Include="..\Ekkleisa.Repository.Contract\Ekkleisa.Repository.Contract.csproj" />
 		<ProjectReference Include="..\Ekkleisa.Repository.Implementation\Ekkleisa.Repository.Implementation.csproj" />
 	</ItemGroup>

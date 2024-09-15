@@ -38,9 +38,9 @@ export class SigninComponent {
     private _toasterService: ToastrService,
   ) {
     this.form = this._formBuilder.group({
-      email: ['', [Validators.email, Validators.required]],
+      email: ['renan@email.com', [Validators.email, Validators.required]],
       password: [
-        '',
+        'D1stroi@',
         [
           Validators.required,
           Validators.pattern(
@@ -55,18 +55,15 @@ export class SigninComponent {
   signin() {
     let account = Object.assign(new SignIn(), this.form.value)
     const observer = {
-      next: (x: any) => {
-        this._accountService.saveUserData(x)
+      next: (token: string) => {        
+        this._accountService.authenticate(token)
         this._toasterService.success(
-          `Seja bem vindo, ${this._accountService.getUser()?.name}!`,
+          `Seja bem vindo, ${this._accountService.User.name}!`,
           'Sucesso ✌️',
         )
         this._router.navigate(['member'])
       },
-      error: (err: any) => {
-        this._toasterService.error(err.error.payload, 'Algo deu errado 😵')
-        console.log(err.error)
-      },
+     
     }
     this._accountService.signIn(account).subscribe(observer)
   }

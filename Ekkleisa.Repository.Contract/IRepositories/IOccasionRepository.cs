@@ -6,6 +6,6 @@ namespace Ekkleisa.Repository.Contract.IRepositories
 {
     public interface IOccasionRepository : IRepository<Occasion>
     {
-        IEnumerable<Occasion> Browse(OccasionFilter filter);
+        IEnumerable<Occasion> Browse(OccasionFilterParams filter);
     }
 }

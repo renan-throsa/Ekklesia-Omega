@@ -29,6 +29,10 @@ import { ToastrService } from 'ngx-toastr'
   `]
 })
 export class TransactionNewComponent implements OnInit {
+
+  private readonly _reader: FileReader;
+  
+  imageUrl!: string | ArrayBuffer;
   form: UntypedFormGroup
   types: (string | TransactionEnum)[]
   transactionMapping = TransactionMapping
@@ -61,6 +65,10 @@ export class TransactionNewComponent implements OnInit {
     private _spinner: NgxSpinnerService,
     private _toasterService: ToastrService
   ) {
+
+    this._reader = new FileReader();
+    this._reader.onload = (e: any) => { this.imageUrl = e.target.result; };
+
     this.members = []
     this.types = Object.values(TransactionEnum).filter(
       (value) => typeof value === 'number',
@@ -84,6 +92,7 @@ export class TransactionNewComponent implements OnInit {
       type: ['', [Validators.required]],
       description: ['', [Validators.maxLength(250)]],
       responsable: ['', [Validators.required]],
+      formFile: [null]
     })
   }
 
@@ -111,6 +120,7 @@ export class TransactionNewComponent implements OnInit {
       new Transaction(),
       this.form.value,
     )
+    
     const observer = {
       next: (x: Response) => { 
         this._toasterService.success(
@@ -135,6 +145,23 @@ export class TransactionNewComponent implements OnInit {
 
   onCancel() {
     this._router.navigate(['transaction'])
+  }
+
+  public imagePicked(event: any): void {
+    const file: File = event.target.files[0];
+    const muiltiplier = 2;
+    const oneMegaByte = 1048576;
+    const allowedSize = muiltiplier * oneMegaByte;
+
+    if (file.size > allowedSize) {
+      this._toasterService.warning(`O tamanho máximo do arquivo permitido é de ${muiltiplier}MB`, 'Tamanho máximo excedido');
+      return;
+    }
+
+    this._reader.readAsDataURL(file);
+    this.form.patchValue({ formFile: file });
+    this.form.markAsDirty();
+
   }
 
   private hasErros(field: string): boolean {

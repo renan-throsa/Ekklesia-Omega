@@ -61,7 +61,7 @@ export class TransactionListComponent extends BaseTable<Transaction>
 
     this._transactioService
       .browse(new Filtering())
-      .pipe(pluck('payload', 'data'),finalize(() => this._spinner.hide()))
+      .pipe(pluck('data'),finalize(() => this._spinner.hide()))
       .subscribe(observer)
   }
 }

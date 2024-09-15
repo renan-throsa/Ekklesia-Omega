@@ -1,61 +1,56 @@
-﻿using Ekkleisa.Business.Contract.IBusiness;
-using Ekklesia.Entities.DTOs;
-using Ekklesia.Entities.Entities;
-using Ekklesia.Entities.Enums;
+﻿
+using Ekkleisa.Business.Abstractions;
+using Ekkleisa.Business.Models;
 using Ekklesia.Entities.Filters;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Ekklesia.Api.Controllers
 {
-    
-    public class MemberController : ApiController
+
+    public class MemberController : BaseController
     {
         private readonly IMemberBusiness _memberBusiness;
 
         public MemberController(IMemberBusiness memberBusiness)
         {
-            this._memberBusiness = memberBusiness;
+            _memberBusiness = memberBusiness;
         }
 
-        [HttpPost($"{nameof(Browse)}")]        
-        public ActionResult<Response> Browse([FromBody] BaseFilter<Member, MemberDTO> filter)
+        [HttpPost($"{nameof(Browse)}")]
+        public ActionResult<MemberFilter> Browse([FromBody] BaseFilterParams filterParams)
         {
-            var response = _memberBusiness.Browse(filter);
-            if (response.Status == ResponseStatus.Ok) return Ok(response);
-            return ErrorResponse(response);
+            var result = _memberBusiness.Browse(filterParams);
+            return CustomResponse(result);
         }
 
         [HttpGet($"{nameof(All)}")]
-        public ActionResult<Response> All()
+        public ActionResult<IEnumerable<SimpleViewMemberModel>> All()
         {
-            var response = _memberBusiness.All();
-            return Ok(response);
+            var result = _memberBusiness.FindAll();
+            return CustomResponse(result);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Response>> Read([FromRoute] string id)
+        public async Task<ActionResult<ViewMemberModel>> Read([FromRoute] string id)
         {
-            var response = await _memberBusiness.FindSync(id);
-            if (response.Status == ResponseStatus.Found) return Ok(response);
-            return ErrorResponse(response);
+            var result = await _memberBusiness.FindById(id);
+            return CustomResponse(result);
         }
 
-
         [HttpPost($"{nameof(Add)}")]
-        public async Task<ActionResult<Response>> Add([FromForm] MemberDTO member)
+        public async Task<ActionResult<string>> Add([FromForm] SaveMemberModel member)
         {
-            var response = await _memberBusiness.AddAsync(member);
-            if (response.Status == ResponseStatus.Created) return Ok(response);
-            return ErrorResponse(response);
+            var result = await _memberBusiness.Insert(member);
+            return CustomResponse(result);
         }
 
         [HttpPut($"{nameof(Edit)}")]
-        public async Task<ActionResult<Response>> Edit([FromForm] MemberDTO member)
+        public async Task<ActionResult<string>> Edit([FromForm] SaveMemberModel member)
         {
-            var response = await _memberBusiness.UpdateAsync(member);
-            if (response.Status == ResponseStatus.Ok) return Ok(response);
-            return ErrorResponse(response);
+            var result = await _memberBusiness.Update(member);
+            return CustomResponse(result);
         }
 
     }

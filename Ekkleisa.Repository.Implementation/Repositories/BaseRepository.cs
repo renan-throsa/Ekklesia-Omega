@@ -52,12 +52,12 @@ namespace Ekkleisa.Repository.Implementation.Repositories
             return query.ToEnumerable();
         }
 
-        public async Task<TEntity> FindSync(string Id)
+        public async Task<TEntity> FindAsync(string Id)
         {
-            return await FindSync(ObjectId.Parse(Id));
+            return await FindAsync(ObjectId.Parse(Id));
         }
 
-        public async Task<TEntity> FindSync(ObjectId key)
+        public async Task<TEntity> FindAsync(ObjectId key)
         {
             var query = await Entities.FindAsync(x => x.Id == key);
             return await query.FirstOrDefaultAsync();
@@ -75,7 +75,7 @@ namespace Ekkleisa.Repository.Implementation.Repositories
 
         public async Task<DeleteResult> DeleteAsync(ObjectId Id)
         {
-            TEntity m = await FindSync(Id);
+            TEntity m = await FindAsync(Id);
             if (m != null)
             {
                 return await Entities.DeleteOneAsync(x => x.Id == Id);

@@ -1,15 +1,12 @@
-﻿using Ekklesia.Entities.Enums;
-using System;
+﻿using Ekklesia.Entities.Entities;
+using System.Linq;
 
 namespace Ekklesia.Entities.Filters
 {
-    public class TransactionFilter
+    public class TransactionFilter : BaseFilter<Transaction>
     {
-        public DateTime? Before { get; set; }
-        public DateTime? After { get; set; }
-        public TransactionType Type { get; set; }
-        public float BiggerThan { get; set; }
-        public float LessThan { get; set; }
-
+        public TransactionFilter(IQueryable<Transaction> query, BaseFilterParams baseFilterParams) : base(query, baseFilterParams)
+        {
+        }
     }
 }

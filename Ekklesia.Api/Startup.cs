@@ -1,5 +1,5 @@
 using Asp.Versioning.ApiExplorer;
-using Ekkleisa.Business.Implementation.Mapping;
+using Ekkleisa.Business.Mapping;
 using Ekklesia.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

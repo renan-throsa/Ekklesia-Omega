@@ -55,7 +55,7 @@ export class MemberListComponent extends BaseTable<Member> implements OnInit {
 
     this._memberService
       .browse(new Filtering())
-      .pipe(pluck('payload', 'data'), finalize(() => this._spinner.hide()))
+      .pipe(pluck('data'), finalize(() => this._spinner.hide()))
       .subscribe(observer);
   }
 }

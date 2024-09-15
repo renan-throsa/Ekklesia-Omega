@@ -7,46 +7,41 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace Ekklesia.Entities.Filters
 {
-    public sealed class BaseFilter<TEntity, TObject> where TEntity : IEntity where TObject : IObject<TEntity>
+    public abstract class BaseFilter<TEntity> where TEntity : IEntity
     {
         private const int DEFAULT_ROWS_PER_PAGE = 10;
         private const string DESC = "DESC";
         private const string ASC = "ASC";
         private const string PT_BR = "pt-BR";
-        private IQueryable<TEntity>? _query;
-
-        public List<OrderRule> OrderBy { get; set; }
-        public List<FilterRule> FilterBy { get; set; }
-        public int PageNumber { get; set; }
-        public int PageSize { get; set; }
 
         private int TotalCount { get; set; }
         private int PagesTotal { get; set; }
         private int SkipSize { get; set; }
 
+        private IQueryable<TEntity>? _query;
 
-        public BaseFilter(int pageNumber = 1, int pageSize = DEFAULT_ROWS_PER_PAGE)
-        {
-            PageNumber = pageNumber;
-            PageSize = pageSize;
-            FilterBy = new List<FilterRule>();
-            OrderBy = new List<OrderRule>();
-        }
+        private readonly BaseFilterParams _baseFilterParams;
 
 
-        public BaseFilter<TEntity, TObject> OnQuery(IQueryable<TEntity> query)
+        public List<OrderRule> OrderBy { get { return _baseFilterParams.OrderBy; } }
+        public List<FilterRule> FilterBy { get { return _baseFilterParams.FilterBy; } }
+        public int PageNumber { get { return _baseFilterParams.PageNumber; } }
+        public int PageSize { get { return _baseFilterParams.PageSize; } }
+       
+
+
+        public BaseFilter(IQueryable<TEntity> query, BaseFilterParams baseFilterParams)
         {
             _query = query;
-            return this;
+            _baseFilterParams = baseFilterParams;
         }
 
-        public BaseFilter<TEntity, TObject> WithFiltering()
+        public BaseFilter<TEntity> WithFiltering()
         {
-            if (this._query == null || FilterBy.Count == 0) return this;
+            if (_query == null || FilterBy.Count == 0) return this;
 
             PropertyInfo[] properties = typeof(TEntity).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
@@ -68,7 +63,7 @@ namespace Ekklesia.Entities.Filters
         }
 
 
-        public BaseFilter<TEntity, TObject> WithFields(Expression<Func<TEntity, TEntity>> projection)
+        public BaseFilter<TEntity> WithFields(Expression<Func<TEntity, TEntity>> projection)
         {
             _query = _query.Select(projection);
             return this;
@@ -131,21 +126,21 @@ namespace Ekklesia.Entities.Filters
             return Expression.Constant(rule.Arg);
         }
 
-        public BaseFilter<TEntity, TObject> WithPagination()
+        public BaseFilter<TEntity> WithPagination()
         {
-            if (this._query == null) return this;
+            if (_query == null) return this;
             TotalCount = _query.Count();
             PagesTotal = (int)Math.Ceiling((double)TotalCount / (double)PageSize);
             SkipSize = (PageNumber - 1) * PageSize;
             return this;
         }
 
-        public BaseFilter<TEntity, TObject> WithSorting()
+        public BaseFilter<TEntity> WithSorting()
         {
-            if (this._query == null) return this;
+            if (_query == null) return this;
             if (FilterBy.Count == 0)
             {
-                this._query.OrderBy(x => x.Id);
+                _query.OrderBy(x => x.Id);
                 return this;
             }
 
@@ -169,10 +164,10 @@ namespace Ekklesia.Entities.Filters
             return this;
         }
 
-        public FilterResult<TEntity, TObject> Build(Func<IEnumerable<TEntity>, IEnumerable<TObject>> mapper)
+        public FilterResult<TModel> Build<TModel>(Func<IEnumerable<TEntity>, IEnumerable<TModel>> mapper) where TModel : new()
         {
-            var filterResult = new FilterResult<TEntity, TObject>();
-            if (this._query == null) return filterResult;
+            var filterResult = new FilterResult<TModel>();
+            if (_query == null) return filterResult;
             var pageInfo = new PageInfo { Page = PageNumber, PerPage = PageSize, Pages = PagesTotal, Total = TotalCount };
             filterResult.PageInfo = pageInfo;
             filterResult.Data = mapper(_query.Skip(SkipSize).Take(PageSize));

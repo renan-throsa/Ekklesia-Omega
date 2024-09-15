@@ -6,6 +6,6 @@ namespace Ekkleisa.Repository.Contract.IRepositories
 {
     public interface ITransactionRepository : IRepository<Transaction>
     {
-        IEnumerable<Transaction> Browse(TransactionFilter filter);
+        IEnumerable<Transaction> Browse(TransactionFilterParams filter);
     }
 }

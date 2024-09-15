@@ -19,7 +19,7 @@ namespace Ekkleisa.Repository.Implementation.Repositories
 
         }
 
-        public IEnumerable<Member> Browse(MemberFilter filter)
+        public IEnumerable<Member> Browse(MemberFilterParams filter)
         {
             IQueryable<Member> query = GetQueryable();
 

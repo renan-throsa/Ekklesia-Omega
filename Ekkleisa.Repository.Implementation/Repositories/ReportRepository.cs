@@ -14,7 +14,7 @@ namespace Ekkleisa.Repository.Implementation.Repositories
         {
 
         }
-        public IEnumerable<Report> Browse(ReportFilter filter)
+        public IEnumerable<Report> Browse(ReportFilterParams filter)
         {
             IQueryable<Report> query = GetQueryable();
 

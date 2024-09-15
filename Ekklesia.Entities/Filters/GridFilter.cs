@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace Ekklesia.Entities.Filters
 {
-    public class GridFilter<TEntity, TObject> where TEntity : class, IEntity where TObject : BaseDto<TEntity>, new()
+    public class GridFilter<TEntity> where TEntity : class, IEntity
     {
         public IList<string> Colunms { get; set; }
         public IList<GroupRule> GroupBy { get; set; }
-        public BaseFilter<TEntity, TObject>? Filter { get; set; }
+        public BaseFilter<TEntity>? Filter { get; set; }
 
         public GridFilter()
         {

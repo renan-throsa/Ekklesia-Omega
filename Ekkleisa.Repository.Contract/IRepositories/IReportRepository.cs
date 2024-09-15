@@ -6,6 +6,6 @@ namespace Ekkleisa.Repository.Contract.IRepositories
 {
     public interface IReportRepository : IRepository<Report>
     {
-        IEnumerable<Report> Browse(ReportFilter filter);
+        IEnumerable<Report> Browse(ReportFilterParams filter);
     }
 }

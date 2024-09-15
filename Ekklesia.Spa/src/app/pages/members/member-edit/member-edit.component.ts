@@ -135,8 +135,6 @@ export class MemberEditComponent implements OnInit {
 
   public onSave(): void {
     const member: Member = Object.assign(new Member(), this.form.value)
-    member.phone = member.phone.replace(/\D/g, '');
-
     const observer = {
       next: (x: Member) => {
         this._toasterService.success(`Membro ${x.name} editado!`, 'Sucesso ✌️');

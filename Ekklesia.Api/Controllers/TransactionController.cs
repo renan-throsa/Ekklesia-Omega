@@ -1,15 +1,13 @@
-﻿using Ekkleisa.Business.Contract.IBusiness;
-using Ekklesia.Entities.DTOs;
-using Ekklesia.Entities.Entities;
-using Ekklesia.Entities.Enums;
+﻿using Ekkleisa.Business.Abstractions;
+using Ekkleisa.Business.Models;
 using Ekklesia.Entities.Filters;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace Ekklesia.Api.Controllers
 {
-    
-    public class TransactionController : ApiController
+
+    public class TransactionController : BaseController
     {
         private readonly ITransactionBusiness _transactionBusiness;
 
@@ -20,35 +18,33 @@ namespace Ekklesia.Api.Controllers
 
 
         [HttpPost($"{nameof(Browse)}")]
-        public ActionResult<Response> Browse([FromBody] BaseFilter<Transaction, TransactionDTO> filter)
+        public ActionResult<TransactionFilter> Browse([FromBody] BaseFilterParams filterParams)
         {
-            return Ok(_transactionBusiness.Browse(filter));
+            var result = _transactionBusiness.Browse(filterParams);
+            return CustomResponse(result);
         }
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<ActionResult<Response>> Get(string id)
+        public async Task<ActionResult<ViewTransactionModel>> Get(string id)
         {
-            var response = await _transactionBusiness.FindSync(id);
-            if (response.Status == ResponseStatus.Found) return Ok(response);
-            return ErrorResponse(response);
+            var result = await _transactionBusiness.FindById(id);           
+            return CustomResponse(result);
         }
 
 
         [HttpPost($"{nameof(Add)}")]
-        public async Task<ActionResult<Response>> Add([FromForm] TransactionDTO transaction)
+        public async Task<ActionResult<string>> Add([FromForm] SaveTransactionModel transaction)
         {
-            var response = await _transactionBusiness.AddAsync(transaction);
-            if (response.Status == ResponseStatus.Created) return Ok(response);
-            return ErrorResponse(response);
+            var result = await _transactionBusiness.Insert(transaction);
+            return CustomResponse(result);
         }
 
         [HttpPut($"{nameof(Edit)}")]
-        public async Task<ActionResult<Response>> Edit([FromForm] TransactionDTO transaction)
+        public async Task<ActionResult<string>> Edit([FromForm] EditTransactionModel transaction)
         {
-            var response = await _transactionBusiness.UpdateAsync(transaction);
-            if (response.Status == ResponseStatus.Ok) return Ok(response);
-            return ErrorResponse(response);
+            var result = await _transactionBusiness.Update(transaction);
+            return CustomResponse(result);
         }
 
     }

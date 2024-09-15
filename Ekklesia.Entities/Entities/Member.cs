@@ -4,11 +4,13 @@ namespace Ekklesia.Entities.Entities
 {
     public class Member : BaseEntity
     {
+
         public string Name { get; set; }
         public string Phone { get; set; }
         public string Photo { get; set; }
         public Role Role { get; set; }
         public DateTime BirthDay { get; set; }
+        public bool Active { get; set; } = true;        
 
         public Member()
         {

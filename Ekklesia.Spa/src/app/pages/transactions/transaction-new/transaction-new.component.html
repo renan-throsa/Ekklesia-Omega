@@ -43,12 +43,12 @@
             </option>
           </select>
         </div>
-
+       
         <div class="col">
           <label for="accountableMember" class="form-label">Responsável</label>
           <select id="accountableMember" class="form-select" formControlName="responsable">
-            <option *ngFor="let responsable of members" [ngValue]="responsable">
-              {{ responsable.name }}
+            <option *ngFor="let member of members" [ngValue]="member">
+              {{ member.name }}
             </option>
           </select>
         </div>
@@ -71,7 +71,11 @@
 
         <div class="col">
           <label for="formFile" class="form-label">Imagem do recibo</label>
-          <input class="form-control" type="file" id="formFile" />
+          <input  class="form-control" 
+                  type="file" 
+                  id="formFile"
+                  accept="image/jpeg, image/png"          
+                  (change)="imagePicked($event)" />
         </div>
       </div>
     </form>

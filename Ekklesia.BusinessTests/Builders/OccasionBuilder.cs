@@ -1,4 +1,5 @@
-﻿using Ekklesia.Entities.DTOs;
+﻿using Ekkleisa.Business.Models;
+using Ekklesia.Entities.DTOs;
 using Ekklesia.Entities.Enums;
 using System;
 using System.Collections.Generic;
@@ -10,96 +11,96 @@ namespace Ekklesia.IntegrationTesting.Builders
         private OccasionType _type;
         private DateTime _startTime;
         private DateTime _endTime;
-        private MemberDTO _host;
-        private ISet<MemberDTO> _attendees;
+        private SaveOccasionMemberModel _host;
+        private ISet<SaveOccasionMemberModel> _attendees;
         private string _place;
         private string _topic;
         private string _description = string.Empty;
         private int _numberOfConvertions;
         private int _numberOfVisitants;
-        private CultDTO? _cult;
-        private SundaySchoolDTO? _sundaySchool;
+        private SaveCultModel? _cult;
+        private SaveSundaySchoolModel? _sundaySchool;
 
         public OccasionBuilder()
         {
-            this._attendees = new HashSet<MemberDTO>();
+            _attendees = new HashSet<SaveOccasionMemberModel>();
         }
 
-        public OccasionDTO Build()
+        public SaveOccasionModel Build()
         {
-            return new OccasionDTO
+            return new SaveOccasionModel
             {
-                Attendees = this._attendees,
-                Cult = this._cult,
-                Description = this._description,
-                EndTime = this._endTime,
-                Host = this._host,
-                Topic = this._topic,
-                NumberOfConvertions = this._numberOfConvertions,
-                NumberOfVisitants = this._numberOfVisitants,
-                Place = this._place,
-                StartTime = this._startTime,
-                SundaySchool = this._sundaySchool,
+                Attendees = _attendees,
+                Cult = _cult,
+                Description = _description,
+                EndTime = _endTime,
+                Host = _host,
+                Topic = _topic,
+                NumberOfConvertions = _numberOfConvertions,
+                NumberOfVisitants = _numberOfVisitants,
+                Place = _place,
+                StartTime = _startTime,
+                SundaySchool = _sundaySchool,
                 Type = _type
             };
         }
 
         public OccasionBuilder WithType(OccasionType type)
         {
-            this._type = type;
+            _type = type;
             return this;
         }
 
         public OccasionBuilder WithStarTime(DateTime date)
         {
-            this._startTime = date;
+            _startTime = date;
             return this;
         }
 
         public OccasionBuilder WithEndTime(DateTime date)
         {
-            this._endTime = date;
+            _endTime = date;
             return this;
         }
 
-        public OccasionBuilder WithHost(MemberDTO host)
+        public OccasionBuilder WithHost(SaveOccasionMemberModel host)
         {
-            this._host = host;
+            _host = host;
             return this;
         }
 
-        public OccasionBuilder WithAttendees(MemberDTO member)
+        public OccasionBuilder WithAttendee(SaveOccasionMemberModel member)
         {
-            this._attendees.Add(member);
+            _attendees.Add(member);
             return this;
         }
 
         public OccasionBuilder WithTopic(string topic = "Um tópico qualquer")
         {
-            this._topic = topic;
+            _topic = topic;
             return this;
         }
 
         public OccasionBuilder WithPlace(string place = "Um local bonito")
         {
-            this._place = place;
+            _place = place;
             return this;
         }
 
         public OccasionBuilder WithDescription(string desription = "Uma descrição qualquer")
         {
-            this._description = desription;
+            _description = desription;
             return this;
         }
 
         public OccasionBuilder WithNumberOfConvertions(int number = 10)
         {
-            this._numberOfConvertions = number;
+            _numberOfConvertions = number;
             return this;
         }
         public OccasionBuilder WithNumberOfVisitants(int number = 5)
         {
-            this._numberOfVisitants = number;
+            _numberOfVisitants = number;
             return this;
         }
 

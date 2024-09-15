@@ -11,10 +11,6 @@
             this.Field = string.Empty;
             this.Arg = string.Empty;
         }
-
-        public object Clone()
-        {
-            return MemberwiseClone();
-        }
+        
     }
 }

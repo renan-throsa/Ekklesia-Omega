@@ -1,16 +1,13 @@
-﻿using Asp.Versioning;
-using Ekkleisa.Business.Contract.IBusiness;
-using Ekklesia.Entities.DTOs;
-using Ekklesia.Entities.Enums;
+﻿using Ekkleisa.Business.Abstractions;
+using Ekkleisa.Business.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace Ekklesia.Api.Controllers
 {
-    [ApiVersion("1.0")]
-    [Route("v{version:apiVersion}/[controller]")]
-    [ApiController]
-    public class AccountController : ControllerBase
+    [AllowAnonymous]
+    public class AccountController : BaseController
     {
         private readonly IAccountBusiness _accountBusiness;
 
@@ -20,21 +17,17 @@ namespace Ekklesia.Api.Controllers
         }
 
         [HttpPost("SignUp")]
-        public async Task<ActionResult<Response>> SignUp(SignUpDTO Dto)
+        public async Task<ActionResult> SignUp(SignUpModel model)
         {
-            var response = await _accountBusiness.SignUp(Dto);
-            if (response.Status == ResponseStatus.Ok) return Ok(response);
-            return BadRequest(response);
+            var result = await _accountBusiness.SignUp(model);
+            return CustomResponse(result);
         }
 
         [HttpPost("SignIn")]
-        public async Task<ActionResult<Response>> SignIn(SignInDTO Dto)
+        public async Task<ActionResult> SignIn(SignInModel model)
         {
-            var response = await _accountBusiness.SignIn(Dto);
-            if (response.Status == ResponseStatus.Ok) return Ok(response);            
-            if (response.Status == ResponseStatus.NotFound) return NotFound(response);
-
-            return BadRequest(response);
+            var result = await _accountBusiness.SignIn(model);
+            return CustomResponse(result);
 
         }
     }

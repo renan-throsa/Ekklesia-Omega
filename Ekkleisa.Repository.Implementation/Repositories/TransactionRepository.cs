@@ -15,7 +15,7 @@ namespace Ekkleisa.Repository.Implementation.Repositories
 
         }
 
-        public IEnumerable<Transaction> Browse(TransactionFilter filter)
+        public IEnumerable<Transaction> Browse(TransactionFilterParams filter)
         {
             IQueryable<Transaction> query = GetQueryable();
 

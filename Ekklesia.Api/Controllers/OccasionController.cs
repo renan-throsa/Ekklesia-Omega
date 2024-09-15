@@ -1,6 +1,6 @@
-﻿using Ekkleisa.Business.Contract.IBusiness;
+﻿using Ekkleisa.Business.Abstractions;
+using Ekkleisa.Business.Models;
 using Ekklesia.Entities.DTOs;
-using Ekklesia.Entities.Enums;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,46 +8,44 @@ using System.Threading.Tasks;
 namespace Ekklesia.Api.Controllers
 {
     
-    public class OccasionController : ApiController
+    public class OccasionController : BaseController
     {
         private readonly IOccasionBusiness _occasionBusiness;
 
         public OccasionController(IOccasionBusiness occasionBusiness)
         {
-            this._occasionBusiness = occasionBusiness;
+            _occasionBusiness = occasionBusiness;
         }
 
         [HttpGet]
-        public IEnumerable<OccasionDTO> All()
+        public ActionResult<Response> All()
         {
-            return   _occasionBusiness.All();
+            var response = _occasionBusiness.FindAll();
+            return CustomResponse(response);
         }
 
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Response>> Get(string id)
         {
-            var response = await _occasionBusiness.FindSync(id);
-            if (response.Status == ResponseStatus.Found) return Ok(response);
-            return ErrorResponse(response);
+            var response = await _occasionBusiness.FindById(id);
+            return CustomResponse(response);
         }
 
 
         [HttpPost($"{nameof(Add)}")]
-        public async Task<ActionResult<Response>> Add([FromBody] OccasionDTO occasion)
+        public async Task<ActionResult<Response>> Add([FromBody] SaveOccasionModel model)
         {
-            var response = await _occasionBusiness.AddAsync(occasion);
-            if (response.Status == ResponseStatus.Created) return Ok(response);
-            return ErrorResponse(response);
+            var response = await _occasionBusiness.Insert(model);
+            return CustomResponse(response);
         }
 
 
         [HttpPut($"{nameof(Edit)}")]
-        public async Task<ActionResult<Response>> Edit([FromBody] OccasionDTO occasion)
+        public async Task<ActionResult<Response>> Edit([FromBody] EditOccasionModel model)
         {
-            var response = await _occasionBusiness.UpdateAsync(occasion);
-            if (response.Status == ResponseStatus.Ok) return Ok(response);
-            return ErrorResponse(response);
+            var response = await _occasionBusiness.Update(model);
+            return CustomResponse(response);
         }
     }
 }

@@ -14,29 +14,38 @@ export abstract class ApplicationService<T extends object> extends BaseService {
 
   public read(id: string): Observable<any> {
     return this._http
-      .get(`${this.baseUrl}/${id}`, { headers: this.getHeader() })
-      .pipe(pluck('payload'))
+      .get(`${this.baseUrl}/${id}`, { headers: this.getHeader() });
   }
 
   public add(entity: T): Observable<any> {
     return this._http
-      .post(`${this.baseUrl}/Add`, this._toFormData(entity), { headers: this.getHeader() })
-      .pipe(pluck('payload'))
+      .post(`${this.baseUrl}/Add`, this._toFormData(entity), { headers: this.getHeader() });
   }
 
   public edit(entity: T): Observable<any> {
     return this._http
-      .put(`${this.baseUrl}/Edit/`, this._toFormData(entity), { headers: this.getHeader() })
-      .pipe(pluck('payload'))
+      .put(`${this.baseUrl}/Edit/`, this._toFormData(entity), { headers: this.getHeader() });
   }
 
   private _toFormData(entity: T): FormData {
-
-    const formData = new FormData();
+    const formData = new FormData();   
 
     for (const [key, value] of Object.entries(entity)) {
-      formData.append(key, value);
+
+      if (key !== 'formFile' && typeof(value) === 'object' ) {
+        for (const [innerkey, innervalue] of Object.entries(value)) {
+          formData.append(innerkey, innervalue as string);
+        }     
+         
+      }else{
+        formData.append(key, value);
+      }
+      
+      
+
     }
+
+    
 
     return formData
   }

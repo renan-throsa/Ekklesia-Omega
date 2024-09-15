@@ -7,7 +7,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AutoFixture" Version="4.17.0" />
+		<PackageReference Include="AutoMapper" Version="13.0.1" />
+		<PackageReference Include="Moq" Version="4.20.70" />		
 		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="6.0.0" />
@@ -25,8 +26,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Ekkleisa.Business.Implementation\Ekkleisa.Business.Implementation.csproj" />
-		<ProjectReference Include="..\Ekkleisa.Repository.Implementation\Ekkleisa.Repository.Implementation.csproj" />
+	  <ProjectReference Include="..\Ekkleisa.Business\Ekkleisa.Business.csproj" />
 	</ItemGroup>
+
+	
 
 </Project>

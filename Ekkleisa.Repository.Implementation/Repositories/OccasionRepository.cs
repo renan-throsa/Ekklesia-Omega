@@ -15,7 +15,7 @@ namespace Ekkleisa.Repository.Implementation.Repositories
 
         }
 
-        public IEnumerable<Occasion> Browse(OccasionFilter filter)
+        public IEnumerable<Occasion> Browse(OccasionFilterParams filter)
         {
             IQueryable<Occasion> query = GetQueryable();
 
