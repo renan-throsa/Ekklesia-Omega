@@ -1,7 +1,7 @@
 <div class="card">
   <div class="card-header"><h4>Lista de Membros</h4></div>
   <div class="card-body">
-    <app-custom-painel [searchBy]="'Nome'" ></app-custom-painel>
+    <app-custom-painel [searchByField]="'Nome'" (searchByEvent)="onSearch($event)"></app-custom-painel>
     <app-custon-table
       [columns]="columns"
       [elements]="members"

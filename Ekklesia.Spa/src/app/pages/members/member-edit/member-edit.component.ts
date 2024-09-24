@@ -91,7 +91,7 @@ export class MemberEditComponent implements OnInit {
       role: ['', [Validators.required]],
       birthDay: ['', [Validators.required, UtilsValidators.maxDate(this.maxDate)]],
       formFile: [null]
-    })
+    });
   }
   ngOnInit(): void {
     this._spinner.show()

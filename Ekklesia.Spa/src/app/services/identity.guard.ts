@@ -11,7 +11,8 @@ export class IdentityGard implements CanLoad {
     private _accountService: IdentityService,
   ) {}
   canLoad(): boolean {
-    const valid = this._accountService.isAuthenticated && this._accountService.isTokenValid
+    const valid = this._accountService.isAuthenticated && this._accountService.isTokenValid;
+    
     if (!valid) {
       this._toasterService.warning(
         '🤖💬 Token inválido ou expirado',

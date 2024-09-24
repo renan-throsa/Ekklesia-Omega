@@ -1,16 +1,24 @@
-import { BaseConverter } from '../utils/base-converter'
-import { RoleEnum } from './RoleEnum'
+import { RoleEnum, RoleMapping } from './RoleEnum'
 
 export class Member {
   id: string
   name: string
   phone: string
   photo: string
-  role: RoleEnum
   roleName: string
   birthDay: string
   formFile?: File  
   BaseConverter: any
+
+  private _role : RoleEnum;
+
+  public get role() : RoleEnum {
+    return this._role;
+  }
+  public set role(v : RoleEnum) {
+    this._role = v;
+    this.roleName = RoleMapping[v]
+  }
 
   constructor() {
     this.id = '';
@@ -19,7 +27,11 @@ export class Member {
     this.photo = '';
     this.roleName = '';
     this.birthDay = '';
-    this.role = RoleEnum.INDEFINIDO;
-  }
+    this._role = RoleEnum.INDEFINIDO;
+  }   
+  
+  
+  
+  
   
 }

@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, Input, OnInit } from '@angular/core'
 import { NgxSpinnerService } from 'ngx-spinner'
 import { ToastrService } from 'ngx-toastr'
 import { finalize, pluck } from 'rxjs'
 import { BaseTable } from 'src/app/components/shared/base-table'
+import { FilterBy } from 'src/app/models/FilterBy'
+import { FilterEnum } from 'src/app/models/filterEnum'
 import { Filtering } from 'src/app/models/Filtering'
 import { Member } from 'src/app/models/Member'
 import { MemberService } from 'src/app/services/member.service'
@@ -13,7 +15,8 @@ import { MemberService } from 'src/app/services/member.service'
   styleUrls: [],
 })
 export class MemberListComponent extends BaseTable<Member> implements OnInit {
-  members: Member[]
+
+  @Input() members: Member[]
 
   constructor(
     private _memberService: MemberService,
@@ -39,10 +42,14 @@ export class MemberListComponent extends BaseTable<Member> implements OnInit {
   }
 
   ngOnInit(): void {
+    this.onSearch();
+  }
+
+  onSearch(filterBy:string = ''): void{
     this._spinner.show()
     const observer = {
-      next: (result: Member[]) => {
-        this.members = result
+      next: (result: Member[]) => { 
+        this.members = result.map(item => Object.assign(new Member(), item));
       },
       error: (error: any) => {
         this._toasterService.error(
@@ -53,8 +60,14 @@ export class MemberListComponent extends BaseTable<Member> implements OnInit {
       },
     }
 
+    let filter = new Filtering();
+
+    if (filterBy.length > 0) {
+      filter.filterBy = [ new FilterBy(FilterEnum.Like,'name',filterBy)];
+    }
+
     this._memberService
-      .browse(new Filtering())
+      .browse(filter)
       .pipe(pluck('data'), finalize(() => this._spinner.hide()))
       .subscribe(observer);
   }

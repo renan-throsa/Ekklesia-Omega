@@ -46,9 +46,7 @@ export class TransactionListComponent extends BaseTable<Transaction>
     this._spinner.show()
     const observer = {
       next: (result: Transaction[]) => {
-        this.transactions = result.map((x) =>
-          Object.assign(new Transaction(), x),
-        )
+        this.transactions = result.map(item => Object.assign(new Transaction(), item))
       },
       error: (error: any) => {
         this._toasterService.error(

@@ -4,14 +4,15 @@
       <fa-icon [icon]="['fas', 'plus']"></fa-icon>
       Adicionar</a
     >
-    <form class="d-flex" role="search">
+    <form [formGroup]="form" class="d-flex" role="search" (ngSubmit)="onSubmit()">
       <input
         class="form-control"
         type="search"        
         aria-label="Search"
-        [placeholder]="searchBy"
+        [placeholder]="searchByField"
+        formControlName="searchByField"
       />
-      <button class="btn btn-outline-success" type="submit">
+      <button class="btn btn-outline-success" type="submit" [disabled]="form.invalid">
         <fa-icon [icon]="['fas', 'magnifying-glass']"></fa-icon>
         Buscar
       </button>

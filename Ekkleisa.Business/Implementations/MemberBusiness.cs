@@ -109,8 +109,13 @@ namespace Ekkleisa.Business.Implementation.Business
                 {
                     await model.FormFile.CopyToAsync(memoryStream);
                     entity.Photo = $"data:image/png;base64,{Convert.ToBase64String(memoryStream.ToArray())}";
-                }
+                }                
 
+            }
+            else
+            {
+                var entityFomDB = await _memberRepository.FindAsync(model.Id);
+                entity.Photo = entityFomDB?.Photo;
             }
 
             await _memberRepository.UpdateAsync(entity);

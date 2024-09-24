@@ -34,11 +34,11 @@ export abstract class ApplicationService<T extends object> extends BaseService {
 
       if (key !== 'formFile' && typeof(value) === 'object' ) {
         for (const [innerkey, innervalue] of Object.entries(value)) {
-          formData.append(innerkey, innervalue as string);
+          formData.append(innerkey.replace("_",""), innervalue as string);
         }     
          
       }else{
-        formData.append(key, value);
+        formData.append(key.replace("_",""), value);
       }
       
       

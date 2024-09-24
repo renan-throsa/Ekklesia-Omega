@@ -7,7 +7,7 @@
         public float Amount { get; set; }
         public string Description { get; set; }
         public string Receipt { get; set; }        
-        public string Type { get; set; }
+        public int Type { get; set; }
 
         public SimpleViewMemberModel Responsable { get; set; }
     }

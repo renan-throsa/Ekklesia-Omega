@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core'
+import { Component, EventEmitter, Input, Output } from '@angular/core'
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms'
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome'
 import { faPlus, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
 
@@ -7,9 +8,25 @@ import { faPlus, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
   templateUrl: './custom-painel.component.html',
 })
 export class CustomPainelComponent {
-  @Input() searchBy: string
-  constructor(private _library: FaIconLibrary) {
-    this.searchBy = ''
+  form: UntypedFormGroup
+  @Input() searchByField: string = ''
+  @Output() searchByEvent : EventEmitter<string> = new EventEmitter<string>()
+
+  constructor(private _library: FaIconLibrary,private _formBuilder: UntypedFormBuilder) {
+    this.form = this._formBuilder.group({
+      searchByField: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(50),         
+        ],
+      ],      
+    })    
     this._library.addIcons(faPlus, faMagnifyingGlass)
+  }
+
+  onSubmit() {    
+    this.searchByEvent.emit(this.form.get('searchByField')?.value);
   }
 }
