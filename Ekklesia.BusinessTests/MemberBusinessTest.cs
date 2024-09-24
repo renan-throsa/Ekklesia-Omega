@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Ekkleisa.Business.Implementation.Business;
-using Ekkleisa.Business.Mapping;
-using Ekkleisa.Repository.Contract.IRepositories;
-using Ekklesia.Entities.Entities;
+using Ekklesia.Application.Implementations;
+using Ekklesia.Application.Infrastructure;
+using Ekklesia.Application.Mapping;
+using Ekklesia.Domain.Entities;
 using Ekklesia.IntegrationTesting.Builders;
 using Moq;
 using System;

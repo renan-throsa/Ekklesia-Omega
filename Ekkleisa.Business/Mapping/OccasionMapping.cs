@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using Ekkleisa.Business.Models;
-using Ekklesia.Entities.Entities;
+using Ekklesia.Application.Models;
+using Ekklesia.Domain.Entities;
 using MongoDB.Bson;
 
-namespace Ekkleisa.Business.Mapping
+namespace Ekklesia.Application.Mapping
 {
     public class OccasionMapping: Profile
     {

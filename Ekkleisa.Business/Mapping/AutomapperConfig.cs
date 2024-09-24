@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace Ekkleisa.Business.Mapping
+namespace Ekklesia.Application.Mapping
 {
     public class AutomapperConfig : Profile
     {

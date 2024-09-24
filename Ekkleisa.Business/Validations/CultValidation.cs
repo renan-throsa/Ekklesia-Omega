@@ -1,9 +1,9 @@
-﻿using Ekklesia.Entities.Contants;
-using Ekklesia.Entities.DTOs;
+﻿using Ekklesia.Domain.Contants;
+using Ekklesia.Domain.DTOs;
 using FluentValidation;
 using System;
 
-namespace Ekkleisa.Business.Validations
+namespace Ekklesia.Application.Validations
 {
     public class CultValidation : AbstractValidator<CultDTO>
     {

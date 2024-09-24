@@ -1,6 +1,6 @@
-﻿using Ekkleisa.Business.Models;
+﻿using Ekklesia.Application.Models;
 
-namespace Ekkleisa.Business.Abstractions
+namespace Ekklesia.Application.Abstractions
 {
     public interface IOccasionBusiness
     {

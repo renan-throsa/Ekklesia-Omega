@@ -1,6 +1,5 @@
-﻿using Ekkleisa.Business.Models;
-using Ekklesia.Entities.DTOs;
-using Ekklesia.Entities.Enums;
+﻿using Ekklesia.Application.Models;
+using Ekklesia.Domain.Enums;
 using System;
 using System.Collections.Generic;
 

@@ -5,17 +5,15 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ekklesia.Api", "Ekklesia.Api\Ekklesia.Api.csproj", "{5C692088-79CE-46DB-819B-21ADEE7F8EBB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ekklesia.Entities", "Ekklesia.Entities\Ekklesia.Entities.csproj", "{266EDD97-855A-4DC6-A5AA-7E93CAD2DCAC}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ekkleisa.Repository.Contract", "Ekkleisa.Repository.Contract\Ekkleisa.Repository.Contract.csproj", "{6F629638-8998-4518-940A-257D8F6A4400}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ekkleisa.Repository.Implementation", "Ekkleisa.Repository.Implementation\Ekkleisa.Repository.Implementation.csproj", "{A08B59DA-F172-4E2B-8C05-F3F125C51BDD}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ekklesia.DependencyInjection", "Ekklesia.DependencyInjection\Ekklesia.DependencyInjection.csproj", "{1388B324-FF09-4BD3-B6CD-E19F682CF57B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ekklesia.IntegrationTesting", "Ekklesia.BusinessTests\Ekklesia.IntegrationTesting.csproj", "{C28B60FF-3DFA-414C-912E-C77043775D08}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ekkleisa.Business", "Ekkleisa.Business\Ekkleisa.Business.csproj", "{18096897-42BE-4618-B581-19AFD453BEB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ekklesia.Application", "Ekkleisa.Business\Ekklesia.Application.csproj", "{18096897-42BE-4618-B581-19AFD453BEB6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ekklesia.Domain", "Ekklesia.Domain\Ekklesia.Domain.csproj", "{18757AC4-3A70-40D8-8228-6F0F916B804D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ekklesia.Infrastructure", "Ekklesia.Infrastructure\Ekklesia.Infrastructure.csproj", "{B5EE91D4-00FC-43F8-80CC-D4E0A372C80F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,18 +25,6 @@ Global
 		{5C692088-79CE-46DB-819B-21ADEE7F8EBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C692088-79CE-46DB-819B-21ADEE7F8EBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C692088-79CE-46DB-819B-21ADEE7F8EBB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{266EDD97-855A-4DC6-A5AA-7E93CAD2DCAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{266EDD97-855A-4DC6-A5AA-7E93CAD2DCAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{266EDD97-855A-4DC6-A5AA-7E93CAD2DCAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{266EDD97-855A-4DC6-A5AA-7E93CAD2DCAC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6F629638-8998-4518-940A-257D8F6A4400}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6F629638-8998-4518-940A-257D8F6A4400}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6F629638-8998-4518-940A-257D8F6A4400}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6F629638-8998-4518-940A-257D8F6A4400}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A08B59DA-F172-4E2B-8C05-F3F125C51BDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A08B59DA-F172-4E2B-8C05-F3F125C51BDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A08B59DA-F172-4E2B-8C05-F3F125C51BDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A08B59DA-F172-4E2B-8C05-F3F125C51BDD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1388B324-FF09-4BD3-B6CD-E19F682CF57B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1388B324-FF09-4BD3-B6CD-E19F682CF57B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1388B324-FF09-4BD3-B6CD-E19F682CF57B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -51,6 +37,14 @@ Global
 		{18096897-42BE-4618-B581-19AFD453BEB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18096897-42BE-4618-B581-19AFD453BEB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{18096897-42BE-4618-B581-19AFD453BEB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18757AC4-3A70-40D8-8228-6F0F916B804D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18757AC4-3A70-40D8-8228-6F0F916B804D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18757AC4-3A70-40D8-8228-6F0F916B804D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18757AC4-3A70-40D8-8228-6F0F916B804D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5EE91D4-00FC-43F8-80CC-D4E0A372C80F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5EE91D4-00FC-43F8-80CC-D4E0A372C80F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5EE91D4-00FC-43F8-80CC-D4E0A372C80F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5EE91D4-00FC-43F8-80CC-D4E0A372C80F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

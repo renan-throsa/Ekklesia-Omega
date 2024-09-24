@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Ekkleisa.Business.Models;
-using Ekklesia.Entities.Entities;
+using Ekklesia.Application.Models;
+using Ekklesia.Domain.Entities;
 
-namespace Ekkleisa.Business.Mapping
+namespace Ekklesia.Application.Mapping
 {
     public class TransactionMapping : Profile
     {

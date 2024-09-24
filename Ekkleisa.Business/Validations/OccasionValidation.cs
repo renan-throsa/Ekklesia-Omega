@@ -1,10 +1,10 @@
-﻿using Ekklesia.Entities.Contants;
-using Ekklesia.Entities.DTOs;
-using Ekklesia.Entities.Enums;
+﻿using Ekklesia.Domain.Contants;
+using Ekklesia.Domain.DTOs;
+using Ekklesia.Domain.Enums;
 using FluentValidation;
 using System;
 
-namespace Ekkleisa.Business.Validations
+namespace Ekklesia.Application.Validations
 {
     public class OccasionValidation : AbstractValidator<OccasionDTO>
     {

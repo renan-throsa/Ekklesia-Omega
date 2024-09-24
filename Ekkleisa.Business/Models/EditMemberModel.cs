@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ekkleisa.Business.Models
+namespace Ekklesia.Application.Models
 {
     public class EditMemberModel
     {

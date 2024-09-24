@@ -26,7 +26,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Ekkleisa.Business\Ekkleisa.Business.csproj" />
+	  <ProjectReference Include="..\Ekkleisa.Business\Ekklesia.Application.csproj" />
 	</ItemGroup>
 
 	

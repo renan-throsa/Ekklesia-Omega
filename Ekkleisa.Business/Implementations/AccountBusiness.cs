@@ -1,10 +1,10 @@
 ﻿
 using AutoMapper;
-using Ekkleisa.Business.Abstractions;
-using Ekkleisa.Business.Models;
-using Ekkleisa.Business.Validations;
-using Ekklesia.Entities.DTOs;
-using Ekklesia.Entities.Settings;
+using Ekklesia.Application.Abstractions;
+using Ekklesia.Application.Models;
+using Ekklesia.Application.Validations;
+using Ekklesia.Domain.DTOs;
+using Ekklesia.Domain.Settings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -14,7 +14,7 @@ using System.Net;
 using System.Security.Claims;
 using System.Text;
 
-namespace Ekkleisa.Business.Implementation.Business
+namespace Ekklesia.Application.Implementations
 {
     public class AccountBusiness : BaseBusiness, IAccountBusiness
     {

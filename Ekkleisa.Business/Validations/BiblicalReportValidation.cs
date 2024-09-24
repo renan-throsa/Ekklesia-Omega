@@ -1,4 +1,4 @@
-﻿using Ekklesia.Entities.DTOs;
+﻿using Ekklesia.Domain.DTOs;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ekkleisa.Business.Validations
+namespace Ekklesia.Application.Validations
 {
     public class BiblicalReportValidation : AbstractValidator<BiblicalReportDTO>
     {

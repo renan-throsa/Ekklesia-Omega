@@ -1,8 +1,8 @@
-﻿using Ekklesia.Entities.Enums;
-using Ekklesia.Entities.Filters;
+﻿using Ekklesia.Domain.Enums;
+using Ekklesia.Domain.Filters;
 using FluentValidation;
 
-namespace Ekkleisa.Business.Validations
+namespace Ekklesia.Application.Validations
 {
     public class BaseFilterValidator: AbstractValidator<BaseFilterParams>
     {

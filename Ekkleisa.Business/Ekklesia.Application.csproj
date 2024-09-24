@@ -11,14 +11,14 @@
 		<PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.29" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.4" />
+		<PackageReference Include="MongoDB.Driver" Version="2.25.0" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.35.0" />
 		<PackageReference Include="FluentValidation" Version="10.3.5" />
 		<PackageReference Include="MongoDB.Bson" Version="2.25.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Ekkleisa.Repository.Contract\Ekkleisa.Repository.Contract.csproj" />
-	  <ProjectReference Include="..\Ekklesia.Entities\Ekklesia.Entities.csproj" />
+	  <ProjectReference Include="..\Ekklesia.Domain\Ekklesia.Domain.csproj" />
 	</ItemGroup>
 
 </Project>

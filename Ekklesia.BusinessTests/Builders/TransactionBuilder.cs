@@ -1,5 +1,5 @@
-﻿using Ekklesia.Entities.DTOs;
-using Ekklesia.Entities.Enums;
+﻿using Ekklesia.Domain.DTOs;
+using Ekklesia.Domain.Enums;
 using System;
 
 

@@ -20,9 +20,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Ekkleisa.Business\Ekkleisa.Business.csproj" />
-		<ProjectReference Include="..\Ekkleisa.Repository.Contract\Ekkleisa.Repository.Contract.csproj" />
-		<ProjectReference Include="..\Ekkleisa.Repository.Implementation\Ekkleisa.Repository.Implementation.csproj" />
+		<ProjectReference Include="..\Ekklesia.Domain\Ekklesia.Domain.csproj" />
+		<ProjectReference Include="..\Ekklesia.Infrastructure\Ekklesia.Infrastructure.csproj" />
 	</ItemGroup>
 
 </Project>

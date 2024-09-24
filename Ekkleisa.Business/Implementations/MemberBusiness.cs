@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
-using Ekkleisa.Business.Abstractions;
-using Ekkleisa.Business.Models;
-using Ekkleisa.Business.Validations;
-using Ekkleisa.Repository.Contract.IRepositories;
-using Ekklesia.Entities.Entities;
-using Ekklesia.Entities.Enums;
-using Ekklesia.Entities.Filters;
+using Ekklesia.Application.Abstractions;
+using Ekklesia.Application.Infrastructure;
+using Ekklesia.Application.Models;
+using Ekklesia.Application.Validations;
+using Ekklesia.Domain.Entities;
+using Ekklesia.Domain.Enums;
+using Ekklesia.Domain.Filters;
 using System.Net;
 
-namespace Ekkleisa.Business.Implementation.Business
+namespace Ekklesia.Application.Implementations
 {
     public class MemberBusiness : BaseBusiness, IMemberBusiness
     {

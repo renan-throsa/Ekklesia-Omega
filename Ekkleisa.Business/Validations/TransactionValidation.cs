@@ -1,9 +1,9 @@
-﻿using Ekklesia.Entities.Entities;
-using Ekklesia.Entities.Enums;
+﻿using Ekklesia.Domain.Entities;
+using Ekklesia.Domain.Enums;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 
-namespace Ekkleisa.Business.Validations
+namespace Ekklesia.Application.Validations
 {
     public class TransactionValidation : AbstractValidator<Transaction>
     {

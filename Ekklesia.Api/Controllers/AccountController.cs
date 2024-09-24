@@ -1,5 +1,6 @@
-﻿using Ekkleisa.Business.Abstractions;
-using Ekkleisa.Business.Models;
+﻿
+using Ekklesia.Application.Abstractions;
+using Ekklesia.Application.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;

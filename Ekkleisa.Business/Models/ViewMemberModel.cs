@@ -1,6 +1,6 @@
-﻿using Ekklesia.Entities.Entities;
+﻿using Ekklesia.Domain.Entities;
 
-namespace Ekkleisa.Business.Models
+namespace Ekklesia.Application.Models
 {
     public class ViewMemberModel
     {

@@ -1,8 +1,6 @@
-﻿using Ekkleisa.Business.Abstractions;
-using Ekkleisa.Business.Models;
-using Ekklesia.Entities.DTOs;
+﻿using Ekklesia.Application.Abstractions;
+using Ekklesia.Application.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Ekklesia.Api.Controllers
@@ -18,7 +16,7 @@ namespace Ekklesia.Api.Controllers
         }
 
         [HttpGet]
-        public ActionResult<Response> All()
+        public ActionResult All()
         {
             var response = _occasionBusiness.FindAll();
             return CustomResponse(response);
@@ -26,7 +24,7 @@ namespace Ekklesia.Api.Controllers
 
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Response>> Get(string id)
+        public async Task<ActionResult> Get(string id)
         {
             var response = await _occasionBusiness.FindById(id);
             return CustomResponse(response);
@@ -34,7 +32,7 @@ namespace Ekklesia.Api.Controllers
 
 
         [HttpPost($"{nameof(Add)}")]
-        public async Task<ActionResult<Response>> Add([FromBody] SaveOccasionModel model)
+        public async Task<ActionResult> Add([FromBody] SaveOccasionModel model)
         {
             var response = await _occasionBusiness.Insert(model);
             return CustomResponse(response);
@@ -42,7 +40,7 @@ namespace Ekklesia.Api.Controllers
 
 
         [HttpPut($"{nameof(Edit)}")]
-        public async Task<ActionResult<Response>> Edit([FromBody] EditOccasionModel model)
+        public async Task<ActionResult> Edit([FromBody] EditOccasionModel model)
         {
             var response = await _occasionBusiness.Update(model);
             return CustomResponse(response);

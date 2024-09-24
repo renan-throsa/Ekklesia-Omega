@@ -1,4 +1,5 @@
-﻿using Ekklesia.Entities.Entities;
+﻿
+using Ekklesia.Domain.Entities;
 using MongoDB.Bson;
 using System;
 using System.Collections.Generic;

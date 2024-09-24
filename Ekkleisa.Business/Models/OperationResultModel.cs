@@ -1,7 +1,7 @@
 ﻿using FluentValidation.Results;
 using System.Net;
 
-namespace Ekkleisa.Business.Models
+namespace Ekklesia.Application.Models
 {
     public class OperationResultModel
     {

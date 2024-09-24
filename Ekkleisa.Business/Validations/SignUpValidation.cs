@@ -1,7 +1,7 @@
-﻿using Ekkleisa.Business.Models;
+﻿using Ekklesia.Application.Models;
 using FluentValidation;
 
-namespace Ekkleisa.Business.Validations
+namespace Ekklesia.Application.Validations
 {
     public class SignUpValidation : AbstractValidator<SignUpModel>
     {

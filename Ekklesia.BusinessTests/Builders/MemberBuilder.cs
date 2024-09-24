@@ -1,5 +1,6 @@
-﻿using Ekkleisa.Business.Models;
-using Ekklesia.Entities.Entities;
+﻿
+using Ekklesia.Application.Models;
+using Ekklesia.Domain.Entities;
 using System;
 
 namespace Ekklesia.IntegrationTesting.Builders

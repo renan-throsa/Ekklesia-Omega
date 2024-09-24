@@ -1,6 +1,6 @@
-﻿using Ekklesia.Entities.Enums;
+﻿using Ekklesia.Domain.Enums;
 
-namespace Ekkleisa.Business.Models
+namespace Ekklesia.Application.Models
 {
     public class ViewOccasionMemberModel
     {

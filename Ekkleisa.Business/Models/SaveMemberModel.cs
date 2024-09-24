@@ -1,9 +1,9 @@
-﻿using Ekklesia.Entities.Entities;
+﻿using Ekklesia.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using MongoDB.Bson.Serialization.Attributes;
 
 
-namespace Ekkleisa.Business.Models
+namespace Ekklesia.Application.Models
 {
     public class SaveMemberModel
     {

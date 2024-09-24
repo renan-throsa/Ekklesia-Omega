@@ -1,8 +1,8 @@
 ﻿
-using Ekkleisa.Business.Models;
-using Ekklesia.Entities.Filters;
+using Ekklesia.Application.Models;
+using Ekklesia.Domain.Filters;
 
-namespace Ekkleisa.Business.Abstractions
+namespace Ekklesia.Application.Abstractions
 {
     public interface ITransactionBusiness
     {

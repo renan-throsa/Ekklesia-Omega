@@ -17,3 +17,7 @@ Finally, head to:
 ```
 http://localhost:4003/
 ```
+
+### Diagram
+
+![](diagram.jpg)

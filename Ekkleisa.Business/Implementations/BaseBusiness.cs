@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
-using Ekkleisa.Business.Models;
-using Ekklesia.Entities.Entities;
-using Ekklesia.Entities.Filters;
+using Ekklesia.Application.Models;
+using Ekklesia.Domain.Entities;
 using FluentValidation;
 using FluentValidation.Results;
 using System.Net;
 
-namespace Ekkleisa.Business.Implementation.Business
+namespace Ekklesia.Application.Implementations
 {
     public abstract class BaseBusiness
     {

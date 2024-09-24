@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using Ekkleisa.Business.Abstractions;
-using Ekkleisa.Business.Implementation.Business;
-using Ekkleisa.Business.Mapping;
-using Ekkleisa.Business.Models;
-using Ekkleisa.Repository.Contract.IRepositories;
-using Ekklesia.Entities.Enums;
+using Ekklesia.Application.Abstractions;
+using Ekklesia.Application.Implementations;
+using Ekklesia.Application.Infrastructure;
+using Ekklesia.Application.Mapping;
+using Ekklesia.Application.Models;
+using Ekklesia.Domain.Enums;
 using Ekklesia.IntegrationTesting.Builders;
 using MongoDB.Bson;
 using Moq;

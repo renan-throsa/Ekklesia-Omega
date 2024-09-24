@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using Ekkleisa.Business.Abstractions;
-using Ekkleisa.Business.Models;
-using Ekkleisa.Repository.Contract.IRepositories;
+using Ekklesia.Application.Abstractions;
+using Ekklesia.Application.Infrastructure;
+using Ekklesia.Application.Models;
 
-namespace Ekkleisa.Business.Implementation.Business
+namespace Ekklesia.Application.Implementations
 {
     public sealed class OccasionBusiness : BaseBusiness, IOccasionBusiness
     {

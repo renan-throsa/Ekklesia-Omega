@@ -1,4 +1,4 @@
-﻿namespace Ekkleisa.Business.Models
+﻿namespace Ekklesia.Application.Models
 {
     public class ViewTransactionModel
     {

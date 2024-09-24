@@ -1,7 +1,8 @@
 ﻿
-using Ekkleisa.Business.Abstractions;
-using Ekkleisa.Business.Models;
-using Ekklesia.Entities.Filters;
+
+using Ekklesia.Application.Abstractions;
+using Ekklesia.Application.Models;
+using Ekklesia.Domain.Filters;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
